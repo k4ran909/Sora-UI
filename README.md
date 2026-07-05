@@ -26,29 +26,31 @@ And best of all? **It's 100% copy-pasteable and v0.app compatible.** No bloated 
 
 ## ⚡ Quick Start
 
-### 1. Copy the Code
-Grab the raw code of the component you want from our registry folder. For example, copy the contents of [music-player.tsx](registry/music-player.tsx).
+You can install Sora UI components using the official **shadcn CLI** (just like shadcn/ui and Magic UI!) or do a manual copy-paste.
 
-### 2. Drop it in your project
-Create a new file in your React/Next.js project. We suggest putting it in:
-`components/music-player.tsx`
+### Option A: Install via shadcn CLI (Recommended)
+If your project is already set up with `shadcn/ui`, you can add the music player component with a single command! It will automatically copy the code, resolve path aliases, and install dependencies (`framer-motion`, `lucide-react`, etc.):
 
-### 3. Grab the dependencies
-We use standard animation and utility helper libraries. Run this command to install them:
 ```bash
-npm install framer-motion clsx tailwind-merge lucide-react
+npx shadcn@latest add https://raw.githubusercontent.com/k4ran909/Sora-UI/main/public/registry/music-player.json
 ```
 
-### 4. Ensure your tailwind helper exists
-If you don't already have the standard class merger in `lib/utils.ts`, drop this snippet in:
-```typescript
-import { type ClassValue, clsx } from "clsx"
-import { twMerge } from "tailwind-merge"
+### Option B: Manual Copy-Paste
+1. **Copy the Code:** Copy the contents of the component registry file: [music-player.tsx](registry/music-player.tsx).
+2. **Drop it in:** Paste the code into your project at `components/music-player.tsx`.
+3. **Install Dependencies:**
+   ```bash
+   npm install framer-motion clsx tailwind-merge lucide-react
+   ```
+4. **Ensure `cn` utility helper exists:** If you don't have it already in `lib/utils.ts`, drop this in:
+   ```typescript
+   import { type ClassValue, clsx } from "clsx"
+   import { twMerge } from "tailwind-merge"
 
-export function cn(...inputs: ClassValue[]) {
-  return twMerge(clsx(inputs))
-}
-```
+   export function cn(...inputs: ClassValue[]) {
+     return twMerge(clsx(inputs))
+   }
+   ```
 
 ---
 

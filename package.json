@@ -5,6 +5,7 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
+    "prebuild": "node scripts/build-registry.js",
     "start": "next start",
     "lint": "eslint"
   },
