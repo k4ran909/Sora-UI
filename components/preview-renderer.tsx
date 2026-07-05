@@ -8,6 +8,10 @@ const componentsMap: Record<string, React.ComponentType<any>> = {
     ssr: false,
     loading: () => <span className="text-zinc-500 text-xs">Loading player...</span>,
   }),
+  "dark-player": dynamic(() => import("@/registry/dark-player").then((mod) => mod.MusicPlayer), {
+    ssr: false,
+    loading: () => <span className="text-zinc-500 text-xs">Loading player...</span>,
+  }),
 };
 
 export function PreviewRenderer({ slug }: { slug: string }) {
