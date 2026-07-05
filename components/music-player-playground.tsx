@@ -57,7 +57,7 @@ export default function Example() {
   };
 
   return (
-    <div className="flex flex-col lg:flex-row items-stretch gap-8 w-full max-w-4xl mx-auto select-none font-mono">
+    <div className="flex flex-col lg:flex-row items-stretch gap-8 w-full max-w-6xl mx-auto select-none font-mono">
       {/* Left Column: Component Viewer */}
       <div className="flex-1 min-w-0">
         <ComponentViewer code={componentCode} usageCode={generateCode()}>
