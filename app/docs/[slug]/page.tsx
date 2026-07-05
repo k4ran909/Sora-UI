@@ -7,6 +7,7 @@ import { ComponentViewer } from "@/components/component-viewer";
 import { PreviewRenderer } from "@/components/preview-renderer";
 import { MusicPlayerPlayground } from "@/components/music-player-playground";
 import { MusicPlayerDocs } from "@/components/music-player-docs";
+import { DarkPlayerDocs } from "@/components/dark-player-docs";
 import { CLIInstallBlock } from "@/components/cli-install-block";
 
 interface PageProps {
@@ -87,6 +88,13 @@ export default async function ComponentPage({ params }: PageProps) {
       {slug === "music-player" && (
         <div className="border-t border-hairline pt-12">
           <MusicPlayerDocs />
+        </div>
+      )}
+
+      {/* Detailed documentation section for dark-player */}
+      {slug === "dark-player" && (
+        <div className="border-t border-hairline pt-12">
+          <DarkPlayerDocs />
         </div>
       )}
     </div>
