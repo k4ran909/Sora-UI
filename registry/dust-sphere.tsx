@@ -359,35 +359,22 @@ export function DustSphere({
   }, []);
 
   return (
-    <div className="relative font-sans text-white select-none">
+    <div className="relative select-none">
       {/* Outer Glass Card Container */}
       <div
         style={{ background: componentColor }}
         onClick={handleMicRequest}
         className={cn(
-          "relative w-[420px] h-[410px] p-6 rounded-[36px] flex flex-col justify-between overflow-hidden border border-white/10 backdrop-blur-3xl shadow-[0_30px_60px_rgba(0,0,0,0.25)]",
+          "relative w-[420px] h-[410px] rounded-[36px] overflow-hidden border border-white/10 backdrop-blur-3xl shadow-[0_30px_60px_rgba(0,0,0,0.25)]",
           className
         )}
         {...props}
       >
-        {/* Card Header Panel */}
-        <div className="flex flex-col gap-1 w-full">
-          <span className="font-bold text-lg tracking-tight">{title}</span>
-          <span className="text-[10px] text-white/60 tracking-wider uppercase font-semibold">
-            {description}
-          </span>
-        </div>
-
         {/* WebGL Canvas Viewport wrapper */}
         <div
           ref={mountRef}
-          className="relative w-full h-[290px] rounded-2xl overflow-hidden bg-black/20 border border-white/5"
-        >
-          {/* Draggable controls tooltip info */}
-          <div className="absolute top-3 right-3 z-10 text-[9px] font-bold text-white/60 border border-white/10 bg-black/40 px-2 py-1 rounded-lg pointer-events-none tracking-wider uppercase">
-            Drag to rotate • Scroll to zoom
-          </div>
-        </div>
+          className="w-full h-full bg-black/10"
+        />
       </div>
     </div>
   );
