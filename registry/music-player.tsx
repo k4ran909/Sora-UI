@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useEffect, useRef } from "react";
+import { motion, Variants } from "framer-motion";
 import { cn } from "@/lib/utils";
 
 interface Track {
@@ -11,41 +12,27 @@ interface Track {
   hasPreview?: boolean;
 }
 
-// Gorgeous, copyright-free track list that mirrors the original library's stripes vibe!
+// Some lovely, copyright-free fallback tracks so the player works right out of the box!
 const STATIC_PLAYLIST: Track[] = [
   {
-    title: "De Stijl",
-    artist: "The White Stripes",
+    title: "Forest Song",
+    artist: "Mavka",
     cover: "https://images.unsplash.com/photo-1614613535308-eb5fbd3d2c17?q=80&w=600&auto=format&fit=crop",
     src: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3",
     hasPreview: true,
   },
   {
-    title: "Icky Thump",
-    artist: "The White Stripes",
+    title: "Urban Echoes",
+    artist: "Lofi Dreamer",
     cover: "https://images.unsplash.com/photo-1514525253161-7a46d19cd819?q=80&w=600&auto=format&fit=crop",
     src: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3",
     hasPreview: true,
   },
   {
-    title: "Elephant",
-    artist: "The White Stripes",
+    title: "Neon Dreams",
+    artist: "Synthwave King",
     cover: "https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?q=80&w=600&auto=format&fit=crop",
     src: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3",
-    hasPreview: true,
-  },
-  {
-    title: "White Blood Cells",
-    artist: "The White Stripes",
-    cover: "https://images.unsplash.com/photo-1514525253161-7a46d19cd819?q=80&w=600&auto=format&fit=crop",
-    src: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-4.mp3",
-    hasPreview: true,
-  },
-  {
-    title: "Get Behind Me Satan",
-    artist: "The White Stripes",
-    cover: "https://images.unsplash.com/photo-1614613535308-eb5fbd3d2c17?q=80&w=600&auto=format&fit=crop",
-    src: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-5.mp3",
     hasPreview: true,
   },
 ];
@@ -53,21 +40,23 @@ const STATIC_PLAYLIST: Track[] = [
 interface MusicPlayerProps {
   /**
    * Spotify Web API Access Token (Bearer Token).
+   * Grab a temporary token from: https://developer.spotify.com/documentation/web-api
    */
   spotifyToken?: string;
   
   /**
    * List of Spotify Track IDs you want to play.
+   * Example: ["0V3wPSX3ygHQwZ21K47gOO", "7qiZRhU7tZ2XG6xBvDUz6r"]
    */
   trackIds?: string[];
   
   /**
-   * Circular progress timeline color (hex or Tailwind class).
+   * Timeline progress indicator color (hex or Tailwind class).
    */
   timelineColor?: string;
   
   /**
-   * Main player capsule background color (hex).
+   * Music player card background color (hex).
    */
   componentColor?: string;
   
@@ -82,7 +71,7 @@ interface MusicPlayerProps {
   artistOverride?: string;
   
   /**
-   * Default starting volume (0 to 100).
+   * Default audio volume (0 to 100).
    */
   defaultVolume?: number;
   
@@ -97,49 +86,62 @@ interface MusicPlayerProps {
   loop?: boolean;
 }
 
+// Framer motion variants to make those wave bars dance up and down!
+const barVariants: Variants = {
+  playing: (i: number) => ({
+    scaleY: [1, 0.3, 1],
+    transition: {
+      repeat: Infinity,
+      duration: 1.2,
+      delay: i * 0.15,
+      ease: "easeInOut",
+    },
+  }),
+  paused: {
+    scaleY: 1,
+  },
+};
+
 export function MusicPlayer({
   spotifyToken,
   trackIds,
   timelineColor = "#5e6ad2",
-  componentColor = "#000000",
+  componentColor = "#0f1011",
   titleOverride,
   artistOverride,
   defaultVolume = 80,
   playbackSpeed = 1.0,
   loop = true,
 }: MusicPlayerProps) {
+  // Let's hook up our track playback state so React knows when to re-render
   const [currentTrackIndex, setCurrentTrackIndex] = useState(0);
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
-  const [volume, setVolume] = useState(defaultVolume);
   const [isTransitioning, setIsTransitioning] = useState(false);
+  const [isFullscreen, setIsFullscreen] = useState(false);
+  const [coverOpacity, setCoverOpacity] = useState(1);
 
-  // Active playlist (either static fallback or loaded from Spotify)
+  // Our active playlist state. If Spotify isn't connected, we default to our lovely local track mix.
   const [playlist, setPlaylist] = useState<Track[]>(STATIC_PLAYLIST);
   const [spotifyError, setSpotifyError] = useState<string | null>(null);
 
   const audioRef = useRef<HTMLAudioElement | null>(null);
-  const trackScrollRef = useRef<HTMLDivElement | null>(null);
-  const volScrollRef = useRef<HTMLDivElement | null>(null);
-  
-  const isScrollingTracks = useRef(false);
-  const isScrollingVol = useRef(false);
-  const trackScrollTimeout = useRef<number | null>(null);
-  const volScrollTimeout = useRef<number | null>(null);
+  const progressBarRef = useRef<HTMLDivElement | null>(null);
 
   const currentTrack = playlist[currentTrackIndex] || STATIC_PLAYLIST[0];
 
-  // Sync volume and playback speed props with HTML Audio object
+  // Sync up our native HTML Audio ref with user-provided volume & speed props whenever they update
   useEffect(() => {
     const audio = audioRef.current;
     if (audio) {
-      audio.volume = volume / 100;
+      audio.volume = defaultVolume / 100;
       audio.playbackRate = playbackSpeed;
     }
-  }, [volume, playbackSpeed, currentTrackIndex]);
+  }, [defaultVolume, playbackSpeed, currentTrackIndex]);
 
-  // Fetch track metadata directly from Spotify API
+  // Effect hook to fetch song details directly from Spotify. 
+  // If no credentials or IDs are passed, we gracefully fallback to local demo songs.
   useEffect(() => {
     if (!spotifyToken || !trackIds || trackIds.length === 0) {
       setPlaylist(STATIC_PLAYLIST);
@@ -168,7 +170,7 @@ export function MusicPlayer({
             title: data.name,
             artist: data.artists.map((a: any) => a.name).join(", "),
             cover: data.album.images[0]?.url || "https://images.unsplash.com/photo-1614613535308-eb5fbd3d2c17?q=80&w=600&auto=format&fit=crop",
-            src: data.preview_url || "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3",
+            src: data.preview_url || "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3", // fallback to local audio if no preview is available
             hasPreview: !!data.preview_url,
           });
         }
@@ -189,7 +191,15 @@ export function MusicPlayer({
     loadSpotifyTracks();
   }, [spotifyToken, trackIds]);
 
-  // Bind HTML Audio event listeners
+  // Quick helper to format raw audio seconds into a friendly human-readable MM:SS string
+  const formatTime = (seconds: number) => {
+    if (isNaN(seconds)) return "0:00";
+    const m = Math.floor(seconds / 60);
+    const s = Math.floor(seconds % 60);
+    return `${m}:${s < 10 ? "0" : ""}${s}`;
+  };
+
+  // Bind basic HTML Audio event listeners so we can sync time progress and know when the track finishes
   useEffect(() => {
     const audio = audioRef.current;
     if (!audio) return;
@@ -204,7 +214,7 @@ export function MusicPlayer({
 
     const handleEnded = () => {
       if (loop) {
-        selectTrack((currentTrackIndex + 1) % playlist.length);
+        changeTrack((currentTrackIndex + 1) % playlist.length);
       } else {
         setIsPlaying(false);
       }
@@ -220,20 +230,6 @@ export function MusicPlayer({
       audio.removeEventListener("ended", handleEnded);
     };
   }, [currentTrackIndex, playlist, loop]);
-
-  // Sync scroll positioning of Track & Volume lists on load/change
-  useEffect(() => {
-    if (trackScrollRef.current && !isScrollingTracks.current) {
-      trackScrollRef.current.scrollTop = currentTrackIndex * 44;
-    }
-  }, [currentTrackIndex]);
-
-  useEffect(() => {
-    if (volScrollRef.current && !isScrollingVol.current) {
-      const volIndex = 100 - volume;
-      volScrollRef.current.scrollTop = volIndex * 36;
-    }
-  }, [volume]);
 
   const togglePlay = () => {
     if (isTransitioning) return;
@@ -252,109 +248,71 @@ export function MusicPlayer({
     }
   };
 
-  // Eject-roll track selection transition
-  const selectTrack = (index: number) => {
-    if (isTransitioning || index === currentTrackIndex) return;
+  // The secret sauce: morphing the spinning CD out to a card, swapping tracks, then morphing it back!
+  const changeTrack = (nextIndex: number) => {
+    if (isTransitioning) return;
     setIsTransitioning(true);
 
+    let targetIndex = nextIndex;
+    if (targetIndex < 0) targetIndex = playlist.length - 1;
+    if (targetIndex >= playlist.length) targetIndex = 0;
+
+    // Stop whatever is playing before we begin the morph transition
     if (audioRef.current) {
       audioRef.current.pause();
     }
     setIsPlaying(false);
 
-    // Scroll the track list to target item
-    isScrollingTracks.current = true;
-    if (trackScrollRef.current) {
-      trackScrollRef.current.scrollTo({
-        top: index * 44,
-        behavior: "smooth"
-      });
-    }
+    // Phase 1: CD morphs into the fullscreen album art card while hiding detail text
+    setIsFullscreen(true);
 
-    // Phase transition duration to match slide animation
+    // Phase 2: Fade the cover art opacity down slightly during transition
     setTimeout(() => {
-      setCurrentTrackIndex(index);
-      const wasPlaying = isPlaying;
-      
-      setTimeout(() => {
-        setIsTransitioning(false);
-        isScrollingTracks.current = false;
-        
-        // Auto-play the next song if it was already playing
-        if (audioRef.current) {
-          const nextTrack = playlist[index];
-          if (nextTrack) {
-            audioRef.current.src = nextTrack.src;
-            audioRef.current.play()
-              .then(() => {
-                setIsPlaying(true);
-              })
-              .catch((err) => console.log("Auto-play blocked:", err));
-          }
-        }
-      }, 350);
+      setCoverOpacity(0.1);
     }, 450);
-  };
 
-  // Debounced track scrolling (updates active index when scroll settles)
-  const handleTrackScroll = () => {
-    if (isScrollingTracks.current || !trackScrollRef.current) return;
+    // Phase 3: Switch the current track index and restore cover visibility
+    setTimeout(() => {
+      setCurrentTrackIndex(targetIndex);
+      setCoverOpacity(1);
+    }, 900);
 
-    if (trackScrollTimeout.current) {
-      window.clearTimeout(trackScrollTimeout.current);
-    }
+    // Phase 4: Shrink the fullscreen cover back down into the circular CD shape
+    setTimeout(() => {
+      setIsFullscreen(false);
+    }, 1500);
 
-    trackScrollTimeout.current = window.setTimeout(() => {
-      if (trackScrollRef.current) {
-        const index = Math.round(trackScrollRef.current.scrollTop / 44);
-        if (index >= 0 && index < playlist.length && index !== currentTrackIndex) {
-          selectTrack(index);
-        }
-      }
-    }, 150) as unknown as number;
-  };
-
-  // Volume wheel scrolling
-  const handleVolScroll = () => {
-    if (!volScrollRef.current) return;
-    isScrollingVol.current = true;
-
-    if (volScrollTimeout.current) {
-      window.clearTimeout(volScrollTimeout.current);
-    }
-
-    const volIndex = Math.round(volScrollRef.current.scrollTop / 36);
-    const newVol = Math.max(0, Math.min(100, 100 - volIndex));
-    
-    if (newVol !== volume) {
-      setVolume(newVol);
+    // Phase 5: Kick off the audio playback for the new track and let the disc spin!
+    setTimeout(() => {
       if (audioRef.current) {
-        audioRef.current.volume = newVol / 100;
+        audioRef.current.play()
+          .then(() => {
+            setIsPlaying(true);
+            setIsTransitioning(false);
+          })
+          .catch((err) => {
+            console.error("Auto-play failed:", err);
+            setIsTransitioning(false);
+          });
+      } else {
+        setIsTransitioning(false);
       }
-    }
-
-    volScrollTimeout.current = window.setTimeout(() => {
-      isScrollingVol.current = false;
-    }, 150) as unknown as number;
+    }, 2200);
   };
 
-  // Click on a specific track directly
-  const handleTrackClick = (index: number) => {
-    selectTrack(index);
+  const handleSeek = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (isTransitioning || !audioRef.current || !progressBarRef.current) return;
+    
+    const rect = progressBarRef.current.getBoundingClientRect();
+    const clickX = e.clientX - rect.left;
+    const width = rect.width;
+    const seekTime = (clickX / width) * duration;
+    audioRef.current.currentTime = seekTime;
   };
-
-  // Circular progress ring calculation
-  const radius = 107;
-  const stroke = 3;
-  const normalizedRadius = radius - stroke * 2;
-  const circumference = normalizedRadius * 2 * Math.PI;
-  const strokeDashoffset = duration > 0 
-    ? circumference - (currentTime / duration) * circumference 
-    : circumference;
 
   return (
     <div className="relative font-mono select-none">
-      {/* Infinite Spin Keyframe styles */}
+      {/* Embedded keyframe styles for spinning the CD disc. Inline works perfectly here. */}
       <style>{`
         @keyframes sora-cd-spin {
           from { transform: rotate(0deg); }
@@ -365,166 +323,123 @@ export function MusicPlayer({
         }
       `}</style>
 
-      {/* Main black pill shell */}
-      <div
+      {/* Outer Neumorphic Card container */}
+      <div 
         style={{ backgroundColor: componentColor }}
-        className="relative w-[620px] h-[260px] rounded-[130px] shadow-[0_30px_60px_rgba(0,0,0,0.15)] flex items-center px-[25px] box-border border border-zinc-900/50"
+        className="relative w-[300px] h-[380px] rounded-[40px] shadow-[0_30px_60px_rgba(0,0,0,0.12),_inset_0_2px_4px_rgba(255,255,255,0.6)] dark:shadow-[0_30px_60px_rgba(0,0,0,0.5),_inset_0_1px_2px_rgba(255,255,255,0.15)] flex flex-col justify-end pb-8 overflow-hidden border border-zinc-200/20 dark:border-zinc-800/30"
       >
-        {/* Hidden Audio node */}
+        {/* The actual HTML5 Audio player hidden under the hood */}
         <audio ref={audioRef} src={currentTrack.src} />
 
-        {/* Circular progress timeline ring surrounding the disc */}
-        <div className="absolute left-[22px] top-[22px] w-[216px] h-[216px] pointer-events-none z-10">
-          <svg className="w-full h-full -rotate-90">
-            <circle
-              className="transition-all duration-300"
-              stroke={timelineColor}
-              fill="transparent"
-              strokeWidth={stroke}
-              strokeDasharray={circumference + " " + circumference}
-              style={{ strokeDashoffset }}
-              r={normalizedRadius}
-              cx={108}
-              cy={108}
-            />
-          </svg>
-        </div>
+        {/* Spinning CD Disc container which morphs to fullscreen during track changes */}
+        <motion.div
+          onClick={togglePlay}
+          animate={{
+            left: isFullscreen ? 0 : 10,
+            top: isFullscreen ? 0 : -120,
+            width: isFullscreen ? 300 : 280,
+            height: isFullscreen ? 380 : 280,
+            borderRadius: isFullscreen ? "40px" : "140px", // 50% border radius
+          }}
+          transition={{
+            duration: 0.7,
+            ease: [0.76, 0, 0.24, 1],
+          }}
+          style={{
+            backgroundImage: `url('${currentTrack.cover}')`,
+            opacity: coverOpacity,
+            animationPlayState: isPlaying && !isFullscreen ? "running" : "paused",
+          }}
+          className={cn(
+            "absolute z-20 bg-cover bg-center flex justify-center items-center shadow-lg shadow-black/15",
+            !isFullscreen ? "sora-cd-spin-active cursor-pointer active:scale-98" : "cursor-default"
+          )}
+          title={!isFullscreen ? "Click to play/pause" : undefined}
+        >
+          {/* Skeuomorphic touch: the plastic center hole of the CD */}
+          <motion.div
+            animate={{ opacity: isFullscreen ? 0 : 1 }}
+            transition={{ duration: 0.5 }}
+            className="w-20 h-20 rounded-full flex items-center justify-center border-2 border-white/25 shadow-[inset_0_2px_10px_rgba(0,0,0,0.3),_0_0_5px_rgba(0,0,0,0.5)] bg-[radial-gradient(circle,_#b4b4b4_30%,_#999_70%)] pointer-events-none"
+          >
+            <div className="w-6 h-6 rounded-full bg-zinc-100 dark:bg-zinc-900 shadow-[inset_0_2px_5px_rgba(0,0,0,0.2)]" />
+          </motion.div>
+        </motion.div>
 
-        {/* Album Art Section */}
-        <div className="relative w-[210px] h-[210px] rounded-full border border-white/20 bg-[#111] overflow-hidden flex-shrink-0">
-          {/* Slicing window displaying vertical cover slide strip */}
-          <div className="w-full h-full absolute top-0 left-0 rounded-full overflow-hidden">
+        {/* Text info & playback controls */}
+        <motion.div
+          animate={{ opacity: isFullscreen ? 0 : 1 }}
+          transition={{ duration: 0.5 }}
+          className="w-full flex flex-col items-center z-30 px-8 select-none overflow-hidden"
+        >
+          {/* Tiny dancing equalizer wave bars to show playback activity */}
+          <div className="flex items-center gap-[3px] h-4 mb-3">
+            {[0, 1, 2, 3, 4].map((i) => (
+              <motion.div
+                key={i}
+                custom={i}
+                variants={barVariants}
+                animate={isPlaying ? "playing" : "paused"}
+                className="w-0.5 h-4 bg-zinc-500 dark:bg-zinc-400 rounded-full origin-center"
+              />
+            ))}
+          </div>
+
+          {/* Artist & Song Title labels */}
+          <div className="text-ink-subtle text-xs tracking-wider mb-1 max-w-full truncate text-center">
+            {artistOverride || currentTrack.artist}
+          </div>
+          <div className="text-ink text-base font-bold tracking-tight mb-4 max-w-full text-center truncate">
+            {titleOverride || currentTrack.title}
+          </div>
+
+          {/* Progress bar with drag/seek interactivity */}
+          <div className="w-full max-w-[200px] flex flex-col items-center mb-3">
             <div
-              className="w-full h-full flex flex-col transition-transform duration-700 ease-[cubic-bezier(0.16,1,0.3,1)]"
-              style={{ transform: `translateY(-${currentTrackIndex * 100}%)` }}
+              ref={progressBarRef}
+              onClick={handleSeek}
+              className="w-full h-1 bg-zinc-700 rounded-full relative cursor-pointer overflow-hidden"
             >
-              {playlist.map((track, idx) => {
-                const isActive = idx === currentTrackIndex;
-                return (
-                  <div
-                    key={idx}
-                    style={{ backgroundImage: `url('${track.cover}')` }}
-                    className={cn(
-                      "w-full h-full rounded-full flex-shrink-0 bg-cover bg-center bg-[#111] transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)]",
-                      isActive && isPlaying && !isTransitioning ? "sora-cd-spin-active" : "",
-                      isActive && !isTransitioning ? "scale-100 opacity-90" : "scale-[0.65] opacity-0",
-                      isActive && isTransitioning ? "scale-[0.65] opacity-40" : "",
-                      !isActive && isTransitioning && Math.abs(idx - currentTrackIndex) === 1 ? "scale-[0.65] opacity-40" : ""
-                    )}
-                  />
-                );
-              })}
+              <div
+                className="absolute left-0 top-0 h-full rounded-full pointer-events-none"
+                style={{ 
+                  width: `${duration > 0 ? Math.min((currentTime / duration) * 100, 100) : 0}%`,
+                  backgroundColor: timelineColor 
+                }}
+              />
+            </div>
+            
+            {/* Elapsed vs Total time readout */}
+            <div className="mt-2 text-xs font-semibold text-ink-subtle tabular-nums">
+              <span className="text-white">{formatTime(currentTime)}</span>
+              <span className="mx-1 opacity-40">/</span>
+              <span>{formatTime(duration)}</span>
             </div>
           </div>
 
-          {/* Centered play button overlay */}
-          <button
-            onClick={togglePlay}
-            className={cn(
-              "absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[50px] h-[50px] rounded-full bg-black/60 border border-white/25 flex items-center justify-center cursor-pointer transition-all duration-200 hover:scale-110 z-30 shadow-lg outline-none",
-              isTransitioning ? "opacity-0 pointer-events-none" : "opacity-100"
-            )}
-            title={isPlaying ? "Pause" : "Play"}
-          >
-            {isPlaying ? (
-              <svg className="w-6 h-6 fill-white drop-shadow" viewBox="0 0 24 24">
-                <path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z" />
+          {/* Skip buttons */}
+          <div className="flex items-center justify-center gap-8 w-full mt-1">
+            <button
+              onClick={() => changeTrack(currentTrackIndex - 1)}
+              className="p-2.5 rounded-full hover:bg-black/5 dark:hover:bg-white/5 active:scale-90 transition-all text-ink-subtle hover:text-ink"
+              title="Previous Track"
+            >
+              <svg className="w-5 h-5 fill-current" viewBox="0 0 24 24">
+                <path d="M6 6h2v12H6zm3.5 6L18 18V6z" />
               </svg>
-            ) : (
-              <svg className="w-6 h-6 fill-white translate-x-0.5 drop-shadow" viewBox="0 0 24 24">
-                <path d="M8 5v14l11-7z" />
+            </button>
+            
+            <button
+              onClick={() => changeTrack(currentTrackIndex + 1)}
+              className="p-2.5 rounded-full hover:bg-black/5 dark:hover:bg-white/5 active:scale-90 transition-all text-ink-subtle hover:text-ink"
+              title="Next Track"
+            >
+              <svg className="w-5 h-5 fill-current" viewBox="0 0 24 24">
+                <path d="M6 18l8.5-6L6 6zm9-12v12h2V6z" />
               </svg>
-            )}
-          </button>
-        </div>
-
-        {/* Center Section: Album/Song Track list */}
-        <div className="flex-1 h-full relative flex flex-col justify-center pl-8 box-border">
-          <div className="absolute top-[45px] left-12 text-[10px] text-zinc-500 tracking-wider uppercase">
-            Album
+            </button>
           </div>
-          
-          {/* Highlight pill indicator block */}
-          <div className="absolute left-6 top-[54%] -translate-y-1/2 w-[85%] h-[44px] border border-zinc-800 rounded-[22px] bg-[#0d0d0d] pointer-events-none z-0 flex items-center justify-end pr-5 box-border">
-            <div className="w-[6px] h-[6px] bg-white rounded-full" />
-          </div>
-
-          {/* Track list container with snap-scrolling */}
-          <div
-            ref={trackScrollRef}
-            onScroll={handleTrackScroll}
-            className="w-full h-[150px] overflow-y-scroll scrollbar-none snap-y snap-mandatory mt-[15px] relative z-10"
-          >
-            {/* Top spacer for center snap align */}
-            <div className="h-[53px] flex-shrink-0" />
-            
-            {playlist.map((track, idx) => {
-              const isActive = idx === currentTrackIndex;
-              return (
-                <div
-                  key={idx}
-                  onClick={() => handleTrackClick(idx)}
-                  className={cn(
-                    "h-[44px] flex items-center pl-5 snap-center cursor-pointer select-none transition-all duration-300 text-sm font-medium w-[80%]",
-                    isActive ? "text-white scale-105" : "text-zinc-600 opacity-40 hover:opacity-70"
-                  )}
-                >
-                  <span className="truncate">
-                    {idx === currentTrackIndex && titleOverride ? titleOverride : track.title}
-                  </span>
-                </div>
-              );
-            })}
-            
-            {/* Bottom spacer for center snap align */}
-            <div className="h-[53px] flex-shrink-0" />
-          </div>
-        </div>
-
-        {/* Right Section: Volume Scroller */}
-        <div className="w-[90px] h-full relative flex flex-col justify-center items-center flex-shrink-0">
-          <div className="absolute top-[45px] text-[10px] text-zinc-500 tracking-wider uppercase">
-            Vol
-          </div>
-          
-          {/* Volume scroller container with snap-scrolling */}
-          <div
-            ref={volScrollRef}
-            onScroll={handleVolScroll}
-            className="w-full h-[150px] overflow-y-scroll scrollbar-none snap-y snap-mandatory mt-[15px]"
-          >
-            {/* Top spacer for center snap align */}
-            <div className="h-[57px] flex-shrink-0" />
-            
-            {Array.from({ length: 101 }, (_, i) => 100 - i).map((val) => {
-              const isActive = val === volume;
-              return (
-                <div
-                  key={val}
-                  onClick={() => {
-                    setVolume(val);
-                    if (audioRef.current) {
-                      audioRef.current.volume = val / 100;
-                    }
-                  }}
-                  className={cn(
-                    "h-[36px] flex items-center justify-center snap-center text-xl tracking-tighter cursor-pointer select-none transition-all duration-300 font-semibold",
-                    isActive ? "text-white scale-110" : "text-zinc-800 opacity-30 hover:opacity-50"
-                  )}
-                >
-                  {val}
-                </div>
-              );
-            })}
-
-            {/* Bottom spacer for center snap align */}
-            <div className="h-[57px] flex-shrink-0" />
-          </div>
-          <div className="absolute right-[22px] top-[54%] -translate-y-1/2 w-[5px] h-[5px] bg-white rounded-full pointer-events-none" />
-        </div>
-
-        {/* Center Pill Home Indicator bar */}
-        <div className="absolute bottom-[12px] left-1/2 -translate-x-1/2 w-[40px] h-[4px] bg-[#444] rounded-[4px]" />
+        </motion.div>
       </div>
 
       {/* Spotify Error Alert */}

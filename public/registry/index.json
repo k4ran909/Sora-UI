@@ -11,5 +11,18 @@
     "files": [
       "music-player.tsx"
     ]
+  },
+  {
+    "name": "dark-player",
+    "type": "registry:ui",
+    "dependencies": [
+      "framer-motion",
+      "lucide-react",
+      "clsx",
+      "tailwind-merge"
+    ],
+    "files": [
+      "dark-player.tsx"
+    ]
   }
 ]

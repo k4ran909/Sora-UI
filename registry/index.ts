@@ -17,6 +17,14 @@ export const registry: Record<string, RegistryEntry> = {
     codePath: "registry/music-player.tsx",
     dependencies: ["framer-motion", "lucide-react", "clsx", "tailwind-merge"],
   },
+  "dark-player": {
+    name: "Dark Pill Music Player",
+    slug: "dark-player",
+    category: "Media",
+    description: "A premium pill-shaped music player featuring vertical scroll-snapping track selection, scroll-snapping volume, and a rolling album disc.",
+    codePath: "registry/dark-player.tsx",
+    dependencies: ["framer-motion", "lucide-react", "clsx", "tailwind-merge"],
+  },
 };
 
 

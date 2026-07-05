@@ -16,6 +16,17 @@ const components = [
         type: "registry:ui"
       }
     ]
+  },
+  {
+    name: "dark-player",
+    type: "registry:ui",
+    dependencies: ["framer-motion", "lucide-react", "clsx", "tailwind-merge"],
+    files: [
+      {
+        path: "dark-player.tsx",
+        type: "registry:ui"
+      }
+    ]
   }
 ];
 
