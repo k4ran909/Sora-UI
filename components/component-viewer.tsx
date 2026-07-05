@@ -104,8 +104,8 @@ export function ComponentViewer({ code, usageCode, children }: ComponentViewerPr
             <div className="z-10">{children}</div>
           </div>
         ) : (
-          <div className="relative max-h-[500px] overflow-y-auto">
-            <pre className="p-6 font-mono text-sm text-ink-muted bg-background overflow-x-auto leading-relaxed select-text">
+          <div className="relative max-h-[500px] overflow-auto w-full">
+            <pre className="p-6 font-mono text-sm text-ink-muted bg-background leading-relaxed select-text">
               <code>{activeCode}</code>
             </pre>
           </div>
