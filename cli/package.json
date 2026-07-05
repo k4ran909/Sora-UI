@@ -1,0 +1,22 @@
+{
+  "name": "soraui-cli",
+  "version": "0.1.0",
+  "description": "Command line interface for installing Sora UI components",
+  "main": "index.js",
+  "bin": {
+    "soraui-cli": "./index.js"
+  },
+  "files": [
+    "index.js"
+  ],
+  "keywords": [
+    "react",
+    "nextjs",
+    "shadcn",
+    "tailwind",
+    "skeuomorphic",
+    "components"
+  ],
+  "author": "k4ran909",
+  "license": "MIT"
+}

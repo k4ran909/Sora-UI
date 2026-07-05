@@ -28,11 +28,11 @@ And best of all? **It's 100% copy-pasteable and v0.app compatible.** No bloated 
 
 You can install Sora UI components using the official **shadcn CLI** (just like shadcn/ui and Magic UI!) or do a manual copy-paste.
 
-### Option A: Install via shadcn CLI (Recommended)
-If your project is already set up with `shadcn/ui`, you can add the music player component with a single command! It will automatically copy the code, resolve path aliases, and install dependencies (`framer-motion`, `lucide-react`, etc.):
+### Option A: Install via Sora UI CLI (Recommended)
+If your project is already set up with `shadcn/ui`, you can add the music player component with a single command! It will automatically download the code, resolve path aliases, and install dependencies (`framer-motion`, `lucide-react`, etc.):
 
 ```bash
-npx shadcn@latest add https://raw.githubusercontent.com/k4ran909/Sora-UI/main/public/registry/music-player.json
+npx soraui-cli add music-player
 ```
 
 ### Option B: Manual Copy-Paste

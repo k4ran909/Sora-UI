@@ -63,13 +63,13 @@ export default async function ComponentPage({ params }: PageProps) {
         <h2 className="text-xl font-bold text-ink tracking-[-0.4px]">Installation</h2>
         
         <div className="space-y-3">
-          <h3 className="text-sm font-semibold text-ink">Option A: Via shadcn CLI (Recommended)</h3>
+          <h3 className="text-sm font-semibold text-ink">Option A: Via Sora UI CLI (Recommended)</h3>
           <p className="text-xs text-ink-muted leading-relaxed">
             If your project uses `shadcn/ui`, you can install this component and its dependencies automatically:
           </p>
           <div className="relative flex items-center justify-between p-4 rounded-xl border border-hairline bg-surface-1 font-mono text-xs">
             <code className="text-primary select-all truncate">
-              npx shadcn@latest add {`https://raw.githubusercontent.com/k4ran909/Sora-UI/main/public/registry/${slug}.json`}
+              npx soraui-cli add {slug}
             </code>
           </div>
         </div>
