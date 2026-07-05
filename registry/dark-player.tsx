@@ -326,7 +326,7 @@ export function MusicPlayer({
 
         {/* 2. Middle Section: Album/Track scroll lists */}
         <div className="flex-1 h-full relative flex flex-col justify-center pl-5 box-border">
-          <div className="absolute top-[45px] left-10 text-[10px] text-zinc-500 uppercase tracking-widest">
+          <div className="absolute top-[32px] left-10 text-[10px] text-zinc-500 uppercase tracking-widest">
             Album
           </div>
           
@@ -373,7 +373,7 @@ export function MusicPlayer({
 
         {/* 3. Right Section: Volume Slider scroll snap */}
         <div className="flex-shrink-0 w-[100px] h-full relative flex flex-col justify-center items-center">
-          <div className="absolute top-[45px] right-[35px] text-[10px] text-zinc-500 uppercase tracking-widest">
+          <div className="absolute top-[32px] right-[35px] text-[10px] text-zinc-500 uppercase tracking-widest">
             Vol
           </div>
 
