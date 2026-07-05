@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useState, useEffect, useRef } from "react";
-import { motion, AnimatePresence } from "framer-motion";
 import { cn } from "@/lib/utils";
 
 interface Track {
@@ -23,12 +22,12 @@ const STATIC_PLAYLIST: Track[] = [
 
 interface DarkPlayerProps {
   /**
-   * Spotify Access Token.
+   * Spotify Access Token (Bearer Token).
    */
   spotifyToken?: string;
   
   /**
-   * Spotify Track ID list to fetch.
+   * Spotify Track ID list to fetch and play.
    */
   trackIds?: string[];
   
@@ -51,6 +50,26 @@ interface DarkPlayerProps {
    * Default starting track index (0-indexed).
    */
   initialTrackIndex?: number;
+
+  /**
+   * Playback speed multiplier (0.5, 1.0, 1.5, 2.0).
+   */
+  playbackSpeed?: number;
+
+  /**
+   * If true, loops playlist continuously. If false, stops at end of playlist.
+   */
+  loop?: boolean;
+
+  /**
+   * Override text for the active track's title.
+   */
+  titleOverride?: string;
+
+  /**
+   * Override text for the active track's artist.
+   */
+  artistOverride?: string;
 }
 
 export function MusicPlayer({
@@ -60,6 +79,10 @@ export function MusicPlayer({
   componentColor = "#000000",
   defaultVolume = 80,
   initialTrackIndex = 2,
+  playbackSpeed = 1.0,
+  loop = true,
+  titleOverride,
+  artistOverride,
 }: DarkPlayerProps) {
   const [playlist, setPlaylist] = useState<Track[]>(STATIC_PLAYLIST);
   const [activeTrackIndex, setActiveTrackIndex] = useState(initialTrackIndex);
@@ -122,14 +145,16 @@ export function MusicPlayer({
     loadSpotifyTracks();
   }, [spotifyToken, trackIds, initialTrackIndex]);
 
-  // Sync up native HTML Audio volume and source
+  // Sync up native HTML Audio volume & speed props
   useEffect(() => {
     const audio = audioRef.current;
     if (audio) {
       audio.volume = volume / 100;
+      audio.playbackRate = playbackSpeed;
     }
-  }, [volume]);
+  }, [volume, playbackSpeed, activeTrackIndex]);
 
+  // Load new audio source when active track changes
   useEffect(() => {
     const audio = audioRef.current;
     if (audio && currentTrack.src) {
@@ -140,6 +165,28 @@ export function MusicPlayer({
       }
     }
   }, [activeTrackIndex, currentTrack.src]);
+
+  // Audio track finish event listener (looping vs static)
+  useEffect(() => {
+    const audio = audioRef.current;
+    if (!audio) return;
+
+    const handleEnded = () => {
+      const nextIndex = activeTrackIndex + 1;
+      if (nextIndex < playlist.length) {
+        handleTrackClick(nextIndex);
+      } else if (loop) {
+        handleTrackClick(0);
+      } else {
+        setIsPlaying(false);
+      }
+    };
+
+    audio.addEventListener("ended", handleEnded);
+    return () => {
+      audio.removeEventListener("ended", handleEnded);
+    };
+  }, [activeTrackIndex, playlist.length, loop]);
 
   // Scroll placements on initial load
   useEffect(() => {
@@ -352,17 +399,26 @@ export function MusicPlayer({
               const scale = Math.max(0.75, 1 - distance * 0.12);
               const opacity = Math.max(0.15, 1 - distance * 0.35);
 
+              // Support track title and artist overrides
+              const displayTitle = (isActive && titleOverride) ? titleOverride : track.title;
+              const displayArtist = (isActive && artistOverride) ? artistOverride : track.artist;
+
               return (
                 <div
                   key={idx}
                   onClick={() => handleTrackClick(idx)}
                   style={{ transform: `scale(${scale})`, opacity }}
                   className={cn(
-                    "text-zinc-500 text-sm h-[44px] flex items-center pl-5 snap-center select-none cursor-pointer w-[80%] transition-all duration-300 ease-[cubic-bezier(0.25,1,0.5,1)] truncate font-semibold",
+                    "text-zinc-500 text-sm h-[44px] flex flex-col justify-center pl-5 snap-center select-none cursor-pointer w-[80%] transition-all duration-300 ease-[cubic-bezier(0.25,1,0.5,1)] truncate",
                     isActive && "text-white font-bold"
                   )}
                 >
-                  {track.title}
+                  <div className="truncate font-semibold text-xs md:text-sm">{displayTitle}</div>
+                  {isActive && (
+                    <div className="text-[10px] text-zinc-400 font-normal truncate mt-0.5">
+                      {displayArtist}
+                    </div>
+                  )}
                 </div>
               );
             })}
