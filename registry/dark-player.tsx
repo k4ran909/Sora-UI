@@ -56,7 +56,7 @@ interface DarkPlayerProps {
 export function MusicPlayer({
   spotifyToken,
   trackIds,
-  timelineColor = "#222222",
+  timelineColor = "#3f3f46",
   componentColor = "#000000",
   defaultVolume = 80,
   initialTrackIndex = 2,
@@ -268,7 +268,7 @@ export function MusicPlayer({
       {/* Main Pill Frame */}
       <div
         style={{ backgroundColor: componentColor }}
-        className="relative w-[620px] h-[260px] rounded-[130px] flex items-center px-[25px] box-border shadow-[0_30px_60px_rgba(0,0,0,0.15)] overflow-hidden border border-zinc-200/5 dark:border-zinc-800/10"
+        className="relative w-[620px] h-[260px] rounded-[130px] flex items-center px-[25px] box-border shadow-[0_30px_60px_rgba(0,0,0,0.15)] overflow-hidden border border-zinc-800/80"
       >
         <audio ref={audioRef} src={currentTrack.src} />
 
