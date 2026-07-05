@@ -11,12 +11,13 @@ if (command === "add" && component) {
   console.log(`\n🕯️  Sora UI CLI: Installing ${component}...`);
   console.log(`Connecting to registry: ${registryUrl}\n`);
   
-  const npxCommand = process.platform === "win32" ? "npx.cmd" : "npx";
+  const fullCommand = `npx shadcn@latest add "${registryUrl}"`;
   
   // Under the hood, we spawn the official shadcn CLI to do the heavy lifting:
   // parsing aliases, merging Tailwind config, and downloading files.
-  const child = spawn(npxCommand, ["shadcn@latest", "add", registryUrl], {
-    stdio: "inherit"
+  const child = spawn(fullCommand, [], {
+    stdio: "inherit",
+    shell: true
   });
 
   child.on("exit", (code) => {
