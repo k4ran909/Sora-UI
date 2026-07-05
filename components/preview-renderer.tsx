@@ -58,6 +58,10 @@ const componentsMap: Record<string, React.ComponentType<any>> = {
     loading: () => <span className="text-zinc-500 text-xs">Loading player...</span>,
   }),
   "bar-visualizer": BarVisualizerPreview,
+  "date-selector": dynamic(() => import("@/registry/date-selector").then((mod) => mod.DateSelector), {
+    ssr: false,
+    loading: () => <span className="text-zinc-500 text-xs">Loading calendar...</span>,
+  }),
 };
 
 export function PreviewRenderer({ slug }: { slug: string }) {

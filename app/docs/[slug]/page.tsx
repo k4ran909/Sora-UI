@@ -9,6 +9,7 @@ import { MusicPlayerPlayground } from "@/components/music-player-playground";
 import { MusicPlayerDocs } from "@/components/music-player-docs";
 import { DarkPlayerDocs } from "@/components/dark-player-docs";
 import { BarVisualizerDocs } from "@/components/bar-visualizer-docs";
+import { DateSelectorDocs } from "@/components/date-selector-docs";
 import { CLIInstallBlock } from "@/components/cli-install-block";
 
 interface PageProps {
@@ -103,6 +104,13 @@ export default async function ComponentPage({ params }: PageProps) {
       {slug === "bar-visualizer" && (
         <div className="border-t border-hairline pt-12">
           <BarVisualizerDocs />
+        </div>
+      )}
+
+      {/* Detailed documentation section for date-selector */}
+      {slug === "date-selector" && (
+        <div className="border-t border-hairline pt-12">
+          <DateSelectorDocs />
         </div>
       )}
     </div>

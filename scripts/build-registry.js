@@ -38,6 +38,17 @@ const components = [
         type: "registry:ui"
       }
     ]
+  },
+  {
+    name: "date-selector",
+    type: "registry:ui",
+    dependencies: ["framer-motion", "lucide-react", "clsx", "tailwind-merge"],
+    files: [
+      {
+        path: "date-selector.tsx",
+        type: "registry:ui"
+      }
+    ]
   }
 ];
 

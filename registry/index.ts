@@ -33,6 +33,14 @@ export const registry: Record<string, RegistryEntry> = {
     codePath: "registry/bar-visualizer.tsx",
     dependencies: ["framer-motion", "lucide-react", "clsx", "tailwind-merge"],
   },
+  "date-selector": {
+    name: "Date Selector",
+    slug: "date-selector",
+    category: "Forms",
+    description: "A premium interactive date selector card featuring a sliding pointer, weekday headings, and height-expanding day capsules.",
+    codePath: "registry/date-selector.tsx",
+    dependencies: ["framer-motion", "lucide-react", "clsx", "tailwind-merge"],
+  },
 };
 
 
