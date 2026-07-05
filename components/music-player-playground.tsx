@@ -47,7 +47,7 @@ export function MusicPlayerPlayground({ componentCode }: MusicPlayerPlaygroundPr
 
     const propsString = props.length > 0 ? "\n  " + props.join("\n  ") + "\n" : "";
     
-    return `import { MusicPlayer } from "@/components/music-player";
+    return `import { MusicPlayer } from "@/components/ui/music-player";
 
 export default function Example() {
   return (

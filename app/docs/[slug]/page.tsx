@@ -7,6 +7,7 @@ import { ComponentViewer } from "@/components/component-viewer";
 import { PreviewRenderer } from "@/components/preview-renderer";
 import { MusicPlayerPlayground } from "@/components/music-player-playground";
 import { MusicPlayerDocs } from "@/components/music-player-docs";
+import { CLIInstallBlock } from "@/components/cli-install-block";
 
 interface PageProps {
   params: Promise<{ slug: string }>;
@@ -67,11 +68,7 @@ export default async function ComponentPage({ params }: PageProps) {
           <p className="text-xs text-ink-muted leading-relaxed">
             If your project uses `shadcn/ui`, you can install this component and its dependencies automatically:
           </p>
-          <div className="relative flex items-center justify-between p-4 rounded-xl border border-hairline bg-surface-1 font-mono text-xs">
-            <code className="text-primary select-all truncate">
-              npx soraui-cli add {slug}
-            </code>
-          </div>
+          <CLIInstallBlock slug={slug} />
         </div>
 
         <div className="space-y-3 pt-2">

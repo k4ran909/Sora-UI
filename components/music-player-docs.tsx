@@ -123,13 +123,13 @@ const PROPS_TABLE: PropRow[] = [
 
 /* ── Code Snippet Examples ── */
 
-const EXAMPLE_BASIC = `import { MusicPlayer } from "@/components/music-player";
+const EXAMPLE_BASIC = `import { MusicPlayer } from "@/components/ui/music-player";
 
 export default function Demo() {
   return <MusicPlayer />;
 }`;
 
-const EXAMPLE_SPOTIFY = `import { MusicPlayer } from "@/components/music-player";
+const EXAMPLE_SPOTIFY = `import { MusicPlayer } from "@/components/ui/music-player";
 
 // 1. Get your Spotify credentials:
 //    → https://developer.spotify.com/dashboard
@@ -205,7 +205,7 @@ const EXAMPLE_TITLE_OVERRIDE = `// Display a custom title and artist
   artistOverride="DJ Sora"
 />`;
 
-const EXAMPLE_FULL = `import { MusicPlayer } from "@/components/music-player";
+const EXAMPLE_FULL = `import { MusicPlayer } from "@/components/ui/music-player";
 
 const TOKEN = "BQDj7g0...";
 
