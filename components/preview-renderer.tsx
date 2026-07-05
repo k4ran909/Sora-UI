@@ -62,6 +62,10 @@ const componentsMap: Record<string, React.ComponentType<any>> = {
     ssr: false,
     loading: () => <span className="text-zinc-500 text-xs">Loading calendar...</span>,
   }),
+  "dust-sphere": dynamic(() => import("@/registry/dust-sphere").then((mod) => mod.DustSphere), {
+    ssr: false,
+    loading: () => <span className="text-zinc-500 text-xs">Loading 3D globe...</span>,
+  }),
 };
 
 export function PreviewRenderer({ slug }: { slug: string }) {

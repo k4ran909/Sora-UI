@@ -50,5 +50,19 @@
     "files": [
       "date-selector.tsx"
     ]
+  },
+  {
+    "name": "dust-sphere",
+    "type": "registry:ui",
+    "dependencies": [
+      "framer-motion",
+      "lucide-react",
+      "clsx",
+      "tailwind-merge",
+      "three"
+    ],
+    "files": [
+      "dust-sphere.tsx"
+    ]
   }
 ]

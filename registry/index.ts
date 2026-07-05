@@ -41,6 +41,14 @@ export const registry: Record<string, RegistryEntry> = {
     codePath: "registry/date-selector.tsx",
     dependencies: ["framer-motion", "lucide-react", "clsx", "tailwind-merge"],
   },
+  "dust-sphere": {
+    name: "Dust Particle Sphere 3D",
+    slug: "dust-sphere",
+    category: "Graphics",
+    description: "A neomorphic glassmorphic display card rendering an interactive, voice-reactive Three.js 3D scattered point cloud sphere.",
+    codePath: "registry/dust-sphere.tsx",
+    dependencies: ["framer-motion", "lucide-react", "clsx", "tailwind-merge", "three"],
+  },
 };
 
 

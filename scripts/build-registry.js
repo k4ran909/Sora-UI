@@ -49,6 +49,17 @@ const components = [
         type: "registry:ui"
       }
     ]
+  },
+  {
+    name: "dust-sphere",
+    type: "registry:ui",
+    dependencies: ["framer-motion", "lucide-react", "clsx", "tailwind-merge", "three"],
+    files: [
+      {
+        path: "dust-sphere.tsx",
+        type: "registry:ui"
+      }
+    ]
   }
 ];
 

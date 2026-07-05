@@ -10,6 +10,7 @@ import { MusicPlayerDocs } from "@/components/music-player-docs";
 import { DarkPlayerDocs } from "@/components/dark-player-docs";
 import { BarVisualizerDocs } from "@/components/bar-visualizer-docs";
 import { DateSelectorDocs } from "@/components/date-selector-docs";
+import { DustSphereDocs } from "@/components/dust-sphere-docs";
 import { CLIInstallBlock } from "@/components/cli-install-block";
 
 interface PageProps {
@@ -111,6 +112,13 @@ export default async function ComponentPage({ params }: PageProps) {
       {slug === "date-selector" && (
         <div className="border-t border-hairline pt-12">
           <DateSelectorDocs />
+        </div>
+      )}
+
+      {/* Detailed documentation section for dust-sphere */}
+      {slug === "dust-sphere" && (
+        <div className="border-t border-hairline pt-12">
+          <DustSphereDocs />
         </div>
       )}
     </div>
