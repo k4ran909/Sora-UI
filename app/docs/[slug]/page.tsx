@@ -8,6 +8,7 @@ import { PreviewRenderer } from "@/components/preview-renderer";
 import { MusicPlayerPlayground } from "@/components/music-player-playground";
 import { MusicPlayerDocs } from "@/components/music-player-docs";
 import { DarkPlayerDocs } from "@/components/dark-player-docs";
+import { BarVisualizerDocs } from "@/components/bar-visualizer-docs";
 import { CLIInstallBlock } from "@/components/cli-install-block";
 
 interface PageProps {
@@ -95,6 +96,13 @@ export default async function ComponentPage({ params }: PageProps) {
       {slug === "dark-player" && (
         <div className="border-t border-hairline pt-12">
           <DarkPlayerDocs />
+        </div>
+      )}
+
+      {/* Detailed documentation section for bar-visualizer */}
+      {slug === "bar-visualizer" && (
+        <div className="border-t border-hairline pt-12">
+          <BarVisualizerDocs />
         </div>
       )}
     </div>

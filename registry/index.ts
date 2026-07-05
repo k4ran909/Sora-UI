@@ -25,6 +25,14 @@ export const registry: Record<string, RegistryEntry> = {
     codePath: "registry/dark-player.tsx",
     dependencies: ["framer-motion", "lucide-react", "clsx", "tailwind-merge"],
   },
+  "bar-visualizer": {
+    name: "Bar Visualizer",
+    slug: "bar-visualizer",
+    category: "Voice",
+    description: "A real-time audio frequency visualizer with state-based animations for voice agents and audio interfaces.",
+    codePath: "registry/bar-visualizer.tsx",
+    dependencies: ["framer-motion", "lucide-react", "clsx", "tailwind-merge"],
+  },
 };
 
 

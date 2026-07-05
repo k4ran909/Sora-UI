@@ -27,6 +27,17 @@ const components = [
         type: "registry:ui"
       }
     ]
+  },
+  {
+    name: "bar-visualizer",
+    type: "registry:ui",
+    dependencies: ["framer-motion", "lucide-react", "clsx", "tailwind-merge"],
+    files: [
+      {
+        path: "bar-visualizer.tsx",
+        type: "registry:ui"
+      }
+    ]
   }
 ];
 

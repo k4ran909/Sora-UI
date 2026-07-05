@@ -24,5 +24,18 @@
     "files": [
       "dark-player.tsx"
     ]
+  },
+  {
+    "name": "bar-visualizer",
+    "type": "registry:ui",
+    "dependencies": [
+      "framer-motion",
+      "lucide-react",
+      "clsx",
+      "tailwind-merge"
+    ],
+    "files": [
+      "bar-visualizer.tsx"
+    ]
   }
 ]
