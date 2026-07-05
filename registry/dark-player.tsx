@@ -342,7 +342,7 @@ export function MusicPlayer({
           <div
             ref={listSectionRef}
             onScroll={handleListScroll}
-            className="sora-dark-scroll w-full h-[150px] overflow-y-scroll snap-y snap-mandatory mt-[15px] relative z-10"
+            className="sora-dark-scroll w-full h-[150px] overflow-y-scroll snap-y snap-mandatory relative z-10"
           >
             <div className="h-[53px] flex-shrink-0" /> {/* Top Spacer */}
             
@@ -381,7 +381,7 @@ export function MusicPlayer({
           <div
             ref={volSectionRef}
             onScroll={handleVolumeScroll}
-            className="sora-dark-scroll w-full h-[150px] overflow-y-scroll snap-y snap-mandatory mt-[15px]"
+            className="sora-dark-scroll w-full h-[150px] overflow-y-scroll snap-y snap-mandatory"
           >
             <div className="h-[57px] flex-shrink-0" /> {/* Top Spacer */}
             
