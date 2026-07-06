@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono, Darker_Grotesque, Inter, Kalam } from "next/font/google";
 import { ThemeProvider } from "@/contexts/theme-context";
+import { RootProvider } from "fumadocs-ui/provider/next";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -47,7 +48,15 @@ export default function RootLayout({
     >
       <body className="min-h-full flex flex-col bg-background text-foreground bg-grid-pattern selection:bg-primary/30 selection:text-white">
         <ThemeProvider>
-          {children}
+          <RootProvider
+            theme={{
+              enabled: false,
+              defaultTheme: "dark",
+              storageKey: "fumadocs-theme",
+            }}
+          >
+            {children}
+          </RootProvider>
         </ThemeProvider>
       </body>
     </html>

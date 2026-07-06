@@ -33,6 +33,8 @@
     "country-state-city": "^3.2.1",
     "currency-codes": "^2.2.0",
     "framer-motion": "^12.42.2",
+    "fumadocs-core": "^16.10.7",
+    "fumadocs-ui": "^16.10.7",
     "lucide-react": "^1.23.0",
     "motion": "^12.42.2",
     "next": "16.2.10",
