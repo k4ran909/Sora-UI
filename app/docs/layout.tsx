@@ -37,10 +37,10 @@ export default function DocsPageLayout({
       tree={tree as any}
       nav={{
         title: (
-          <Link href="/" className="flex items-center gap-2 font-semibold">
+          <div className="flex items-center gap-2 font-semibold">
             <Logo size={24} className="text-zinc-100" />
             <span className="font-display text-lg tracking-tight text-white">Sora UI</span>
-          </Link>
+          </div>
         ),
       }}
       links={[
