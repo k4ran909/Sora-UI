@@ -70,7 +70,7 @@ export default function Home() {
 
           {/* Main Heading */}
           <h1 className={`${russoOne.className} text-4xl sm:text-6xl md:text-[68px] font-normal tracking-tight text-zinc-950 leading-[1.08] max-w-3.5xl mx-auto`}>
-            The Framer partner your team actually needs
+            The Framer partner your <br /> <span className="text-orange-500">team actually needs</span>
           </h1>
 
           {/* Subheading */}
