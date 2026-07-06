@@ -20,6 +20,18 @@
   --hairline: #23252a;
   --hairline-strong: #34343a;
   --hairline-tertiary: #3e3e44;
+
+  /* Custom variables for billing SDK landing page */
+  --dodo-primary: oklch(0.9251 0.2258 124.46);
+  --muted: oklch(0.269 0 0);
+  --muted-foreground: oklch(0.708 0 0);
+  --accent: oklch(0.371 0 0);
+  --accent-foreground: oklch(0.985 0 0);
+  --border: oklch(0.275 0 0);
+  --input: oklch(0.325 0 0);
+  --ring: oklch(0.556 0 0);
+  --card: oklch(0.205 0 0);
+  --card-foreground: oklch(0.985 0 0);
 }
 
 @theme {
@@ -43,8 +55,22 @@
   --color-hairline-strong: var(--hairline-strong);
   --color-hairline-tertiary: var(--hairline-tertiary);
 
+  /* Mapping layout fonts & colors */
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
+  --font-body: var(--font-inter);
+  --font-display: var(--font-darker-grotesque);
+
+  --color-dodo-primary: var(--dodo-primary);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
 }
 
 body {
@@ -91,4 +117,53 @@ body {
 .linear-card-hover:hover {
   background-color: var(--surface-2);
   border-color: var(--hairline-strong);
+}
+
+/* Hide scrollbars while maintaining scroll functionality */
+.hide-scrollbars {
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE and Edge */
+}
+
+.hide-scrollbars::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, and Opera */
+}
+
+/* Hide scrollbars for SyntaxHighlighter specifically */
+pre[class*="language-"] {
+  scrollbar-width: none !important;
+  -ms-overflow-style: none !important;
+}
+
+pre[class*="language-"]::-webkit-scrollbar {
+  display: none !important;
+}
+
+/* Handwritten font style */
+.handwritten {
+  font-family: var(--font-kalam), "Comic Sans MS", cursive;
+  font-weight: 400;
+  letter-spacing: 0.5px;
+}
+
+@layer utilities {
+  /* Light glass: 1px white/10 border, 10px blur, rgba(255,255,255,.05) bg, 20px radius, inset shadow */
+  .glass {
+    @apply border border-white/10 rounded-[20px] backdrop-blur-[10px] bg-white/5;
+    box-shadow: inset 0 0 30px rgba(255, 255, 255, 0.05);
+  }
+
+  /* Darker glass used for inner wrappers: same border/blur/radius with rgba(0,0,0,.3) bg */
+  .glass-dark {
+    @apply border border-white/10 rounded-[20px] backdrop-blur-[10px] bg-black/30;
+    box-shadow: inset 0 0 30px rgba(255, 255, 255, 0.05);
+  }
+
+  /* Subtle hover darkening without scale/zoom */
+  .glass-hover {
+    @apply transition-colors duration-300;
+  }
+  .glass-hover:hover {
+    background-color: rgb(255 255 255 / 0.02);
+  }
 }

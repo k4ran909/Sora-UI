@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Geist, Geist_Mono, Darker_Grotesque, Inter, Kalam } from "next/font/google";
+import { ThemeProvider } from "@/contexts/theme-context";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -10,6 +11,22 @@ const geistSans = Geist({
 const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
   subsets: ["latin"],
+});
+
+const DarkerGrotesque = Darker_Grotesque({
+  subsets: ["latin"],
+  variable: "--font-darker-grotesque",
+});
+
+const interFont = Inter({
+  subsets: ["latin"],
+  variable: "--font-inter",
+});
+
+const kalam = Kalam({
+  subsets: ["latin"],
+  weight: ["300", "400", "700"],
+  variable: "--font-kalam",
 });
 
 export const metadata: Metadata = {
@@ -25,11 +42,13 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
+      className={`${geistSans.variable} ${geistMono.variable} ${DarkerGrotesque.variable} ${interFont.variable} ${kalam.variable} h-full antialiased dark`}
       suppressHydrationWarning
     >
       <body className="min-h-full flex flex-col bg-background text-foreground bg-grid-pattern selection:bg-primary/30 selection:text-white">
-        {children}
+        <ThemeProvider>
+          {children}
+        </ThemeProvider>
       </body>
     </html>
   );
