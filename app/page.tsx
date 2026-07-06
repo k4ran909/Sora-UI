@@ -3,6 +3,7 @@
 import React from "react";
 import Link from "next/link";
 import { motion } from "framer-motion";
+import { Logo } from "@/components/logo";
 
 export default function Home() {
   return (
@@ -16,15 +17,9 @@ export default function Home() {
     >
       {/* ─── NAVIGATION HEADER ─── */}
       <header className="w-full h-20 flex items-center justify-between px-6 md:px-12 border-b border-zinc-100 bg-white/70 backdrop-blur-md z-20">
-        <Link href="/" className="flex items-center gap-2.5">
-          {/* Stylized premium hexagon logo */}
-          <div className="relative flex items-center justify-center">
-            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" className="text-black" xmlns="http://www.w3.org/2000/svg">
-              <path d="M12 2L3.5 7v10L12 22l8.5-5V7L12 2z" fill="black" />
-              <path d="M10 16L14 8" stroke="white" strokeWidth="2.5" strokeLinecap="round" />
-              <path d="M13 16L17 8" stroke="white" strokeWidth="1.5" strokeLinecap="round" className="opacity-70" />
-            </svg>
-          </div>
+        <Link href="/" className="flex items-center gap-2">
+          <Logo className="text-black" size={32} />
+          <span className="font-bold text-sm tracking-tight text-zinc-900">Sora UI</span>
         </Link>
 
         {/* Center menu links */}

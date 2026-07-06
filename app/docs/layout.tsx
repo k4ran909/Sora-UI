@@ -2,6 +2,7 @@ import React from "react";
 import Link from "next/link";
 import { registry } from "@/registry";
 import { Sparkles, Layers, FileText } from "lucide-react";
+import { Logo } from "@/components/logo";
 
 export default function DocsLayout({
   children,
@@ -13,7 +14,7 @@ export default function DocsLayout({
       {/* Top Header */}
       <header className="sticky top-0 z-50 flex h-16 w-full items-center justify-between border-b border-hairline bg-background/80 px-6 backdrop-blur-md">
         <Link href="/" className="flex items-center gap-2 font-semibold text-ink">
-          <Sparkles className="h-4.5 w-4.5 text-primary" />
+          <Logo size={22} className="text-zinc-100" />
           <span>Sora UI</span>
         </Link>
         <div className="flex items-center gap-4">
