@@ -12,18 +12,17 @@ import { useRouter } from "next/navigation";
 
 const Hero = () => {
   const feature = {
-    title: "Plan Upgrades in Seconds",
-    description: "Beautiful plan upgrade interface - copy, paste, done!",
+    title: "Interactive Music Player",
+    description: "Beautiful copy-paste audio player component - copy, paste, done!",
     code: `
-  import { UpdatePlanCard } from "@/components/billingsdk/update-plan-card"
-  import { plans } from "@/lib/billingsdk-config"
+  import { MusicPlayer } from "@/components/sora-ui/music-player"
 
   export default function App() {
     return (
-      <UpdatePlanCard
-        currentPlan={plans[0]}
-        plans={plans}
-        onPlanChange={(planId) => console.log('Upgraded to:', planId)}
+      <MusicPlayer
+        theme="dark"
+        autoPlay={false}
+        onTrackChange={(track) => console.log('Playing:', track.title)}
       />
     ) 
   }`,
@@ -40,7 +39,7 @@ const Hero = () => {
         router.push("/docs/components"); // Redirect to Browse Components
       }
       if (e.key.toLowerCase() === "g") {
-        router.push("https://github.com/dodopayments/billingsdk");
+        router.push("https://github.com/k4ran909/Sora-UI");
       }
     };
 
@@ -75,7 +74,7 @@ const Hero = () => {
               }}
               transition={{ duration: 0.4, ease: "easeOut" }}
             >
-              Launch Billing UIs at <span>warp speed</span>
+              Launch Premium UIs at <span>warp speed</span>
               <motion.div
                 className="group absolute top-[100px] -right-[145px] hidden h-12 rotate-12 rounded-full p-px text-xs leading-6 font-semibold text-white lg:flex"
                 variants={{
@@ -129,9 +128,9 @@ const Hero = () => {
               }}
               transition={{ duration: 0.4, delay: 0.1, ease: "easeOut" }}
             >
-              Stop reinventing the wheel , Ship production ready accessible
-              billing components with 10x more faster speed, built for React and
-              Shadcn.
+              Stop reinventing the wheel. Ship production-ready premium animated
+              React components with 10x faster speed, built with Tailwind CSS and
+              Framer Motion.
             </motion.p>
 
             {/* Email Signup */}
