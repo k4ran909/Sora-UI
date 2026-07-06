@@ -15,19 +15,20 @@ export function Footer2() {
           <div className="mb-8 grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-4">
             <div className="lg:col-span-1">
               <div className="mb-4 flex items-center">
-                <div className="flex items-center justify-center">
+                <div className="flex items-center justify-center gap-1.5 sm:gap-2">
                   <Image
-                    src="/logo/Logo.svg"
-                    alt="BillingSDK Logo"
-                    width={160}
+                    src="/logo/logo-dodo.svg"
+                    alt="Sora UI"
+                    width={32}
                     height={32}
-                    className="h-8 w-40"
+                    className="h-7 w-7"
                   />
+                  <span className="font-display text-2xl text-zinc-500">/</span>
+                  <span className="font-sans font-bold text-lg tracking-tight text-white">Sora UI</span>
                 </div>
               </div>
               <p className="text-muted-foreground mb-4 text-sm">
-                Open-source React components for modern billing and subscription
-                management.
+                Open-source React components for premium animations and interactions.
               </p>
               <div className="flex">
                 <Button variant="ghost" size="sm" asChild>

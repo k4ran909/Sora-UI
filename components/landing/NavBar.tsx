@@ -15,19 +15,13 @@ export const Logo = () => {
     <div className="flex items-center justify-center gap-1.5 sm:gap-2">
       <Image
         src="/logo/logo-dodo.svg"
-        alt="Billing SDK"
+        alt="Sora UI"
         width={32}
         height={32}
         className="h-7 w-7 sm:h-8 sm:w-8"
       />
-      <span className="font-display text-3xl">/</span>
-      <Image
-        src="/logo/Logo.svg"
-        alt="Billing SDK"
-        width={120}
-        height={120}
-        className="h-6 w-[64px] sm:w-[120px]"
-      />
+      <span className="font-display text-2xl text-zinc-500">/</span>
+      <span className="font-sans font-bold text-lg sm:text-xl tracking-tight text-white">Sora UI</span>
     </div>
   );
 };
