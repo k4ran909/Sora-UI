@@ -3,10 +3,10 @@
 import React from "react";
 import Link from "next/link";
 import { motion } from "framer-motion";
-import { Share_Tech } from "next/font/google";
+import { Russo_One } from "next/font/google";
 import { Logo } from "@/components/logo";
 
-const shareTech = Share_Tech({
+const russoOne = Russo_One({
   weight: "400",
   subsets: ["latin"],
 });
@@ -69,7 +69,7 @@ export default function Home() {
           </div>
 
           {/* Main Heading */}
-          <h1 className={`${shareTech.className} text-4xl sm:text-6xl md:text-[68px] font-bold tracking-tight text-zinc-950 leading-[1.08] max-w-3.5xl mx-auto`}>
+          <h1 className={`${russoOne.className} text-4xl sm:text-6xl md:text-[68px] font-normal tracking-tight text-zinc-950 leading-[1.08] max-w-3.5xl mx-auto`}>
             The Framer partner your team actually needs
           </h1>
 
