@@ -380,9 +380,9 @@ export function MusicPlayer({
           {/* Active indicator Pill Background */}
           <div 
             style={{ borderColor: timelineColor }}
-            className="absolute left-5 top-1/2 -translate-y-1/2 w-[82%] h-[44px] border rounded-[22px] bg-zinc-100 dark:bg-[#0d0d0d] pointer-events-none flex items-center justify-end pr-5 box-border z-0"
+            className="absolute left-5 top-1/2 -translate-y-1/2 w-[82%] h-[44px] border rounded-[22px] bg-surface-1 pointer-events-none flex items-center justify-end pr-5 box-border z-0"
           >
-            <div className="w-1.5 h-1.5 bg-zinc-950 dark:bg-white rounded-full" />
+            <div className="w-1.5 h-1.5 bg-ink rounded-full" />
           </div>
 
           {/* Scrollable Track list */}
@@ -410,7 +410,7 @@ export function MusicPlayer({
                   style={{ transform: `scale(${scale})`, opacity }}
                   className={cn(
                     "text-zinc-500 text-sm h-[44px] flex flex-col justify-center pl-5 snap-center select-none cursor-pointer w-[80%] transition-all duration-300 ease-[cubic-bezier(0.25,1,0.5,1)] truncate",
-                    isActive && "text-zinc-950 dark:text-white font-bold"
+                    isActive && "text-ink font-bold"
                   )}
                 >
                   <div className="truncate font-semibold text-xs md:text-sm">{displayTitle}</div>
@@ -455,7 +455,7 @@ export function MusicPlayer({
                   style={{ transform: `scale(${scale})`, opacity }}
                   className={cn(
                     "text-zinc-600 text-[18px] h-[36px] flex items-center justify-center snap-center font-normal select-none cursor-pointer transition-all duration-300 ease-[cubic-bezier(0.25,1,0.5,1)]",
-                    isActive && "text-zinc-950 dark:text-white font-bold"
+                    isActive && "text-ink font-bold"
                   )}
                 >
                   {volVal}
@@ -467,11 +467,11 @@ export function MusicPlayer({
           </div>
 
           {/* Active Volume indicator Dot */}
-          <div className="absolute right-5 top-1/2 -translate-y-1/2 w-[5px] h-[5px] bg-zinc-950 dark:bg-white rounded-full pointer-events-none" />
+          <div className="absolute right-5 top-1/2 -translate-y-1/2 w-[5px] h-[5px] bg-ink rounded-full pointer-events-none" />
         </div>
 
         {/* Apple-style pill bottom home indicator decoration */}
-        <div className="absolute bottom-3 left-1/2 -translate-x-1/2 w-10 h-1 bg-zinc-300 dark:bg-zinc-800 rounded-full" />
+        <div className="absolute bottom-3 left-1/2 -translate-x-1/2 w-10 h-1 bg-hairline rounded-full" />
       </div>
     </div>
   );
