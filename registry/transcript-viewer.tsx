@@ -82,43 +82,45 @@ export function parseAlignment(alignment: CharacterAlignmentResponseModel): Tran
 
 // ─── DYNAMIC TRANSCRIPT COMPOSER ───
 
-const LONG_DEMO_TEXT = 
-  "Sora UI is a premium component library designed for building next-generation audio and voice applications. " +
-  "It allows you to generate precision audio timings at the word and character level, enabling you to build fully synced " +
-  "karaoke players, real-time voice agents, and interactive speech visualizers. " +
-  "Try clicking any word to seek the audio, or use the play button to listen to the browser voice synthesis speak and " +
-  "highlight this entire paragraph in real-time.";
+const DEFAULT_WORD_TIMINGS = [
+  { word: "Sora", start: 0.0, end: 0.4 },
+  { word: "UI", start: 0.4, end: 0.8 },
+  { word: "allows", start: 0.8, end: 1.3 },
+  { word: "you", start: 1.3, end: 1.6 },
+  { word: "to", start: 1.6, end: 1.8 },
+  { word: "generate", start: 1.8, end: 2.4 },
+  { word: "audio", start: 2.4, end: 2.9 },
+  { word: "timings", start: 2.9, end: 3.5 },
+  { word: "—", start: 3.5, end: 3.7 },
+  { word: "now", start: 3.7, end: 4.0 },
+  { word: "you", start: 4.0, end: 4.2 },
+  { word: "can", start: 4.2, end: 4.4 },
+  { word: "easily", start: 4.4, end: 4.9 },
+  { word: "visualize", start: 4.9, end: 5.6 },
+  { word: "them", start: 5.6, end: 5.9 },
+  { word: "too!", start: 5.9, end: 6.5 },
+];
 
 export function generateDefaultMockAlignment(): CharacterAlignmentResponseModel {
-  const rawWords = LONG_DEMO_TEXT.split(" ");
-  const totalChars = rawWords.reduce((sum, w) => sum + w.length, 0);
-  const targetDuration = 24.5; // speaking duration in seconds
-
   const characters: string[] = [];
   const character_start_times_seconds: number[] = [];
   const character_end_times_seconds: number[] = [];
 
-  let accumulatedTime = 0;
-  rawWords.forEach((word, idx) => {
-    const charDuration = targetDuration / totalChars;
-    const wordDuration = word.length * charDuration;
-    const start = accumulatedTime;
+  DEFAULT_WORD_TIMINGS.forEach((wt, idx) => {
+    const word = wt.word;
+    const duration = wt.end - wt.start;
+    const charDuration = duration / word.length;
 
-    const wordCharDuration = wordDuration / word.length;
     for (let i = 0; i < word.length; i++) {
       characters.push(word[i]);
-      character_start_times_seconds.push(start + i * wordCharDuration);
-      character_end_times_seconds.push(start + (i + 1) * wordCharDuration);
+      character_start_times_seconds.push(wt.start + i * charDuration);
+      character_end_times_seconds.push(wt.start + (i + 1) * charDuration);
     }
 
-    accumulatedTime = start + wordDuration;
-
-    // Add space offset boundary
-    if (idx < rawWords.length - 1) {
+    if (idx < DEFAULT_WORD_TIMINGS.length - 1) {
       characters.push(" ");
-      character_start_times_seconds.push(accumulatedTime);
-      character_end_times_seconds.push(accumulatedTime + 0.04);
-      accumulatedTime += 0.04;
+      character_start_times_seconds.push(wt.end);
+      character_end_times_seconds.push(wt.end + 0.05);
     }
   });
 
@@ -134,7 +136,7 @@ function getAlignmentDuration(alignment: CharacterAlignmentResponseModel): numbe
   if (alignment.character_end_times_seconds.length > 0) {
     return alignment.character_end_times_seconds[alignment.character_end_times_seconds.length - 1];
   }
-  return 24.5;
+  return 6.5;
 }
 
 // ─── HOOKS ───
