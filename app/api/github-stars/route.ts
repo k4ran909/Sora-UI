@@ -35,7 +35,7 @@ const CACHE_TTL = 300;
 const STALE_TTL = 3600; // 1 hour
 
 export async function GET() {
-  const repo = "dodopayments/billingsdk";
+  const repo = "k4ran909/Sora-UI";
 
   // Create AbortController with timeout
   const controller = new AbortController();
