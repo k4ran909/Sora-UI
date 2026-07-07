@@ -1,14 +1,27 @@
 <div align="center">
-  <img src="public/logo.png" width="120" height="120" alt="Sora UI Logo" />
-  <h1>Sora UI 🕯️</h1>
-  <p><strong>Hey developer!</strong> Welcome to Sora UI — a crafted collection of gorgeous, interactive, and copy-paste friendly skeuomorphic components for Next.js and Tailwind CSS.</p>
-  
+  <img src="public/logo.svg" width="110" height="110" alt="Sora UI logo" />
+
+  # Sora UI
+
+  **Beautiful, skeuomorphic, copy-paste React components for Next.js + Tailwind CSS.**
+
+  Crafted audio players, visualizers, and interactive widgets — installable with one command, owned by you forever.
+
   <p>
-    <a href="#-why-sora-ui">Why Sora UI?</a> •
-    <a href="#%EF%B8%8F-quick-start">Quick Start</a> •
-    <a href="#-the-skeuomorphic-music-player">Music Player Specs</a> •
-    <a href="#-how-to-wire-up-spotify">Spotify Setup</a> •
-    <a href="#-customization-props">Props API</a>
+    <a href="https://github.com/k4ran909/Sora-UI/stargazers"><img src="https://img.shields.io/github/stars/k4ran909/Sora-UI?style=flat-square&color=5e6ad2" alt="GitHub stars" /></a>
+    <img src="https://img.shields.io/badge/Next.js-16-black?style=flat-square&logo=next.js" alt="Next.js 16" />
+    <img src="https://img.shields.io/badge/React-19-149eca?style=flat-square&logo=react" alt="React 19" />
+    <img src="https://img.shields.io/badge/Tailwind-v4-38bdf8?style=flat-square&logo=tailwindcss" alt="Tailwind CSS v4" />
+    <img src="https://img.shields.io/badge/license-MIT-green?style=flat-square" alt="MIT license" />
+  </p>
+
+  <p>
+    <a href="#-components">Components</a> •
+    <a href="#-quick-start">Quick Start</a> •
+    <a href="#-usage">Usage</a> •
+    <a href="#-spotify-integration">Spotify</a> •
+    <a href="#-local-development">Development</a> •
+    <a href="#-contributing">Contributing</a>
   </p>
 </div>
 
@@ -16,128 +29,200 @@
 
 ## 🖤 Why Sora UI?
 
-Let's face it: most web interfaces today look exactly the same. Flat grids, generic cards, and sterile layouts are everywhere. 
+Most web interfaces today look the same — flat grids, generic cards, sterile layouts. Sora UI brings back **tactility**: spinning CD discs, dancing equalizer bars, word-by-word speech highlighting, and 3D particle spheres that react to your voice.
 
-We built **Sora UI** to bring back the fun! Inspired by the dark, high-end visual aesthetic of Linear.app and the tactile feel of classic hardware, Sora UI combines modern React animations (via Framer Motion) with skeuomorphic design.
+- **Copy-paste first.** No package to install, no runtime lock-in. The code lands in *your* repo — restyle it, rewrite it, own it.
+- **shadcn-compatible registry.** Install any component through the shadcn CLI pipeline; path aliases and dependencies are resolved automatically.
+- **Modern stack.** Built for Next.js App Router, React 19, Tailwind CSS v4, and Framer Motion.
+- **Dark-mode native.** Designed against a Linear-inspired dark aesthetic, with light-mode support.
 
-And best of all? **It's 100% copy-pasteable and v0.app compatible.** No bloated npm packages to install, no complex config files to adjust — just copy the component file, drop it in, customize it with props, and you're good to go!
+---
+
+## 🧩 Components
+
+| Component | Description | Install |
+|---|---|---|
+| 📀 **Music Player** | Skeuomorphic CD player with a morphing track-change animation, equalizer bars, and optional Spotify metadata | `npx soraui-cli add music-player` |
+| 🌑 **Dark Player** | Sleek dark-themed audio player with a rolling track list and animated disc | `npx soraui-cli add dark-player` |
+| 📊 **Bar Visualizer** | Voice-assistant style frequency bars with `connecting / listening / thinking / speaking` states — plug in any `MediaStream` | `npx soraui-cli add bar-visualizer` |
+| 📅 **Date Selector** | Tactile week strip with a glowing active-day indicator | `npx soraui-cli add date-selector` |
+| 🌐 **Dust Sphere** | Three.js particle globe that scatters on hover and reacts to microphone input | `npx soraui-cli add dust-sphere` |
+| 📝 **Transcript Viewer** | Word-level audio transcript with synced highlighting, click-to-seek, scrub bar, and TTS fallback | `npx soraui-cli add transcript-viewer` |
+
+Live previews and full prop tables for every component: **[the docs site](https://sora-ui.vercel.app/docs)** (or run it locally, see below).
 
 ---
 
 ## ⚡ Quick Start
 
-You can install Sora UI components using the official **shadcn CLI** (just like shadcn/ui and Magic UI!) or do a manual copy-paste.
+### Option A — CLI (recommended)
 
-### Option A: Install via Sora UI CLI (Recommended)
-If your project is already set up with `shadcn/ui`, you can add the music player component with a single command! It will automatically download the code, resolve path aliases, and install dependencies (`framer-motion`, `lucide-react`, etc.):
+If your project already uses `shadcn/ui`, one command downloads the component, resolves your path aliases, and installs its dependencies:
 
 ```bash
 npx soraui-cli add music-player
+# or
+pnpm dlx soraui-cli add music-player
+bunx soraui-cli add music-player
 ```
 
-### Option B: Manual Copy-Paste
-1. **Copy the Code:** Copy the contents of the component registry file: [music-player.tsx](registry/music-player.tsx).
-2. **Drop it in:** Paste the code into your project at `components/music-player.tsx`.
-3. **Install Dependencies:**
+### Option B — Manual copy-paste
+
+1. Copy the component file you want from [`registry/`](registry/) into your project (e.g. `components/ui/music-player.tsx`).
+2. Install its dependencies:
+
    ```bash
-   npm install framer-motion clsx tailwind-merge lucide-react
+   npm install framer-motion lucide-react clsx tailwind-merge
    ```
-4. **Ensure `cn` utility helper exists:** If you don't have it already in `lib/utils.ts`, drop this in:
-   ```typescript
-   import { type ClassValue, clsx } from "clsx"
-   import { twMerge } from "tailwind-merge"
+
+   > `dust-sphere` additionally needs `three`. `transcript-viewer` doesn't need `framer-motion`.
+
+3. Make sure the `cn` helper exists at `lib/utils.ts`:
+
+   ```ts
+   import { type ClassValue, clsx } from "clsx";
+   import { twMerge } from "tailwind-merge";
 
    export function cn(...inputs: ClassValue[]) {
-     return twMerge(clsx(inputs))
+     return twMerge(clsx(inputs));
    }
    ```
 
 ---
 
-## 📻 The Skeuomorphic Music Player
+## 🎯 Usage
 
-Our centerpiece component is a classic CD player shell with premium interactions:
-* **The Tactile Spin:** Clicking play starts an infinite, buttery-smooth CSS rotation of the vinyl disc cover art.
-* **Equalizer Waves:** Five responsive wave bars dance dynamically to show playback activity.
-* **Morphing Transition:** Switching tracks triggers a custom Framer Motion timeline where the spinning CD expands to fill the entire card, crossfades the album art, and then scales back down.
+### Music Player
 
----
-
-## 🎵 How to Wire Up Spotify
-
-To dynamicize your CD covers and song streams directly from Spotify's database, you just need a Bearer Access Token!
-
-### Step 1: Create a Developer App
-Go to the [Spotify Developer Dashboard](https://developer.spotify.com/dashboard) and log in. Click **Create App**, give it any name, and grab your **Client ID** and **Client Secret**.
-
-### Step 2: Grab an Access Token
-You can trade your client credentials for a temporary token using the built-in route we set up in this repo: `app/api/spotify/token/route.ts`. 
-
-Simply make a `POST` request to `/api/spotify/token` containing your credentials:
-```json
-{
-  "clientId": "your_client_id_here",
-  "clientSecret": "your_client_secret_here"
-}
-```
-
-It will return an `access_token`.
-
-### Step 3: Pass Props to the Player
-Simply pass your Spotify Token and the track IDs you want to play! The component will load all track metadata automatically.
+Works out of the box with bundled copyright-free demo tracks:
 
 ```tsx
-import { MusicPlayer } from "@/components/music-player";
+import { MusicPlayer } from "@/components/ui/music-player";
 
 export default function App() {
-  const SPOTIFY_TOKEN = "BQB16..."; // paste token here
-  const MY_TRACKS = [
-    "0V3wPSX3ygHQwZ21K47gOO", // Shape of You
-    "7qiZRhU7tZ2XG6xBvDUz6r", // Blinding Lights
-  ];
-
   return (
-    <MusicPlayer 
-      spotifyToken={SPOTIFY_TOKEN} 
-      trackIds={MY_TRACKS} 
+    <MusicPlayer
+      timelineColor="#5e6ad2"
+      defaultVolume={80}
+      loop
     />
   );
 }
 ```
 
-> 💡 **Tip:** If no `spotifyToken` or `trackIds` are supplied, the player is smart enough to gracefully load our copyright-free local fallback songs so it works right out of the box!
+### Transcript Viewer
+
+Compound components give you full layout control:
+
+```tsx
+import {
+  TranscriptViewerContainer,
+  TranscriptViewerAudio,
+  TranscriptViewerWords,
+  TranscriptViewerPlayPauseButton,
+  TranscriptViewerScrubBar,
+} from "@/components/ui/transcript-viewer";
+
+export default function Demo() {
+  return (
+    <TranscriptViewerContainer audioSrc="/speech.mp3" alignment={myAlignment}>
+      <TranscriptViewerAudio />
+      <TranscriptViewerWords />
+      <div className="flex items-center gap-4">
+        <TranscriptViewerPlayPauseButton />
+        <TranscriptViewerScrubBar className="flex-1" />
+      </div>
+    </TranscriptViewerContainer>
+  );
+}
+```
+
+`alignment` accepts a character-level timing payload (the shape returned by ElevenLabs' alignment API); a helper `parseAlignment()` converts it to word timings. Without `audioSrc`, the component falls back to browser TTS or a simulated timer.
+
+### Bar Visualizer
+
+```tsx
+import { BarVisualizer } from "@/components/ui/bar-visualizer";
+
+<BarVisualizer state="speaking" barCount={15} mediaStream={stream} />
+```
 
 ---
 
-## 🎨 Customization Props
+## 🎵 Spotify Integration
 
-Every style and behavioral setting can be adjusted via props on the `<MusicPlayer />` component:
+The Music Player can pull real track metadata (titles, artists, cover art) from Spotify.
 
-| Prop | Type | Default | Description |
-|---|---|---|---|
-| `spotifyToken` | `string` | — | Your Spotify Web API Bearer token for retrieving dynamic cover art and previews. |
-| `trackIds` | `string[]` | — | List of Spotify Track ID strings to load into the player playlist. |
-| `timelineColor` | `string` | `"#5e6ad2"` | Accent color of the seeking progress track fill. |
-| `componentColor` | `string` | `"#0f1011"` | The background hex color of the music player shell. |
-| `titleOverride` | `string` | — | Override text to display a custom song title. |
-| `artistOverride` | `string` | — | Override text to display a custom artist name. |
-| `defaultVolume` | `number` | `80` | Initial playback volume from 0 (muted) to 100 (full). |
-| `playbackSpeed` | `number` | `1.0` | Default rate multiplier. Supports `0.5`, `1.0`, `1.5`, and `2.0`. |
-| `loop` | `boolean` | `true` | Loops playlist playback continuously. |
+1. Create an app in the [Spotify Developer Dashboard](https://developer.spotify.com/dashboard) and note your **Client ID** and **Client Secret**.
+2. Keep the credentials **server-side** — e.g. in `.env`:
+
+   ```bash
+   SPOTIFY_CLIENT_ID=your_client_id
+   SPOTIFY_CLIENT_SECRET=your_client_secret
+   ```
+
+3. Exchange them for a short-lived access token on the server (this repo ships an example route at `app/api/spotify/token/route.ts`), then pass the token and track IDs as props:
+
+   ```tsx
+   <MusicPlayer
+     spotifyToken={accessToken}
+     trackIds={["0V3wPSX3ygHQwZ21K47gOO", "7qiZRhU7tZ2XG6xBvDUz6r"]}
+   />
+   ```
+
+> ⚠️ **Never ship your Client Secret in client-side code.** Mint tokens on the server and hand only the short-lived `access_token` to the browser. If you deploy the example token route, add auth/rate-limiting so it can't be used by third parties.
+
+> 💡 If no `spotifyToken`/`trackIds` are provided, the player gracefully falls back to the bundled demo tracks.
 
 ---
 
-## 🛠️ Local Development Preview
+## 🛠 Local Development
 
-If you want to run our interactive docs site and playground locally to test custom themes and configurations:
+Run the docs site and interactive playground locally:
 
-1. Clone or download this project folder
-2. Install the local project dependencies:
-   ```bash
-   npm install
-   ```
-3. Run the Next.js development server:
-   ```bash
-   npm run dev
-   ```
-4. Open [http://localhost:3000](http://localhost:3000) in your web browser and click on **Skeuomorphic Music Player** in the sidebar navigation!
+```bash
+git clone https://github.com/k4ran909/Sora-UI.git
+cd Sora-UI
+npm install
+npm run dev
+```
+
+Open [http://localhost:3000](http://localhost:3000) and browse the components from the sidebar.
+
+**Project layout:**
+
+```
+registry/          # The component source files (what gets installed)
+public/registry/   # Generated shadcn-compatible JSON (via scripts/build-registry.js)
+app/docs/          # Docs site pages
+components/        # Docs-site UI (viewers, playgrounds, install blocks)
+cli/               # The soraui-cli npm package
+```
+
+`npm run build` regenerates the registry JSON automatically (`prebuild` hook). To rebuild it manually:
+
+```bash
+node scripts/build-registry.js
+```
+
+---
+
+## 🤝 Contributing
+
+Contributions are welcome!
+
+1. Fork the repo and create a feature branch.
+2. Add or improve a component in `registry/` (and add its entry to `scripts/build-registry.js` + `registry/index.ts` so the CLI and docs pick it up).
+3. Run `npm run lint` and `npm run build` before opening a PR.
+
+Found a bug? [Open an issue](https://github.com/k4ran909/Sora-UI/issues).
+
+---
+
+## 📄 License
+
+[MIT](LICENSE) © Sora UI
+
+<div align="center">
+  <sub>Built with 🖤 for developers who miss when interfaces had texture.</sub>
+</div>
