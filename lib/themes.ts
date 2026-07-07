@@ -827,6 +827,19 @@ export function applyScopedTheme(
     element.style.setProperty(key, value);
   });
 
+  // Map custom variables to standard variables so non-standard components respect the active theme!
+  element.style.setProperty("--ink", vars["--foreground"] || "var(--foreground)");
+  element.style.setProperty("--ink-muted", vars["--muted-foreground"] || "var(--muted-foreground)");
+  element.style.setProperty("--ink-subtle", vars["--muted-foreground"] || "var(--muted-foreground)");
+  element.style.setProperty("--ink-tertiary", vars["--muted-foreground"] || "var(--muted-foreground)");
+  element.style.setProperty("--surface-1", vars["--card"] || "var(--card)");
+  element.style.setProperty("--surface-2", vars["--muted"] || "var(--muted)");
+  element.style.setProperty("--surface-3", vars["--muted"] || "var(--muted)");
+  element.style.setProperty("--surface-4", vars["--muted"] || "var(--muted)");
+  element.style.setProperty("--hairline", vars["--border"] || "var(--border)");
+  element.style.setProperty("--hairline-strong", vars["--border"] || "var(--border)");
+  element.style.setProperty("--hairline-tertiary", vars["--border"] || "var(--border)");
+
   // Apply font families if defined
   if (theme.fonts) {
     // Load font if URL is provided
@@ -866,6 +879,19 @@ export function getThemeStyles(
   Object.entries(vars).forEach(([key, value]) => {
     styles[key] = value;
   });
+
+  // Map custom variables to standard variables so non-standard components respect the active theme!
+  styles["--ink"] = vars["--foreground"] || "var(--foreground)";
+  styles["--ink-muted"] = vars["--muted-foreground"] || "var(--muted-foreground)";
+  styles["--ink-subtle"] = vars["--muted-foreground"] || "var(--muted-foreground)";
+  styles["--ink-tertiary"] = vars["--muted-foreground"] || "var(--muted-foreground)";
+  styles["--surface-1"] = vars["--card"] || "var(--card)";
+  styles["--surface-2"] = vars["--muted"] || "var(--muted)";
+  styles["--surface-3"] = vars["--muted"] || "var(--muted)";
+  styles["--surface-4"] = vars["--muted"] || "var(--muted)";
+  styles["--hairline"] = vars["--border"] || "var(--border)";
+  styles["--hairline-strong"] = vars["--border"] || "var(--border)";
+  styles["--hairline-tertiary"] = vars["--border"] || "var(--border)";
 
   // Add font families if defined
   if (theme.fonts) {

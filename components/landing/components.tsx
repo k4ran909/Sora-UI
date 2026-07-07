@@ -261,13 +261,13 @@ function ComponentsShowcase({ setIsHovered }: any) {
         <div className="h-full w-full transition-all duration-300 ease-in-out">
           <TabsContent value="music-player" className="mt-0">
             <PreviewComponents className="animate-in fade-in bg-background h-full min-h-[500px] w-full max-w-none border-none px-0 py-4 duration-300 md:min-h-[700px] flex items-center justify-center">
-              <MusicPlayer />
+              <MusicPlayer timelineColor="var(--primary)" componentColor="var(--card)" />
             </PreviewComponents>
           </TabsContent>
 
           <TabsContent value="dark-player" className="mt-0">
             <PreviewComponents className="animate-in fade-in bg-background h-full min-h-[500px] w-full max-w-none border-none px-0 py-4 duration-300 md:min-h-[700px] flex items-center justify-center">
-              <DarkPlayer />
+              <DarkPlayer timelineColor="var(--primary)" componentColor="var(--card)" />
             </PreviewComponents>
           </TabsContent>
 
@@ -279,13 +279,13 @@ function ComponentsShowcase({ setIsHovered }: any) {
 
           <TabsContent value="date-selector" className="mt-0">
             <PreviewComponents className="animate-in fade-in bg-background h-full min-h-[500px] w-full max-w-none border-none px-0 py-4 duration-300 md:min-h-[700px] flex items-center justify-center">
-              <DateSelector />
+              <DateSelector activeColor="var(--primary)" componentColor="var(--card)" />
             </PreviewComponents>
           </TabsContent>
 
           <TabsContent value="dust-sphere" className="mt-0">
             <PreviewComponents className="animate-in fade-in bg-background h-full min-h-[500px] w-full max-w-none border-none px-0 py-4 duration-300 md:min-h-[700px] flex items-center justify-center">
-              <DustSphere className="h-[400px] w-[350px] sm:w-[400px]" />
+              <DustSphere color="var(--primary)" componentColor="var(--card)" className="h-[400px] w-[350px] sm:w-[400px]" />
             </PreviewComponents>
           </TabsContent>
         </div>

@@ -82,7 +82,7 @@ export function PreviewComponents({
 
   return (
     <Card
-      className={cn("not-prose bg-background relative overflow-hidden", className)}
+      className={cn("not-prose bg-background text-ink relative overflow-hidden", className)}
       style={themeStyles}
     >
       <div className="absolute top-4 right-4 z-20 flex gap-2">
