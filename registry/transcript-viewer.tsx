@@ -73,7 +73,6 @@ export function parseAlignment(alignment: CharacterAlignmentResponseModel): Tran
     }
   }
 
-  // Push final word if string doesn't end with a space
   if (inWord) {
     words.push({ word: currentWord, start: wordStart, end: wordEnd });
   }
@@ -81,47 +80,45 @@ export function parseAlignment(alignment: CharacterAlignmentResponseModel): Tran
   return words;
 }
 
-// ─── MOCK DATA GENERATOR ───
+// ─── DYNAMIC TRANSCRIPT COMPOSER ───
 
-const DEFAULT_WORD_TIMINGS = [
-  { word: "Sora", start: 0.0, end: 0.4 },
-  { word: "UI", start: 0.4, end: 0.8 },
-  { word: "allows", start: 0.8, end: 1.3 },
-  { word: "you", start: 1.3, end: 1.6 },
-  { word: "to", start: 1.6, end: 1.8 },
-  { word: "generate", start: 1.8, end: 2.4 },
-  { word: "audio", start: 2.4, end: 2.9 },
-  { word: "timings", start: 2.9, end: 3.5 },
-  { word: "—", start: 3.5, end: 3.7 },
-  { word: "now", start: 3.7, end: 4.0 },
-  { word: "you", start: 4.0, end: 4.2 },
-  { word: "can", start: 4.2, end: 4.4 },
-  { word: "easily", start: 4.4, end: 4.9 },
-  { word: "visualize", start: 4.9, end: 5.6 },
-  { word: "them", start: 5.6, end: 5.9 },
-  { word: "too!", start: 5.9, end: 6.5 },
-];
+const LONG_DEMO_TEXT = 
+  "Sora UI is a premium component library designed for building next-generation audio and voice applications. " +
+  "It allows you to generate precision audio timings at the word and character level, enabling you to build fully synced " +
+  "karaoke players, real-time voice agents, and interactive speech visualizers. " +
+  "Try clicking any word to seek the audio, or use the play button to listen to the browser voice synthesis speak and " +
+  "highlight this entire paragraph in real-time.";
 
 export function generateDefaultMockAlignment(): CharacterAlignmentResponseModel {
+  const rawWords = LONG_DEMO_TEXT.split(" ");
+  const totalChars = rawWords.reduce((sum, w) => sum + w.length, 0);
+  const targetDuration = 24.5; // speaking duration in seconds
+
   const characters: string[] = [];
   const character_start_times_seconds: number[] = [];
   const character_end_times_seconds: number[] = [];
 
-  DEFAULT_WORD_TIMINGS.forEach((wt, idx) => {
-    const word = wt.word;
-    const duration = wt.end - wt.start;
-    const charDuration = duration / word.length;
+  let accumulatedTime = 0;
+  rawWords.forEach((word, idx) => {
+    const charDuration = targetDuration / totalChars;
+    const wordDuration = word.length * charDuration;
+    const start = accumulatedTime;
 
+    const wordCharDuration = wordDuration / word.length;
     for (let i = 0; i < word.length; i++) {
       characters.push(word[i]);
-      character_start_times_seconds.push(wt.start + i * charDuration);
-      character_end_times_seconds.push(wt.start + (i + 1) * charDuration);
+      character_start_times_seconds.push(start + i * wordCharDuration);
+      character_end_times_seconds.push(start + (i + 1) * wordCharDuration);
     }
 
-    if (idx < DEFAULT_WORD_TIMINGS.length - 1) {
+    accumulatedTime = start + wordDuration;
+
+    // Add space offset boundary
+    if (idx < rawWords.length - 1) {
       characters.push(" ");
-      character_start_times_seconds.push(wt.end);
-      character_end_times_seconds.push(wt.end + 0.05);
+      character_start_times_seconds.push(accumulatedTime);
+      character_end_times_seconds.push(accumulatedTime + 0.04);
+      accumulatedTime += 0.04;
     }
   });
 
@@ -132,7 +129,13 @@ export function generateDefaultMockAlignment(): CharacterAlignmentResponseModel 
   };
 }
 
-const DEMO_DURATION = 6.5;
+// Calculate duration from alignment bounds
+function getAlignmentDuration(alignment: CharacterAlignmentResponseModel): number {
+  if (alignment.character_end_times_seconds.length > 0) {
+    return alignment.character_end_times_seconds[alignment.character_end_times_seconds.length - 1];
+  }
+  return 24.5;
+}
 
 // ─── HOOKS ───
 
@@ -157,15 +160,19 @@ export function useTranscriptViewer({
 
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
-  const [duration, setDuration] = useState(DEMO_DURATION);
+  const [duration, setDuration] = useState(() => getAlignmentDuration(activeAlignment));
   const [playbackMode, setPlaybackMode] = useState<"audio" | "speech" | "simulated">("simulated");
 
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const animationFrameRef = useRef<number | null>(null);
-  const startTimeRef = useRef<number>(0);
-  const pauseTimeRef = useRef<number>(0);
+  const lastTimeRef = useRef<number>(0);
 
-  // Initialize playback elements and state hooks
+  // Sync duration if alignment input changes
+  useEffect(() => {
+    setDuration(getAlignmentDuration(activeAlignment));
+  }, [activeAlignment]);
+
+  // Initialize playback mode
   useEffect(() => {
     if (audioSrc) {
       setPlaybackMode("audio");
@@ -174,7 +181,6 @@ export function useTranscriptViewer({
       }
     } else if (typeof window !== "undefined" && window.speechSynthesis) {
       setPlaybackMode("speech");
-      setDuration(DEMO_DURATION);
       window.speechSynthesis.getVoices();
       const onVoicesChanged = () => {
         if (window.speechSynthesis) {
@@ -190,40 +196,46 @@ export function useTranscriptViewer({
       };
     } else {
       setPlaybackMode("simulated");
-      setDuration(DEMO_DURATION);
     }
   }, [audioSrc]);
 
-  // Simulation playback loop
-  const stepSimulation = (timestamp: number) => {
-    if (!startTimeRef.current) {
-      startTimeRef.current = timestamp - pauseTimeRef.current;
+  // RequestAnimationFrame timer loop (Used for both speech synthesis and simulation mode)
+  // This guarantees smooth, device-independent slider updates!
+  const stepTimer = (timestamp: number) => {
+    if (!lastTimeRef.current) {
+      lastTimeRef.current = timestamp;
     }
-    const elapsed = (timestamp - startTimeRef.current) / 1000;
+    const delta = (timestamp - lastTimeRef.current) / 1000;
+    lastTimeRef.current = timestamp;
 
-    if (elapsed >= duration) {
-      setIsPlaying(false);
-      setCurrentTime(0);
-      pauseTimeRef.current = 0;
-      startTimeRef.current = 0;
-    } else {
-      setCurrentTime(elapsed);
-      animationFrameRef.current = requestAnimationFrame(stepSimulation);
+    setCurrentTime((prev) => {
+      const next = prev + delta;
+      if (next >= duration) {
+        setIsPlaying(false);
+        if (playbackMode === "speech" && typeof window !== "undefined" && window.speechSynthesis) {
+          window.speechSynthesis.cancel();
+        }
+        lastTimeRef.current = 0;
+        return 0;
+      }
+      return next;
+    });
+
+    if (isPlaying) {
+      animationFrameRef.current = requestAnimationFrame(stepTimer);
     }
   };
 
   useEffect(() => {
-    if (playbackMode === "simulated" && isPlaying) {
-      animationFrameRef.current = requestAnimationFrame(stepSimulation);
+    if (isPlaying && playbackMode !== "audio") {
+      lastTimeRef.current = performance.now();
+      animationFrameRef.current = requestAnimationFrame(stepTimer);
     } else {
       if (animationFrameRef.current) {
         cancelAnimationFrame(animationFrameRef.current);
         animationFrameRef.current = null;
       }
-      if (playbackMode === "simulated" && !isPlaying) {
-        pauseTimeRef.current = currentTime * 1000;
-        startTimeRef.current = 0;
-      }
+      lastTimeRef.current = 0;
     }
 
     return () => {
@@ -231,8 +243,9 @@ export function useTranscriptViewer({
         cancelAnimationFrame(animationFrameRef.current);
       }
     };
-  }, [isPlaying, playbackMode, currentTime]);
+  }, [isPlaying, playbackMode, duration]);
 
+  // Browser TTS engine trigger
   const speakFromTime = (time: number) => {
     if (typeof window === "undefined" || !window.speechSynthesis) return;
 
@@ -265,39 +278,14 @@ export function useTranscriptViewer({
     if (naturalVoice) {
       utterance.voice = naturalVoice;
     }
-    utterance.rate = 0.92;
-
-    const fullText = words.map(t => t.word).join(" ");
-    const offsetIndex = words.slice(0, startWordIdx).map(t => t.word).join(" ").length + (startWordIdx > 0 ? 1 : 0);
-
-    utterance.onboundary = (event) => {
-      if (event.name === "word") {
-        const charIndex = event.charIndex + offsetIndex;
-        let accumulatedChars = 0;
-        let activeIdx = 0;
-        
-        for (let i = 0; i < words.length; i++) {
-          const word = words[i].word;
-          if (charIndex >= accumulatedChars && charIndex < accumulatedChars + word.length + 1) {
-            activeIdx = i;
-            break;
-          }
-          accumulatedChars += word.length + 1;
-        }
-
-        setCurrentTime(words[activeIdx].start);
-      }
-    };
+    utterance.rate = 0.95; // Speaking speed multiplier
 
     utterance.onend = () => {
-      setIsPlaying(false);
-      setCurrentTime(0);
+      // Handled by the master timer loop to ensure sync
     };
 
     utterance.onerror = () => {
-      setPlaybackMode("simulated");
-      startTimeRef.current = 0;
-      pauseTimeRef.current = time * 1000;
+      // Silent fallback
     };
 
     window.speechSynthesis.speak(utterance);
@@ -312,15 +300,10 @@ export function useTranscriptViewer({
           speakFromTime(currentTime);
         } else {
           setPlaybackMode("simulated");
-          startTimeRef.current = 0;
-          pauseTimeRef.current = currentTime * 1000;
         }
       });
     } else if (playbackMode === "speech") {
       speakFromTime(currentTime);
-    } else {
-      startTimeRef.current = 0;
-      pauseTimeRef.current = currentTime * 1000;
     }
   };
 
@@ -334,16 +317,19 @@ export function useTranscriptViewer({
   };
 
   const seekToTime = (time: number) => {
-    setCurrentTime(time);
+    const clampedTime = Math.max(0, Math.min(duration, time));
+    setCurrentTime(clampedTime);
+
     if (playbackMode === "audio" && audioRef.current) {
-      audioRef.current.currentTime = time;
-    } else if (playbackMode === "speech" && isPlaying) {
-      speakFromTime(time);
-    } else if (playbackMode === "simulated") {
-      pauseTimeRef.current = time * 1000;
+      audioRef.current.currentTime = clampedTime;
+    } else if (playbackMode === "speech") {
       if (isPlaying) {
-        startTimeRef.current = performance.now() - pauseTimeRef.current;
+        speakFromTime(clampedTime);
       }
+    }
+    // Update animation frames delta offset
+    if (isPlaying) {
+      lastTimeRef.current = performance.now();
     }
   };
 
@@ -385,7 +371,6 @@ export function TranscriptViewerContainer({
 }: TranscriptViewerContainerProps) {
   const viewer = useTranscriptViewer({ alignment, audioSrc });
 
-  // Sync real audio listeners if elements are loaded dynamically
   useEffect(() => {
     const audio = viewer.audioRef.current;
     if (!audio) return;
@@ -471,7 +456,7 @@ export function TranscriptViewerWords({
   return (
     <div
       className={cn(
-        "flex flex-wrap items-center justify-start text-left mb-6 leading-relaxed select-none min-h-[90px] content-start",
+        "flex flex-wrap items-center justify-start text-left mb-6 leading-relaxed select-none min-h-[140px] content-start gap-y-1.5",
         className
       )}
       {...props}
@@ -497,15 +482,15 @@ export function TranscriptViewerWords({
                 isActive 
                   ? "font-bold shadow-[0_4px_12px_rgba(255,255,255,0.15)] scale-105" 
                   : status === "spoken"
-                    ? "text-zinc-200 dark:text-zinc-300 font-medium"
-                    : "text-zinc-500 dark:text-zinc-600 font-medium hover:text-zinc-300",
+                    ? "text-zinc-900 dark:text-zinc-100 font-medium"
+                    : "text-zinc-400 dark:text-zinc-500 font-medium hover:text-zinc-800 dark:hover:text-zinc-200",
                 wordClassNames
               )}
             >
               {w.word}
             </span>
             {idx < words.length - 1 && (
-              <span className={cn("inline-block w-1.5", gapClassNames)} />
+              <span className={cn("inline-block w-1", gapClassNames)} />
             )}
           </React.Fragment>
         );
@@ -580,7 +565,7 @@ export function TranscriptViewerScrubBar({
   const percent = duration > 0 ? (currentTime / duration) * 100 : 0;
 
   return (
-    <div className={cn("w-full flex flex-col gap-2", className)} {...props}>
+    <div className={cn("w-full flex flex-col gap-2 justify-center", className)} {...props}>
       <div
         ref={progressBarRef}
         onClick={handleSeek}
@@ -608,7 +593,7 @@ export function TranscriptViewerScrubBar({
       </div>
 
       {showTimeLabels && (
-        <div className={cn("flex justify-between items-center text-xs font-semibold text-zinc-500 tabular-nums", labelsClassName)}>
+        <div className={cn("flex justify-between items-center text-xs font-semibold text-zinc-500 tabular-nums px-0.5", labelsClassName)}>
           <span>{formatTime(currentTime)}</span>
           <span>{formatTime(Math.max(0, duration - currentTime))}</span>
         </div>

@@ -357,9 +357,9 @@ function InteractiveDustSphere() {
       >
         <TranscriptViewerAudio />
         <TranscriptViewerWords highlightBg="var(--primary)" highlightText="var(--primary-foreground)" />
-        <div className="flex items-center gap-3">
-          <TranscriptViewerPlayPauseButton />
-          <TranscriptViewerScrubBar />
+        <div className="flex items-center gap-4 w-full">
+          <TranscriptViewerPlayPauseButton className="h-10 px-4 shrink-0" />
+          <TranscriptViewerScrubBar className="flex-1 w-full" />
         </div>
       </TranscriptViewerContainer>
     </div>
