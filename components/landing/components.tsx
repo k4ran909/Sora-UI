@@ -296,6 +296,7 @@ function ComponentsShowcase({ setIsHovered }: any) {
 
 function InteractiveDustSphere() {
   const [sphereColor, setSphereColor] = useState("var(--primary)");
+  const [voiceReact, setVoiceReact] = useState(false);
 
   const colors = [
     { label: "Theme Active", value: "var(--primary)" },
@@ -309,7 +310,7 @@ function InteractiveDustSphere() {
 
   return (
     <div className="flex flex-col items-center gap-6">
-      <DustSphere color={sphereColor} componentColor="var(--card)" className="h-[400px] w-[350px] sm:w-[400px]" />
+      <DustSphere color={sphereColor} voiceReact={voiceReact} componentColor="var(--card)" className="h-[400px] w-[350px] sm:w-[400px]" />
 
       <div className="flex flex-wrap gap-3 justify-center bg-zinc-900/60 p-2.5 rounded-xl border border-zinc-800/80 items-center">
         {colors.map((c) => (
@@ -329,6 +330,19 @@ function InteractiveDustSphere() {
           />
         ))}
       </div>
+
+      <button
+        onClick={() => setVoiceReact(!voiceReact)}
+        className={cn(
+          "px-4 py-1.5 text-xs uppercase font-bold tracking-wider rounded-md cursor-pointer transition-all border flex items-center gap-2",
+          voiceReact 
+            ? "bg-red-500/20 text-red-400 border-red-500/40 hover:bg-red-500/30" 
+            : "text-zinc-500 hover:text-zinc-300 border-zinc-800/80"
+        )}
+      >
+        <span className={cn(voiceReact && "animate-pulse")}>🎤</span>
+        <span>Voice React: {voiceReact ? "ON" : "OFF"}</span>
+      </button>
     </div>
   );
 }
