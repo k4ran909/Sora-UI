@@ -285,10 +285,49 @@ function ComponentsShowcase({ setIsHovered }: any) {
 
           <TabsContent value="dust-sphere" className="mt-0">
             <PreviewComponents className="animate-in fade-in bg-background h-full min-h-[500px] w-full max-w-none border-none px-0 py-4 duration-300 md:min-h-[700px] flex items-center justify-center">
-              <DustSphere color="var(--primary)" componentColor="var(--card)" className="h-[400px] w-[350px] sm:w-[400px]" />
+              <InteractiveDustSphere />
             </PreviewComponents>
           </TabsContent>
         </div>
+      </div>
+    </div>
+  );
+}
+
+function InteractiveDustSphere() {
+  const [sphereColor, setSphereColor] = useState("var(--primary)");
+
+  const colors = [
+    { label: "Theme Active", value: "var(--primary)" },
+    { label: "Indigo Glow", value: "#6366f1" },
+    { label: "Emerald Green", value: "#10b981" },
+    { label: "Neon Cyan", value: "#06b6d4" },
+    { label: "Sunset Orange", value: "#f97316" },
+    { label: "Hot Pink", value: "#ec4899" },
+    { label: "Pure White", value: "#ffffff" },
+  ];
+
+  return (
+    <div className="flex flex-col items-center gap-6">
+      <DustSphere color={sphereColor} componentColor="var(--card)" className="h-[400px] w-[350px] sm:w-[400px]" />
+
+      <div className="flex flex-wrap gap-3 justify-center bg-zinc-900/60 p-2.5 rounded-xl border border-zinc-800/80 items-center">
+        {colors.map((c) => (
+          <button
+            key={c.value}
+            onClick={() => setSphereColor(c.value)}
+            className={cn(
+              "w-6 h-6 rounded-full cursor-pointer transition-all hover:scale-110 active:scale-95 border-2",
+              sphereColor === c.value ? "border-white scale-110 shadow-md" : "border-transparent opacity-80 hover:opacity-100"
+            )}
+            style={{ 
+              background: c.value === "var(--primary)" 
+                ? "linear-gradient(135deg, var(--primary), var(--accent))" 
+                : c.value 
+            }}
+            title={c.label}
+          />
+        ))}
       </div>
     </div>
   );
