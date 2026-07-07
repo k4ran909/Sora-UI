@@ -216,9 +216,19 @@ export function useTranscriptViewer({
     }
   }, [audioSrc]);
 
-  // RequestAnimationFrame timer loop (Used for both speech synthesis and simulation mode)
-  // This guarantees smooth, device-independent slider updates!
+  // RequestAnimationFrame timer loop (Used for all playback modes to ensure smooth 60fps slider updates!)
   const stepTimer = (timestamp: number) => {
+    if (playbackMode === "audio") {
+      const audio = audioRef.current;
+      if (audio) {
+        setCurrentTime(audio.currentTime);
+      }
+      if (isPlaying) {
+        animationFrameRef.current = requestAnimationFrame(stepTimer);
+      }
+      return;
+    }
+
     if (!lastTimeRef.current) {
       lastTimeRef.current = timestamp;
     }
@@ -244,7 +254,7 @@ export function useTranscriptViewer({
   };
 
   useEffect(() => {
-    if (isPlaying && playbackMode !== "audio") {
+    if (isPlaying) {
       lastTimeRef.current = performance.now();
       animationFrameRef.current = requestAnimationFrame(stepTimer);
     } else {
