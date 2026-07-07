@@ -160,7 +160,12 @@ export function DustSphere({
     // Initialize Three.js Scene
     const initThree = () => {
       scene = new THREE.Scene();
-      scene.fog = new THREE.FogExp2(0x0c111a, 0.0015);
+      
+      // Determine dynamic fog color from card background or container fallback
+      const parentCard = container.closest(".backdrop-blur-3xl") || container;
+      const bgStyle = window.getComputedStyle(parentCard).backgroundColor;
+      const fogColor = new THREE.Color(bgStyle && bgStyle !== "rgba(0, 0, 0, 0)" ? bgStyle : "#0c111a");
+      scene.fog = new THREE.FogExp2(fogColor, 0.0015);
 
       camera = new THREE.PerspectiveCamera(45, container.clientWidth / container.clientHeight, 1, 1000);
       camera.position.z = 175;
@@ -199,8 +204,10 @@ export function DustSphere({
 
       baseParticleGeometry.setAttribute("position", new THREE.BufferAttribute(positions, 3));
 
+      // Resolve CSS custom properties to actual RGB color on container color style
+      const computedColor = window.getComputedStyle(container).color || "#ffffff";
       const pMaterial = new THREE.PointsMaterial({
-        color: new THREE.Color(propsRef.current.color),
+        color: new THREE.Color(computedColor),
         size: 1.2,
         transparent: true,
         opacity: 0.85,
@@ -218,12 +225,25 @@ export function DustSphere({
 
       const { color: colorHex, noiseIntensity: noiseInt, morphSpeed: speed, voiceReact: vReact } = propsRef.current;
 
-      // Update particle colors dynamically
+      // Update particle colors dynamically by checking computed container text color
       if (particleSystem) {
         const matColor = particleSystem.material as THREE.PointsMaterial;
-        if (matColor.color.getHexString() !== new THREE.Color(colorHex).getHexString()) {
-          matColor.color.set(colorHex);
+        const resolvedColor = window.getComputedStyle(container).color || "#ffffff";
+        const tempThreeColor = new THREE.Color(resolvedColor);
+        if (matColor.color.getHex() !== tempThreeColor.getHex()) {
+          matColor.color.copy(tempThreeColor);
           matColor.needsUpdate = true;
+        }
+      }
+
+      // Update fog color dynamically if theme background shifts
+      if (scene && scene.fog) {
+        const parentCard = container.closest(".backdrop-blur-3xl") || container;
+        const bgStyle = window.getComputedStyle(parentCard).backgroundColor;
+        const targetFogColor = new THREE.Color(bgStyle && bgStyle !== "rgba(0, 0, 0, 0)" ? bgStyle : "#0c111a");
+        const currentFog = scene.fog as THREE.FogExp2;
+        if (currentFog.color.getHex() !== targetFogColor.getHex()) {
+          currentFog.color.copy(targetFogColor);
         }
       }
 
@@ -373,6 +393,7 @@ export function DustSphere({
         {/* WebGL Canvas Viewport wrapper */}
         <div
           ref={mountRef}
+          style={{ color }}
           className="w-full h-full bg-black/10"
         />
       </div>
