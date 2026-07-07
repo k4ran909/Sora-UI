@@ -17,7 +17,7 @@ export interface AudioTimingVisualizerProps extends React.HTMLAttributes<HTMLDiv
   wordTimings?: WordTiming[];
   
   /**
-   * URL to speech MP3. If omitted or fails, simulated audio playback is used.
+   * URL to speech MP3. If omitted, browser SpeechSynthesis (TTS) is used.
    */
   audioSrc?: string;
   
@@ -56,8 +56,9 @@ const DEFAULT_TIMINGS: WordTiming[] = [
   { word: "too!", start: 5.9, end: 6.5 },
 ];
 
-// 6.5 seconds total demo duration
 const DEMO_DURATION = 6.5;
+
+type PlaybackMode = "audio" | "speech" | "simulated";
 
 export function AudioTimingVisualizer({
   wordTimings = DEFAULT_TIMINGS,
@@ -71,7 +72,7 @@ export function AudioTimingVisualizer({
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(DEMO_DURATION);
-  const [isSimulated, setIsSimulated] = useState(true);
+  const [playbackMode, setPlaybackMode] = useState<PlaybackMode>("simulated");
 
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const progressBarRef = useRef<HTMLDivElement | null>(null);
@@ -79,12 +80,12 @@ export function AudioTimingVisualizer({
   const startTimeRef = useRef<number>(0);
   const pauseTimeRef = useRef<number>(0);
 
-  // Initialize audio element if source is provided
+  // Initialize playback mode and preload voices/audio
   useEffect(() => {
     if (audioSrc) {
       const audio = new Audio(audioSrc);
       audioRef.current = audio;
-      setIsSimulated(false);
+      setPlaybackMode("audio");
 
       const onTimeUpdate = () => {
         setCurrentTime(audio.currentTime);
@@ -110,13 +111,31 @@ export function AudioTimingVisualizer({
         audio.removeEventListener("ended", onEnded);
         audioRef.current = null;
       };
+    } else if (typeof window !== "undefined" && window.speechSynthesis) {
+      setPlaybackMode("speech");
+      setDuration(DEMO_DURATION);
+
+      // Force-load voices
+      window.speechSynthesis.getVoices();
+      const onVoicesChanged = () => {
+        if (window.speechSynthesis) {
+          window.speechSynthesis.getVoices();
+        }
+      };
+      window.speechSynthesis.addEventListener("voiceschanged", onVoicesChanged);
+      return () => {
+        if (window.speechSynthesis) {
+          window.speechSynthesis.cancel();
+          window.speechSynthesis.removeEventListener("voiceschanged", onVoicesChanged);
+        }
+      };
     } else {
-      setIsSimulated(true);
+      setPlaybackMode("simulated");
       setDuration(DEMO_DURATION);
     }
   }, [audioSrc]);
 
-  // Simulation play loop
+  // Simulation playback loop
   const stepSimulation = (timestamp: number) => {
     if (!startTimeRef.current) {
       startTimeRef.current = timestamp - pauseTimeRef.current;
@@ -128,10 +147,6 @@ export function AudioTimingVisualizer({
       setCurrentTime(0);
       pauseTimeRef.current = 0;
       startTimeRef.current = 0;
-      if (animationFrameRef.current) {
-        cancelAnimationFrame(animationFrameRef.current);
-        animationFrameRef.current = null;
-      }
     } else {
       setCurrentTime(elapsed);
       animationFrameRef.current = requestAnimationFrame(stepSimulation);
@@ -139,14 +154,14 @@ export function AudioTimingVisualizer({
   };
 
   useEffect(() => {
-    if (isSimulated && isPlaying) {
+    if (playbackMode === "simulated" && isPlaying) {
       animationFrameRef.current = requestAnimationFrame(stepSimulation);
     } else {
       if (animationFrameRef.current) {
         cancelAnimationFrame(animationFrameRef.current);
         animationFrameRef.current = null;
       }
-      if (isSimulated && !isPlaying) {
+      if (playbackMode === "simulated" && !isPlaying) {
         pauseTimeRef.current = currentTime * 1000;
         startTimeRef.current = 0;
       }
@@ -157,24 +172,116 @@ export function AudioTimingVisualizer({
         cancelAnimationFrame(animationFrameRef.current);
       }
     };
-  }, [isPlaying, isSimulated]);
+  }, [isPlaying, playbackMode, currentTime]);
+
+  // Helper to trigger browser Speech Synthesis (TTS)
+  const speakFromTime = (time: number) => {
+    if (typeof window === "undefined" || !window.speechSynthesis) return;
+
+    window.speechSynthesis.cancel();
+
+    // Find the word index corresponding to current time
+    let startWordIdx = 0;
+    for (let i = 0; i < wordTimings.length; i++) {
+      if (time >= wordTimings[i].start && time < wordTimings[i].end) {
+        startWordIdx = i;
+        break;
+      }
+    }
+
+    // Slice remaining words to speak
+    const slicedTimings = wordTimings.slice(startWordIdx);
+    const textToSpeak = slicedTimings.map(t => t.word).join(" ");
+    
+    // Fallback if no text left
+    if (!textToSpeak) {
+      setIsPlaying(false);
+      setCurrentTime(0);
+      return;
+    }
+
+    const utterance = new SpeechSynthesisUtterance(textToSpeak);
+
+    // Pick a natural English speaking voice
+    const voices = window.speechSynthesis.getVoices();
+    const naturalVoice = voices.find(v => v.lang.startsWith("en-US") && v.name.includes("Google")) ||
+                         voices.find(v => v.lang.startsWith("en-US")) ||
+                         voices.find(v => v.lang.startsWith("en")) ||
+                         voices[0];
+
+    if (naturalVoice) {
+      utterance.voice = naturalVoice;
+    }
+    utterance.rate = 0.92; // Slightly slower pacing to align with DEFAULT_TIMINGS offsets
+
+    // Calculate char index offset of starting word in original string
+    const fullText = wordTimings.map(t => t.word).join(" ");
+    const offsetIndex = wordTimings.slice(0, startWordIdx).map(t => t.word).join(" ").length + (startWordIdx > 0 ? 1 : 0);
+
+    utterance.onboundary = (event) => {
+      if (event.name === "word") {
+        const charIndex = event.charIndex + offsetIndex;
+        
+        let accumulatedChars = 0;
+        let activeIdx = 0;
+        
+        for (let i = 0; i < wordTimings.length; i++) {
+          const word = wordTimings[i].word;
+          if (charIndex >= accumulatedChars && charIndex < accumulatedChars + word.length + 1) {
+            activeIdx = i;
+            break;
+          }
+          accumulatedChars += word.length + 1;
+        }
+
+        // Snap elapsed position slider
+        setCurrentTime(wordTimings[activeIdx].start);
+      }
+    };
+
+    utterance.onend = () => {
+      setIsPlaying(false);
+      setCurrentTime(0);
+    };
+
+    utterance.onerror = (e) => {
+      console.warn("Speech Synthesis error, falling back to simulated playback: ", e);
+      setPlaybackMode("simulated");
+      startTimeRef.current = 0;
+      pauseTimeRef.current = time * 1000;
+    };
+
+    window.speechSynthesis.speak(utterance);
+  };
 
   const handlePlayPause = () => {
-    if (isSimulated) {
-      setIsPlaying(!isPlaying);
-    } else if (audioRef.current) {
-      if (isPlaying) {
+    if (isPlaying) {
+      if (playbackMode === "audio" && audioRef.current) {
         audioRef.current.pause();
-        setIsPlaying(false);
-      } else {
+      } else if (playbackMode === "speech" && typeof window !== "undefined" && window.speechSynthesis) {
+        window.speechSynthesis.cancel();
+      }
+      setIsPlaying(false);
+    } else {
+      setIsPlaying(true);
+      if (playbackMode === "audio" && audioRef.current) {
         audioRef.current.play().catch(() => {
-          // Fallback to simulation if audio block occurs
-          setIsSimulated(true);
-          startTimeRef.current = 0;
-          pauseTimeRef.current = currentTime * 1000;
-          setIsPlaying(true);
+          // Fallback to SpeechSynthesis/simulation if blocked
+          if (typeof window !== "undefined" && window.speechSynthesis) {
+            setPlaybackMode("speech");
+            speakFromTime(currentTime);
+          } else {
+            setPlaybackMode("simulated");
+            startTimeRef.current = 0;
+            pauseTimeRef.current = currentTime * 1000;
+          }
         });
-        setIsPlaying(true);
+      } else if (playbackMode === "speech") {
+        speakFromTime(currentTime);
+      } else {
+        // Simulated playback
+        startTimeRef.current = 0;
+        pauseTimeRef.current = currentTime * 1000;
       }
     }
   };
@@ -190,9 +297,12 @@ export function AudioTimingVisualizer({
 
     setCurrentTime(newTime);
 
-    if (!isSimulated && audioRef.current) {
+    if (playbackMode === "audio" && audioRef.current) {
       audioRef.current.currentTime = newTime;
-    } else if (isSimulated) {
+    } else if (playbackMode === "speech" && isPlaying) {
+      // Re-trigger speech from newly selected word boundary
+      speakFromTime(newTime);
+    } else if (playbackMode === "simulated") {
       pauseTimeRef.current = newTime * 1000;
       if (isPlaying) {
         startTimeRef.current = performance.now() - pauseTimeRef.current;
@@ -230,7 +340,7 @@ export function AudioTimingVisualizer({
                 "inline-block text-[15px] sm:text-[18px] transition-all duration-200 rounded px-1.5 py-0.5",
                 isActive 
                   ? "font-bold shadow-[0_4px_12px_rgba(255,255,255,0.15)] scale-105" 
-                  : "text-zinc-400 dark:text-zinc-500 font-medium hover:text-zinc-200"
+                  : "text-zinc-400 dark:text-zinc-500 font-medium hover:text-zinc-250 cursor-pointer"
               )}
             >
               {t.word}
