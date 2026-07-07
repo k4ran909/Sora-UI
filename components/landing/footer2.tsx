@@ -150,7 +150,7 @@ export function Footer2() {
               <ul className="space-y-3 text-sm">
                 <li>
                   <Link
-                    href="https://github.com/dodopayments/billingsdk/issues"
+                    href="https://github.com/k4ran909/Sora-UI/issues"
                     className="text-muted-foreground hover:text-foreground transition-colors"
                   >
                     GitHub Issues
@@ -174,10 +174,10 @@ export function Footer2() {
                 </li>
                 <li>
                   <Link
-                    href="https://github.com/dodopayments"
+                    href="https://github.com/k4ran909"
                     className="text-muted-foreground hover:text-foreground transition-colors"
                   >
-                    Dodo Payments Github
+                    Karan Github
                   </Link>
                 </li>
               </ul>
@@ -189,9 +189,9 @@ export function Footer2() {
             <div className="flex flex-col items-center justify-between md:flex-row">
               <div className="mb-4 flex flex-col items-center gap-4 md:mb-0 md:flex-row">
                 <p className="text-muted-foreground text-sm">
-                  © {new Date().getFullYear()} BillingSDK. Made with{" "}
+                  © {new Date().getFullYear()} SoraUI. Made with{" "}
                   <FaHeart className="inline h-3 w-3 fill-current text-red-500" />{" "}
-                  by developers at Dodo Payments, for developers.
+                  for developers.
                 </p>
               </div>
             </div>

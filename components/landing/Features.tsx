@@ -72,10 +72,10 @@ export default function Features() {
         label="Features"
       />
       <h2 className="font-display text-primary animate-in fade-in slide-in-from-bottom-4 mt-4 text-3xl font-medium duration-1000 sm:text-3xl md:text-5xl">
-        Why choose BillingSDK?
+        Why choose SoraUI?
       </h2>
       <p className="text-muted-foreground animate-in fade-in slide-in-from-bottom-4 mx-auto mt-4 mb-12 max-w-3xl text-center text-sm tracking-tight text-balance delay-200 duration-1000 md:text-base">
-        Beautiful, customizable billing components that save you development
+        Beautiful, customizable premium components that save you development
         time and effort.
       </p>
 

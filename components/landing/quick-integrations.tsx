@@ -35,7 +35,7 @@ export const billingQuickIntegrationData: QuickIntegrationDataItem[] = [
     href: "/docs/quick-start",
     label: "Follow Installation",
     description:
-      "Get started with Billing SDK in seconds. Choose between our CLI tool for complete project setup or add individual components using shadcn. Both methods provide TypeScript-first components with full theme integration.",
+      "Get started with SoraUI in seconds. Choose between our CLI tool for complete project setup or add individual components using shadcn. Both methods provide TypeScript-first components with full theme integration.",
     subPoints: [
       "One-command project initialization",
       "Individual component installation",
@@ -45,9 +45,9 @@ export const billingQuickIntegrationData: QuickIntegrationDataItem[] = [
       title: "Install any component instantly",
       language: "shell",
       commands: {
-        npm: "npx shadcn@latest add @billingsdk/pricing-table-one",
-        pnpm: "pnpm dlx shadcn@latest add @billingsdk/pricing-table-one",
-        bun: "bunx shadcn@latest add @billingsdk/pricing-table-one",
+        npm: "npx shadcn@latest add @sora-ui/music-player",
+        pnpm: "pnpm dlx shadcn@latest add @sora-ui/music-player",
+        bun: "bunx shadcn@latest add @sora-ui/music-player",
       },
     },
   },
@@ -56,7 +56,7 @@ export const billingQuickIntegrationData: QuickIntegrationDataItem[] = [
     href: "/docs/theming",
     label: "Play with Themes",
     description:
-      "Customize your billing components with our comprehensive theming system. Choose from pre-built themes like Cyberpunk, Elegant, or Minimal, or create your own using CSS variables for perfect brand integration.",
+      "Customize your components with our comprehensive theming system. Choose from pre-built themes like Cyberpunk, Elegant, or Minimal, or create your own using CSS variables for perfect brand integration.",
     subPoints: [
       "10+ pre-built theme variants",
       "CSS variable-based customization",
@@ -78,7 +78,7 @@ export const billingQuickIntegrationData: QuickIntegrationDataItem[] = [
     href: "/docs/quick-start#use-in-your-app",
     label: "Implement Usage",
     description:
-      "Start building with production-ready components immediately. Import your chosen component, pass your pricing data, and handle user interactions with simple callback functions. Full TypeScript support included.",
+      "Start building with production-ready components immediately. Import your chosen component, pass your configurations, and handle user interactions with simple callback functions. Full TypeScript support included.",
     subPoints: [
       "Import and use instantly",
       "TypeScript interfaces included",
@@ -86,14 +86,12 @@ export const billingQuickIntegrationData: QuickIntegrationDataItem[] = [
     ],
     codeExample: {
       title: "Use components with full TypeScript support",
-      code: `import { PricingTableOne } from "@/components/billingsdk/pricing-table-one";
-import { plans } from "@/lib/billingsdk-config";
+      code: `import { MusicPlayer } from "@/components/sora-ui/music-player";
 
-<PricingTableOne
-  plans={plans}
-  onPlanSelect={(planId) => console.log('Selected:', planId)}
-  theme="classic"
-  size="medium"
+<MusicPlayer
+  theme="dark"
+  autoPlay={false}
+  onTrackChange={(track) => console.log('Playing:', track.title)}
 />`,
       language: "tsx",
     },
@@ -199,7 +197,7 @@ export function QuickIntegration() {
         }}
         className="font-display text-primary animate-in fade-in slide-in-from-bottom-4 mt-4 max-w-2xl text-center text-3xl font-medium text-balance duration-1000 sm:text-3xl md:text-5xl"
       >
-        Get your billing system running in minutes
+        Get your animated UI running in minutes
       </motion.h2>
 
       <div className="mt-14 flex w-full max-w-7xl flex-col gap-8">
