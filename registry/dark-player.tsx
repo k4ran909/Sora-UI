@@ -433,11 +433,14 @@ export function MusicPlayer({
             Vol
           </div>
 
+          {/* Active indicator Pill Background for Volume */}
+          <div className="absolute top-1/2 -translate-y-1/2 w-[60px] h-[36px] rounded-[18px] bg-zinc-200/80 dark:bg-zinc-900/60 pointer-events-none z-0 border border-zinc-300/30 dark:border-zinc-800/30" />
+
           {/* Scrollable volume scale list */}
           <div
             ref={volSectionRef}
             onScroll={handleVolumeScroll}
-            className="sora-dark-scroll w-full h-[150px] overflow-y-scroll snap-y snap-mandatory"
+            className="sora-dark-scroll w-full h-[150px] overflow-y-scroll snap-y snap-mandatory relative z-10"
           >
             <div className="h-[57px] flex-shrink-0" /> {/* Top Spacer */}
             
@@ -455,7 +458,7 @@ export function MusicPlayer({
                   style={{ transform: `scale(${scale})`, opacity }}
                   className={cn(
                     "text-zinc-600 text-[18px] h-[36px] flex items-center justify-center snap-center font-normal select-none cursor-pointer transition-all duration-300 ease-[cubic-bezier(0.25,1,0.5,1)]",
-                    isActive && "text-ink font-bold"
+                    isActive && "text-zinc-950 dark:text-white font-extrabold"
                   )}
                 >
                   {volVal}
@@ -467,7 +470,7 @@ export function MusicPlayer({
           </div>
 
           {/* Active Volume indicator Dot */}
-          <div className="absolute right-5 top-1/2 -translate-y-1/2 w-[5px] h-[5px] bg-ink rounded-full pointer-events-none" />
+          <div className="absolute right-5 top-1/2 -translate-y-1/2 w-[5px] h-[5px] bg-zinc-950 dark:bg-white rounded-full pointer-events-none z-20" />
         </div>
 
         {/* Apple-style pill bottom home indicator decoration */}
