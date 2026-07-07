@@ -84,21 +84,21 @@ export function parseAlignment(alignment: CharacterAlignmentResponseModel): Tran
 
 const DEFAULT_WORD_TIMINGS = [
   { word: "Sora", start: 0.0, end: 0.5 },
-  { word: "UI", start: 0.5, end: 0.9 },
-  { word: "allows", start: 0.9, end: 1.4 },
-  { word: "you", start: 1.4, end: 1.6 },
-  { word: "to", start: 1.6, end: 1.8 },
-  { word: "generate", start: 1.8, end: 2.4 },
-  { word: "audio", start: 2.4, end: 2.8 },
-  { word: "timings", start: 2.8, end: 3.4 },
-  { word: "—", start: 3.4, end: 3.8 },
-  { word: "now", start: 3.8, end: 4.2 },
-  { word: "you", start: 4.2, end: 4.4 },
-  { word: "can", start: 4.4, end: 4.6 },
-  { word: "easily", start: 4.6, end: 5.1 },
-  { word: "visualize", start: 5.1, end: 5.8 },
-  { word: "them", start: 5.8, end: 6.1 },
-  { word: "too!", start: 6.1, end: 6.672 },
+  { word: "UI", start: 0.5, end: 1.0 },
+  { word: "allows", start: 1.0, end: 1.5 },
+  { word: "you", start: 1.5, end: 1.7 },
+  { word: "to", start: 1.7, end: 1.9 },
+  { word: "generate", start: 1.9, end: 2.5 },
+  { word: "audio", start: 2.5, end: 2.9 },
+  { word: "timings", start: 2.9, end: 3.5 },
+  { word: "—", start: 3.5, end: 4.2 },
+  { word: "now", start: 4.2, end: 4.5 },
+  { word: "you", start: 4.5, end: 4.7 },
+  { word: "can", start: 4.7, end: 4.9 },
+  { word: "easily", start: 4.9, end: 5.4 },
+  { word: "visualize", start: 5.4, end: 6.0 },
+  { word: "them", start: 6.0, end: 6.3 },
+  { word: "too!", start: 6.3, end: 6.672 },
 ];
 
 export function generateDefaultMockAlignment(): CharacterAlignmentResponseModel {
@@ -295,7 +295,7 @@ export function useTranscriptViewer({
     if (naturalVoice) {
       utterance.voice = naturalVoice;
     }
-    utterance.rate = 0.95; // Speaking speed multiplier
+    utterance.rate = 0.85; // Speaking speed multiplier
 
     utterance.onend = () => {
       // Handled by the master timer loop to ensure sync
@@ -391,6 +391,9 @@ export function TranscriptViewerContainer({
   useEffect(() => {
     const audio = viewer.audioRef.current;
     if (!audio) return;
+
+    // Slow down playback rate slightly for comfortable listening pacing
+    audio.playbackRate = 0.88;
 
     const onTimeUpdate = () => {
       viewer.setCurrentTime(audio.currentTime);
