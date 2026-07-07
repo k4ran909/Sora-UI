@@ -523,7 +523,7 @@ export function TranscriptViewerPlayPauseButton(props: React.ButtonHTMLAttribute
     <button
       onClick={isPlaying ? pause : play}
       className={cn(
-        "h-11 px-4 border border-zinc-700/60 dark:border-zinc-800 bg-zinc-900/60 hover:bg-zinc-800/80 active:scale-[0.98] transition-all text-white rounded-xl text-sm font-semibold flex items-center justify-center gap-2 cursor-pointer shadow-inner shrink-0",
+        "h-11 px-4 border border-zinc-700/60 dark:border-zinc-800 bg-zinc-900/60 hover:bg-zinc-800/80 active:scale-[0.98] transition-all text-white rounded-xl text-sm font-semibold flex flex-row flex-nowrap items-center justify-center gap-2 cursor-pointer shadow-inner shrink-0 whitespace-nowrap",
         props.className
       )}
       {...props}
