@@ -64,5 +64,17 @@
     "files": [
       "dust-sphere.tsx"
     ]
+  },
+  {
+    "name": "transcript-viewer",
+    "type": "registry:ui",
+    "dependencies": [
+      "lucide-react",
+      "clsx",
+      "tailwind-merge"
+    ],
+    "files": [
+      "transcript-viewer.tsx"
+    ]
   }
 ]

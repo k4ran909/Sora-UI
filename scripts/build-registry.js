@@ -60,6 +60,17 @@ const components = [
         type: "registry:ui"
       }
     ]
+  },
+  {
+    name: "transcript-viewer",
+    type: "registry:ui",
+    dependencies: ["lucide-react", "clsx", "tailwind-merge"],
+    files: [
+      {
+        path: "transcript-viewer.tsx",
+        type: "registry:ui"
+      }
+    ]
   }
 ];
 

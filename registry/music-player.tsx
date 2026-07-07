@@ -128,6 +128,20 @@ export function MusicPlayer({
 
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const progressBarRef = useRef<HTMLDivElement | null>(null);
+  const transitionTimeoutsRef = useRef<ReturnType<typeof setTimeout>[]>([]);
+
+  // Cancel any in-flight transition timers and stop audio when unmounting,
+  // otherwise a pending phase-5 timer would call play() on the detached element
+  useEffect(() => {
+    const audio = audioRef.current;
+    return () => {
+      transitionTimeoutsRef.current.forEach(clearTimeout);
+      transitionTimeoutsRef.current = [];
+      if (audio) {
+        audio.pause();
+      }
+    };
+  }, []);
 
   const currentTrack = playlist[currentTrackIndex] || STATIC_PLAYLIST[0];
 
@@ -150,6 +164,8 @@ export function MusicPlayer({
       return;
     }
 
+    const controller = new AbortController();
+
     const loadSpotifyTracks = async () => {
       setSpotifyError(null);
       try {
@@ -158,6 +174,7 @@ export function MusicPlayer({
         for (const id of trackIds) {
           const res = await fetch(`https://api.spotify.com/v1/tracks/${id}`, {
             headers: { Authorization: `Bearer ${spotifyToken}` },
+            signal: controller.signal,
           });
 
           if (!res.ok) {
@@ -165,7 +182,7 @@ export function MusicPlayer({
           }
 
           const data = await res.json();
-          
+
           fetchedTracks.push({
             title: data.name,
             artist: data.artists.map((a: any) => a.name).join(", "),
@@ -175,6 +192,8 @@ export function MusicPlayer({
           });
         }
 
+        if (controller.signal.aborted) return;
+
         setPlaylist(fetchedTracks);
         setCurrentTrackIndex(0);
         setIsPlaying(false);
@@ -183,12 +202,17 @@ export function MusicPlayer({
           audioRef.current.currentTime = 0;
         }
       } catch (err: any) {
+        if (controller.signal.aborted) return; // superseded by a newer request or unmount
         setSpotifyError(err.message || "Failed to load tracks from Spotify.");
         setPlaylist(STATIC_PLAYLIST);
       }
     };
 
     loadSpotifyTracks();
+
+    return () => {
+      controller.abort();
+    };
   }, [spotifyToken, trackIds]);
 
   // Quick helper to format raw audio seconds into a friendly human-readable MM:SS string
@@ -198,6 +222,9 @@ export function MusicPlayer({
     const s = Math.floor(seconds % 60);
     return `${m}:${s < 10 ? "0" : ""}${s}`;
   };
+
+  // Always call the latest changeTrack so the ended handler never reads stale transition state
+  const changeTrackRef = useRef<(nextIndex: number) => void>(() => {});
 
   // Bind basic HTML Audio event listeners so we can sync time progress and know when the track finishes
   useEffect(() => {
@@ -214,7 +241,7 @@ export function MusicPlayer({
 
     const handleEnded = () => {
       if (loop) {
-        changeTrack((currentTrackIndex + 1) % playlist.length);
+        changeTrackRef.current((currentTrackIndex + 1) % playlist.length);
       } else {
         setIsPlaying(false);
       }
@@ -266,24 +293,33 @@ export function MusicPlayer({
     // Phase 1: CD morphs into the fullscreen album art card while hiding detail text
     setIsFullscreen(true);
 
+    const timers = transitionTimeoutsRef.current;
+
     // Phase 2: Fade the cover art opacity down slightly during transition
-    setTimeout(() => {
+    timers.push(setTimeout(() => {
       setCoverOpacity(0.1);
-    }, 450);
+    }, 450));
 
     // Phase 3: Switch the current track index and restore cover visibility
-    setTimeout(() => {
+    timers.push(setTimeout(() => {
       setCurrentTrackIndex(targetIndex);
       setCoverOpacity(1);
-    }, 900);
+      // Rewind explicitly — if the next track shares the same src, React won't
+      // reload the element and playback would otherwise resume mid-song
+      if (audioRef.current) {
+        audioRef.current.currentTime = 0;
+      }
+      setCurrentTime(0);
+    }, 900));
 
     // Phase 4: Shrink the fullscreen cover back down into the circular CD shape
-    setTimeout(() => {
+    timers.push(setTimeout(() => {
       setIsFullscreen(false);
-    }, 1500);
+    }, 1500));
 
     // Phase 5: Kick off the audio playback for the new track and let the disc spin!
-    setTimeout(() => {
+    timers.push(setTimeout(() => {
+      transitionTimeoutsRef.current = [];
       if (audioRef.current) {
         audioRef.current.play()
           .then(() => {
@@ -297,12 +333,17 @@ export function MusicPlayer({
       } else {
         setIsTransitioning(false);
       }
-    }, 2200);
+    }, 2200));
   };
+
+  useEffect(() => {
+    changeTrackRef.current = changeTrack;
+  });
 
   const handleSeek = (e: React.MouseEvent<HTMLDivElement>) => {
     if (isTransitioning || !audioRef.current || !progressBarRef.current) return;
-    
+    if (!isFinite(duration) || duration <= 0) return; // streams report Infinity/NaN — seeking would throw
+
     const rect = progressBarRef.current.getBoundingClientRect();
     const clickX = e.clientX - rect.left;
     const width = rect.width;

@@ -22,10 +22,11 @@ export type WordStatus = "spoken" | "unspoken" | "current";
 
 export interface TranscriptViewerContextType {
   audioRef: React.RefObject<HTMLAudioElement | null>;
-  alignment: CharacterAlignmentResponseModel;
   words: TranscriptWord[];
   currentTime: number;
+  setCurrentTime: React.Dispatch<React.SetStateAction<number>>;
   duration: number;
+  setDuration: (val: number | ((prev: number) => number)) => void;
   isPlaying: boolean;
   play: () => void;
   pause: () => void;
@@ -156,77 +157,68 @@ export function useTranscriptViewer({
   alignment?: CharacterAlignmentResponseModel;
   audioSrc?: string;
 }) {
-  const defaultAlignment = useRef(generateDefaultMockAlignment());
-  const activeAlignment = alignment || defaultAlignment.current;
+  // Use React.useMemo to safely generate/initialize base alignment without reading ref during render
+  const defaultAlignmentVal = React.useMemo(() => generateDefaultMockAlignment(), []);
+  const activeAlignment = alignment || defaultAlignmentVal;
 
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
-  const [duration, setDuration] = useState(() => getAlignmentDuration(activeAlignment));
-  const [playbackMode, setPlaybackMode] = useState<"audio" | "speech" | "simulated">("simulated");
-  const [words, setWords] = useState<TranscriptWord[]>(() => parseAlignment(activeAlignment));
+  const [durationOverride, setDurationOverride] = useState<number | null>(null);
 
-  // Sync duration and scale words if alignment input or loaded duration changes
-  useEffect(() => {
-    const baseDuration = getAlignmentDuration(activeAlignment);
-    setDuration(baseDuration);
-    
-    // Scale word timings to match the actual loaded duration
-    if (duration > 0 && Math.abs(duration - baseDuration) > 0.05) {
+  // Derive base values inside useMemo
+  const baseWords = React.useMemo(() => parseAlignment(activeAlignment), [activeAlignment]);
+  const baseDuration = React.useMemo(() => getAlignmentDuration(activeAlignment), [activeAlignment]);
+
+  // Combined duration
+  const duration = durationOverride !== null ? durationOverride : baseDuration;
+
+  // Derive scaled words directly during render
+  const words = React.useMemo(() => {
+    if (duration > 0 && baseDuration > 0 && Math.abs(duration - baseDuration) > 0.05) {
       const scale = duration / baseDuration;
-      const parsedWords = parseAlignment(activeAlignment);
-      const scaled = parsedWords.map(w => ({
+      return baseWords.map(w => ({
         word: w.word,
         start: w.start * scale,
         end: w.end * scale
       }));
-      setWords(scaled);
-    } else {
-      setWords(parseAlignment(activeAlignment));
     }
-  }, [activeAlignment, duration]);
+    return baseWords;
+  }, [baseWords, duration, baseDuration]);
+
+  // Handle playback mode derived state on mount/props changes without synchronous setStates in useEffect
+  const [playbackMode, setPlaybackMode] = useState<"audio" | "speech" | "simulated">(() => {
+    if (audioSrc) return "audio";
+    if (typeof window !== "undefined" && window.speechSynthesis) return "speech";
+    return "simulated";
+  });
+
+  const [prevAudioSrc, setPrevAudioSrc] = useState(audioSrc);
+  if (audioSrc !== prevAudioSrc) {
+    setPrevAudioSrc(audioSrc);
+    setPlaybackMode(audioSrc ? "audio" : (typeof window !== "undefined" && window.speechSynthesis ? "speech" : "simulated"));
+  }
 
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const animationFrameRef = useRef<number | null>(null);
   const lastTimeRef = useRef<number>(0);
 
-  // Initialize playback mode
+  // Synchronized playback state mutable ref to avoid closures lag in stepTimer
+  const isPlayingRef = useRef(isPlaying);
   useEffect(() => {
-    if (audioSrc) {
-      setPlaybackMode("audio");
-      if (audioRef.current) {
-        audioRef.current.src = audioSrc;
-      }
-    } else if (typeof window !== "undefined" && window.speechSynthesis) {
-      setPlaybackMode("speech");
-      window.speechSynthesis.getVoices();
-      const onVoicesChanged = () => {
-        if (window.speechSynthesis) {
-          window.speechSynthesis.getVoices();
-        }
-      };
-      window.speechSynthesis.addEventListener("voiceschanged", onVoicesChanged);
-      return () => {
-        if (window.speechSynthesis) {
-          window.speechSynthesis.cancel();
-          window.speechSynthesis.removeEventListener("voiceschanged", onVoicesChanged);
-        }
-      };
-    } else {
-      setPlaybackMode("simulated");
-    }
-  }, [audioSrc]);
+    isPlayingRef.current = isPlaying;
+  }, [isPlaying]);
 
   // RequestAnimationFrame timer loop (Used for all playback modes to ensure smooth 60fps slider updates!)
-  const stepTimer = (timestamp: number) => {
+  const stepTimer = React.useCallback(function stepTimer(timestamp: number) {
     if (playbackMode === "audio") {
       const audio = audioRef.current;
       if (audio) {
         setCurrentTime(audio.currentTime);
-        if (audio.duration && !isNaN(audio.duration) && audio.duration !== duration) {
-          setDuration(audio.duration);
+        if (audio.duration && !isNaN(audio.duration) && audio.duration !== durationOverride) {
+          setDurationOverride(audio.duration);
         }
       }
-      if (isPlaying) {
+      if (isPlayingRef.current) {
         animationFrameRef.current = requestAnimationFrame(stepTimer);
       }
       return;
@@ -251,10 +243,10 @@ export function useTranscriptViewer({
       return next;
     });
 
-    if (isPlaying) {
+    if (isPlayingRef.current) {
       animationFrameRef.current = requestAnimationFrame(stepTimer);
     }
-  };
+  }, [playbackMode, duration, durationOverride]);
 
   useEffect(() => {
     if (isPlaying) {
@@ -273,23 +265,44 @@ export function useTranscriptViewer({
         cancelAnimationFrame(animationFrameRef.current);
       }
     };
-  }, [isPlaying, playbackMode, duration]);
+  }, [isPlaying, stepTimer]);
+
+  // Initialize playback mode side-effects
+  useEffect(() => {
+    if (playbackMode === "audio" && audioSrc && audioRef.current) {
+      audioRef.current.src = audioSrc;
+      audioRef.current.playbackRate = 0.88; // Slow down for comfortable pacing
+    }
+  }, [playbackMode, audioSrc]);
+
+  useEffect(() => {
+    if (playbackMode === "speech" && typeof window !== "undefined" && window.speechSynthesis) {
+      window.speechSynthesis.getVoices();
+      const onVoicesChanged = () => {
+        if (window.speechSynthesis) {
+          window.speechSynthesis.getVoices();
+        }
+      };
+      window.speechSynthesis.addEventListener("voiceschanged", onVoicesChanged);
+      return () => {
+        if (window.speechSynthesis) {
+          window.speechSynthesis.cancel();
+          window.speechSynthesis.removeEventListener("voiceschanged", onVoicesChanged);
+        }
+      };
+    }
+  }, [playbackMode]);
 
   // Browser TTS engine trigger
-  const speakFromTime = (time: number) => {
+  const speakFromTime = React.useCallback((time: number) => {
     if (typeof window === "undefined" || !window.speechSynthesis) return;
 
     window.speechSynthesis.cancel();
 
-    let startWordIdx = 0;
-    for (let i = 0; i < words.length; i++) {
-      if (time >= words[i].start && time < words[i].end) {
-        startWordIdx = i;
-        break;
-      }
-    }
+    // First word not yet finished — covers in-word, in-gap, and before-start positions.
+    const startWordIdx = words.findIndex((w) => time < w.end);
 
-    const slicedWords = words.slice(startWordIdx);
+    const slicedWords = startWordIdx === -1 ? [] : words.slice(startWordIdx);
     const textToSpeak = slicedWords.map(t => t.word).join(" ");
     
     if (!textToSpeak) {
@@ -310,18 +323,10 @@ export function useTranscriptViewer({
     }
     utterance.rate = 0.85; // Speaking speed multiplier
 
-    utterance.onend = () => {
-      // Handled by the master timer loop to ensure sync
-    };
-
-    utterance.onerror = () => {
-      // Silent fallback
-    };
-
     window.speechSynthesis.speak(utterance);
-  };
+  }, [words]);
 
-  const play = () => {
+  const play = React.useCallback(() => {
     setIsPlaying(true);
     if (playbackMode === "audio" && audioRef.current) {
       audioRef.current.play().catch(() => {
@@ -335,18 +340,18 @@ export function useTranscriptViewer({
     } else if (playbackMode === "speech") {
       speakFromTime(currentTime);
     }
-  };
+  }, [playbackMode, currentTime, speakFromTime]);
 
-  const pause = () => {
+  const pause = React.useCallback(() => {
     setIsPlaying(false);
     if (playbackMode === "audio" && audioRef.current) {
       audioRef.current.pause();
     } else if (playbackMode === "speech" && typeof window !== "undefined" && window.speechSynthesis) {
       window.speechSynthesis.cancel();
     }
-  };
+  }, [playbackMode]);
 
-  const seekToTime = (time: number) => {
+  const seekToTime = React.useCallback((time: number) => {
     const clampedTime = Math.max(0, Math.min(duration, time));
     setCurrentTime(clampedTime);
 
@@ -361,11 +366,19 @@ export function useTranscriptViewer({
     if (isPlaying) {
       lastTimeRef.current = performance.now();
     }
-  };
+  }, [duration, playbackMode, isPlaying, speakFromTime]);
 
-  const seekToWord = (word: TranscriptWord) => {
+  const seekToWord = React.useCallback((word: TranscriptWord) => {
     seekToTime(word.start);
-  };
+  }, [seekToTime]);
+
+  const setDuration = React.useCallback((val: number | ((prev: number) => number)) => {
+    if (typeof val === "function") {
+      setDurationOverride((prev) => val(prev ?? baseDuration));
+    } else {
+      setDurationOverride(val);
+    }
+  }, [baseDuration]);
 
   return {
     audioRef,
@@ -400,25 +413,23 @@ export function TranscriptViewerContainer({
   ...props
 }: TranscriptViewerContainerProps) {
   const viewer = useTranscriptViewer({ alignment, audioSrc });
+  const { audioRef, playbackMode, setCurrentTime, setDuration, pause, seekToTime } = viewer;
 
   useEffect(() => {
-    const audio = viewer.audioRef.current;
+    const audio = audioRef.current;
     if (!audio) return;
 
-    // Slow down playback rate slightly for comfortable listening pacing
-    audio.playbackRate = 0.88;
-
     const onTimeUpdate = () => {
-      viewer.setCurrentTime(audio.currentTime);
+      setCurrentTime(audio.currentTime);
     };
 
     const onLoadedMetadata = () => {
-      viewer.setDuration(audio.duration);
+      setDuration(audio.duration);
     };
 
     const onEnded = () => {
-      viewer.pause();
-      viewer.seekToTime(0);
+      pause();
+      seekToTime(0);
     };
 
     audio.addEventListener("timeupdate", onTimeUpdate);
@@ -430,10 +441,10 @@ export function TranscriptViewerContainer({
       audio.removeEventListener("loadedmetadata", onLoadedMetadata);
       audio.removeEventListener("ended", onEnded);
     };
-  }, [viewer.playbackMode]);
+  }, [audioRef, playbackMode, setCurrentTime, setDuration, pause, seekToTime]);
 
   return (
-    <TranscriptViewerContext.Provider value={viewer as any}>
+    <TranscriptViewerContext.Provider value={viewer}>
       <div
         style={{ backgroundColor: componentColor }}
         className={cn(
@@ -448,15 +459,15 @@ export function TranscriptViewerContainer({
   );
 }
 
-export function TranscriptViewerAudio(props: React.AudioHTMLAttributes<HTMLAudioElement>) {
+export function TranscriptViewerAudio({ className, ...props }: React.AudioHTMLAttributes<HTMLAudioElement>) {
   const { audioRef, playbackMode } = useTranscriptViewerContext();
   if (playbackMode !== "audio") return null;
 
   return (
     <audio
-      ref={audioRef}
-      className="hidden"
       {...props}
+      ref={audioRef}
+      className={cn("hidden", className)}
     />
   );
 }
@@ -532,15 +543,28 @@ export function TranscriptViewerWords({
   );
 }
 
-export function TranscriptViewerPlayPauseButton(props: React.ButtonHTMLAttributes<HTMLButtonElement>) {
+export function TranscriptViewerPlayPauseButton({
+  className,
+  style,
+  onClick,
+  ...props
+}: React.ButtonHTMLAttributes<HTMLButtonElement>) {
   const { isPlaying, play, pause } = useTranscriptViewerContext();
 
   return (
     <button
-      onClick={isPlaying ? pause : play}
+      {...props}
+      onClick={(e) => {
+        onClick?.(e);
+        if (isPlaying) {
+          pause();
+        } else {
+          play();
+        }
+      }}
       className={cn(
         "h-10 px-5 bg-white hover:bg-zinc-200 active:scale-[0.97] transition-all text-zinc-900 rounded-full text-xs font-bold cursor-pointer shrink-0 whitespace-nowrap shadow-sm",
-        props.className
+        className
       )}
       style={{
         display: "flex",
@@ -549,9 +573,8 @@ export function TranscriptViewerPlayPauseButton(props: React.ButtonHTMLAttribute
         alignItems: "center",
         justifyContent: "center",
         gap: "6px",
-        ...props.style
+        ...style
       }}
-      {...props}
     >
       {isPlaying ? (
         <>

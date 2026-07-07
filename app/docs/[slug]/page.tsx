@@ -129,8 +129,8 @@ export default async function ComponentPage({ params }: PageProps) {
         </div>
       )}
 
-      {/* Detailed documentation section for audio-timing-visualizer */}
-      {slug === "audio-timing-visualizer" && (
+      {/* Detailed documentation section for transcript-viewer */}
+      {slug === "transcript-viewer" && (
         <div className="border-t border-hairline pt-12">
           <AudioTimingVisualizerDocs />
         </div>
