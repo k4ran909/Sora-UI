@@ -7,10 +7,11 @@ import { MusicPlayer as DarkPlayer } from "@/registry/dark-player";
 import { BarVisualizer } from "@/registry/bar-visualizer";
 import { DateSelector } from "@/registry/date-selector";
 import { DustSphere } from "@/registry/dust-sphere";
+import { AudioTimingVisualizer } from "@/registry/audio-timing-visualizer";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { motion } from "motion/react";
 import { ShineButton } from "./shine-button";
-import { ArrowLeft, ArrowRight, Blocks, Music, Disc, Activity, Calendar, Globe } from "lucide-react";
+import { ArrowLeft, ArrowRight, Blocks, Music, Disc, Activity, Calendar, Globe, MessageSquareText } from "lucide-react";
 import { Button } from "../ui/button";
 
 export function ComponentsSection() {
@@ -344,20 +345,12 @@ function InteractiveDustSphere() {
         <span>Voice React: {voiceReact ? "ON" : "OFF"}</span>
       </button>
 
-      <div 
-        style={{ borderColor: "var(--border)" }}
-        className="mt-2 p-4 rounded-2xl border bg-surface-1/40 backdrop-blur-sm max-w-[350px] sm:max-w-[400px] text-center flex flex-col items-center gap-1.5 shadow-sm"
-      >
-        <span className="text-[10px] font-extrabold tracking-widest text-zinc-500 dark:text-zinc-400 uppercase">
-          Voice Testing & Visualisation
-        </span>
-        <p 
-          style={{ color: "var(--muted-foreground)" }}
-          className="text-xs leading-relaxed font-medium"
-        >
-          Sora UI allows you to generate audio timings — now you can easily visualize them too! Try enabling voice reactivity and speak to see the sphere morph.
-        </p>
-      </div>
+      <AudioTimingVisualizer 
+        highlightBg="var(--primary)" 
+        highlightText="var(--primary-foreground)" 
+        componentColor="var(--card)" 
+        className="mt-4 w-full max-w-[480px] border border-white/5 dark:border-zinc-800/30 animate-in fade-in duration-300" 
+      />
     </div>
   );
 }

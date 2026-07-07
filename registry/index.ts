@@ -49,6 +49,14 @@ export const registry: Record<string, RegistryEntry> = {
     codePath: "registry/dust-sphere.tsx",
     dependencies: ["framer-motion", "lucide-react", "clsx", "tailwind-merge", "three"],
   },
+  "audio-timing-visualizer": {
+    name: "Audio Timing Visualizer",
+    slug: "audio-timing-visualizer",
+    category: "Voice",
+    description: "A karaoke-style word-highlighting audio player displaying precision word timings synced to sound playback.",
+    codePath: "registry/audio-timing-visualizer.tsx",
+    dependencies: ["clsx", "tailwind-merge", "lucide-react"],
+  },
 };
 
 

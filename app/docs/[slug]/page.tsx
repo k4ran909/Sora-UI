@@ -11,6 +11,7 @@ import { DarkPlayerDocs } from "@/components/dark-player-docs";
 import { BarVisualizerDocs } from "@/components/bar-visualizer-docs";
 import { DateSelectorDocs } from "@/components/date-selector-docs";
 import { DustSphereDocs } from "@/components/dust-sphere-docs";
+import { AudioTimingVisualizerDocs } from "@/components/audio-timing-visualizer-docs";
 import { CLIInstallBlock } from "@/components/cli-install-block";
 
 interface PageProps {
@@ -119,6 +120,13 @@ export default async function ComponentPage({ params }: PageProps) {
       {slug === "dust-sphere" && (
         <div className="border-t border-hairline pt-12">
           <DustSphereDocs />
+        </div>
+      )}
+
+      {/* Detailed documentation section for audio-timing-visualizer */}
+      {slug === "audio-timing-visualizer" && (
+        <div className="border-t border-hairline pt-12">
+          <AudioTimingVisualizerDocs />
         </div>
       )}
     </div>

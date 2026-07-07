@@ -66,6 +66,10 @@ const componentsMap: Record<string, React.ComponentType<any>> = {
     ssr: false,
     loading: () => <span className="text-zinc-500 text-xs">Loading 3D globe...</span>,
   }),
+  "audio-timing-visualizer": dynamic(() => import("@/registry/audio-timing-visualizer").then((mod) => mod.AudioTimingVisualizer), {
+    ssr: false,
+    loading: () => <span className="text-zinc-500 text-xs">Loading visualizer...</span>,
+  }),
 };
 
 export function PreviewRenderer({ slug }: { slug: string }) {
