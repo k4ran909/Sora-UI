@@ -168,7 +168,7 @@ export function DustSphere({
       scene.fog = new THREE.FogExp2(fogColor, 0.0015);
 
       camera = new THREE.PerspectiveCamera(45, container.clientWidth / container.clientHeight, 1, 1000);
-      camera.position.z = 130;
+      camera.position.z = 210;
 
       renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
       renderer.setPixelRatio(window.devicePixelRatio);
