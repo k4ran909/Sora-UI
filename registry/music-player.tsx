@@ -386,10 +386,16 @@ export function MusicPlayer({
           </div>
 
           {/* Artist & Song Title labels */}
-          <div className="text-zinc-500 dark:text-zinc-400 text-xs tracking-wider mb-1 max-w-full truncate text-center">
+          <div 
+            style={{ color: "var(--muted-foreground)" }}
+            className="text-xs tracking-wider mb-1 max-w-full truncate text-center"
+          >
             {artistOverride || currentTrack.artist}
           </div>
-          <div className="text-zinc-950 dark:text-white text-base font-bold tracking-tight mb-4 max-w-full text-center truncate">
+          <div 
+            style={{ color: "var(--foreground)" }}
+            className="text-base font-bold tracking-tight mb-4 max-w-full text-center truncate"
+          >
             {titleOverride || currentTrack.title}
           </div>
 
@@ -409,8 +415,11 @@ export function MusicPlayer({
               />
             </div>
             
-            <div className="mt-2 text-xs font-semibold text-zinc-500 dark:text-zinc-400 tabular-nums">
-              <span className="text-zinc-950 dark:text-white">{formatTime(currentTime)}</span>
+            <div 
+              style={{ color: "var(--muted-foreground)" }}
+              className="mt-2 text-xs font-semibold tabular-nums"
+            >
+              <span style={{ color: "var(--foreground)" }}>{formatTime(currentTime)}</span>
               <span className="mx-1 opacity-40">/</span>
               <span>{formatTime(duration)}</span>
             </div>
@@ -420,7 +429,8 @@ export function MusicPlayer({
           <div className="flex items-center justify-center gap-8 w-full mt-1">
             <button
               onClick={() => changeTrack(currentTrackIndex - 1)}
-              className="p-2.5 rounded-full hover:bg-black/5 dark:hover:bg-white/5 active:scale-90 transition-all text-zinc-500 dark:text-zinc-400 hover:text-zinc-950 dark:hover:text-white"
+              style={{ color: "var(--muted-foreground)" }}
+              className="p-2.5 rounded-full hover:bg-black/5 dark:hover:bg-white/5 active:scale-90 transition-all hover:text-foreground"
               title="Previous Track"
             >
               <svg className="w-5 h-5 fill-current" viewBox="0 0 24 24">
@@ -430,7 +440,8 @@ export function MusicPlayer({
             
             <button
               onClick={() => changeTrack(currentTrackIndex + 1)}
-              className="p-2.5 rounded-full hover:bg-black/5 dark:hover:bg-white/5 active:scale-90 transition-all text-zinc-500 dark:text-zinc-400 hover:text-zinc-950 dark:hover:text-white"
+              style={{ color: "var(--muted-foreground)" }}
+              className="p-2.5 rounded-full hover:bg-black/5 dark:hover:bg-white/5 active:scale-90 transition-all hover:text-foreground"
               title="Next Track"
             >
               <svg className="w-5 h-5 fill-current" viewBox="0 0 24 24">
