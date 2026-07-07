@@ -65,7 +65,7 @@ const NavBar = () => {
             <div className="sm:hidden">
               <Button variant="ghost" size="icon" asChild className="h-7 w-7">
                 <Link
-                  href="https://github.com/dodopayments/billingsdk"
+                  href="https://github.com/k4ran909/Sora-UI"
                   target="_blank"
                   rel="noopener noreferrer"
                 >

@@ -19,7 +19,7 @@ export default function DocsLayout({
         </Link>
         <div className="flex items-center gap-4">
           <a
-            href="https://github.com"
+            href="https://github.com/k4ran909/Sora-UI"
             target="_blank"
             rel="noopener noreferrer"
             className="text-sm font-medium text-ink-subtle hover:text-ink transition-colors"

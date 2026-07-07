@@ -110,7 +110,7 @@ export default function GitHubStarBadge() {
 
   return (
     <Link
-      href="https://github.com/dodopayments/billingsdk"
+      href="https://github.com/k4ran909/Sora-UI"
       target="_blank"
       rel="noopener noreferrer"
       className="bg-background inline-flex h-9 items-center rounded-md border text-xs leading-none font-normal text-white shadow-sm backdrop-blur-md transition-colors"

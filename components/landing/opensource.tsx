@@ -8,7 +8,7 @@ export function OpenSource() {
     {
       name: "GitHub",
       icon: BsGithub,
-      href: "https://github.com/dodopayments/billingsdk",
+      href: "https://github.com/k4ran909/Sora-UI",
       description: "View our open source code and contribute to the project",
     },
     {

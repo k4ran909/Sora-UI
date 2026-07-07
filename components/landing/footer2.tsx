@@ -35,7 +35,7 @@ export function Footer2() {
               <div className="flex">
                 <Button variant="ghost" size="sm" asChild>
                   <Link
-                    href="https://github.com/dodopayments/billingsdk"
+                    href="https://github.com/k4ran909/Sora-UI"
                     target="_blank"
                     rel="noopener noreferrer"
                   >
