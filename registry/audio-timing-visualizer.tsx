@@ -210,7 +210,7 @@ export function AudioTimingVisualizer({
     <div
       style={{ backgroundColor: componentColor }}
       className={cn(
-        "w-[480px] max-w-full rounded-[24px] p-6 flex flex-col justify-between box-border border border-zinc-200/10 dark:border-zinc-800/20 shadow-[0_25px_50px_rgba(0,0,0,0.25)] select-none font-sans relative overflow-hidden",
+        "w-full rounded-[24px] p-6 flex flex-col justify-between box-border border border-zinc-200/10 dark:border-zinc-800/20 shadow-[0_25px_50px_rgba(0,0,0,0.25)] select-none font-sans relative overflow-hidden",
         className
       )}
       {...props}
