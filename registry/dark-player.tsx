@@ -380,9 +380,9 @@ export function MusicPlayer({
           {/* Active indicator Pill Background */}
           <div 
             style={{ borderColor: timelineColor }}
-            className="absolute left-5 top-1/2 -translate-y-1/2 w-[82%] h-[44px] border rounded-[22px] bg-surface-1 pointer-events-none flex items-center justify-end pr-5 box-border z-0"
+            className="absolute left-5 top-1/2 -translate-y-1/2 w-[82%] h-[44px] border rounded-[22px] bg-zinc-900 dark:bg-[#0d0d0d] pointer-events-none flex items-center justify-end pr-5 box-border z-0"
           >
-            <div className="w-1.5 h-1.5 bg-ink rounded-full" />
+            <div className="w-1.5 h-1.5 bg-white rounded-full" />
           </div>
 
           {/* Scrollable Track list */}
@@ -409,8 +409,8 @@ export function MusicPlayer({
                   onClick={() => handleTrackClick(idx)}
                   style={{ transform: `scale(${scale})`, opacity }}
                   className={cn(
-                    "text-zinc-500 text-sm h-[44px] flex flex-col justify-center pl-5 snap-center select-none cursor-pointer w-[80%] transition-all duration-300 ease-[cubic-bezier(0.25,1,0.5,1)] truncate",
-                    isActive && "text-ink font-bold"
+                    "text-zinc-500 dark:text-zinc-400 text-sm h-[44px] flex flex-col justify-center pl-5 snap-center select-none cursor-pointer w-[80%] transition-all duration-300 ease-[cubic-bezier(0.25,1,0.5,1)] truncate",
+                    isActive && "text-white font-bold"
                   )}
                 >
                   <div className="truncate font-semibold text-xs md:text-sm">{displayTitle}</div>
