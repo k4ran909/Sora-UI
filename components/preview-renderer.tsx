@@ -79,6 +79,7 @@ const componentsMap: Record<string, React.ComponentType<any>> = {
         return (
           <div className="w-full flex items-center justify-center p-4">
             <TranscriptViewerContainer 
+              audioSrc="/sora-speech.mp3"
               componentColor="var(--card)" 
               className="max-w-[580px] border border-white/5 dark:border-zinc-800/30"
             >

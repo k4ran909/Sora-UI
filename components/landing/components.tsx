@@ -352,6 +352,7 @@ function InteractiveDustSphere() {
       </button>
 
       <TranscriptViewerContainer 
+        audioSrc="/sora-speech.mp3"
         componentColor="var(--card)" 
         className="mt-4 w-full max-w-[580px] border border-white/5 dark:border-zinc-800/30 animate-in fade-in duration-300"
       >

@@ -158,21 +158,36 @@ export function useTranscriptViewer({
 }) {
   const defaultAlignment = useRef(generateDefaultMockAlignment());
   const activeAlignment = alignment || defaultAlignment.current;
-  const words = parseAlignment(activeAlignment);
 
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(() => getAlignmentDuration(activeAlignment));
   const [playbackMode, setPlaybackMode] = useState<"audio" | "speech" | "simulated">("simulated");
+  const [words, setWords] = useState<TranscriptWord[]>(() => parseAlignment(activeAlignment));
+
+  // Sync duration and scale words if alignment input or loaded duration changes
+  useEffect(() => {
+    const baseDuration = getAlignmentDuration(activeAlignment);
+    setDuration(baseDuration);
+    
+    // Scale word timings to match the actual loaded duration
+    if (duration > 0 && Math.abs(duration - baseDuration) > 0.05) {
+      const scale = duration / baseDuration;
+      const parsedWords = parseAlignment(activeAlignment);
+      const scaled = parsedWords.map(w => ({
+        word: w.word,
+        start: w.start * scale,
+        end: w.end * scale
+      }));
+      setWords(scaled);
+    } else {
+      setWords(parseAlignment(activeAlignment));
+    }
+  }, [activeAlignment, duration]);
 
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const animationFrameRef = useRef<number | null>(null);
   const lastTimeRef = useRef<number>(0);
-
-  // Sync duration if alignment input changes
-  useEffect(() => {
-    setDuration(getAlignmentDuration(activeAlignment));
-  }, [activeAlignment]);
 
   // Initialize playback mode
   useEffect(() => {
