@@ -141,6 +141,7 @@ export function PreviewComponents({
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent
+                align="end"
                 sideOffset={4}
                 className="w-fit min-w-full"
               >
@@ -196,7 +197,7 @@ export function PreviewComponents({
               <span className="sr-only">Switch theme</span>
             </Button>
           </DropdownMenuTrigger>
-          <DropdownMenuContent sideOffset={4} className="w-fit min-w-full">
+          <DropdownMenuContent align="end" sideOffset={4} className="w-fit min-w-full">
             {themes.map((theme) => (
               <DropdownMenuItem
                 key={theme.name}
