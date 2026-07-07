@@ -83,22 +83,22 @@ export function parseAlignment(alignment: CharacterAlignmentResponseModel): Tran
 // ─── DYNAMIC TRANSCRIPT COMPOSER ───
 
 const DEFAULT_WORD_TIMINGS = [
-  { word: "Sora", start: 0.0, end: 0.4 },
-  { word: "UI", start: 0.4, end: 0.8 },
-  { word: "allows", start: 0.8, end: 1.3 },
-  { word: "you", start: 1.3, end: 1.6 },
+  { word: "Sora", start: 0.0, end: 0.5 },
+  { word: "UI", start: 0.5, end: 0.9 },
+  { word: "allows", start: 0.9, end: 1.4 },
+  { word: "you", start: 1.4, end: 1.6 },
   { word: "to", start: 1.6, end: 1.8 },
   { word: "generate", start: 1.8, end: 2.4 },
-  { word: "audio", start: 2.4, end: 2.9 },
-  { word: "timings", start: 2.9, end: 3.5 },
-  { word: "—", start: 3.5, end: 3.7 },
-  { word: "now", start: 3.7, end: 4.0 },
-  { word: "you", start: 4.0, end: 4.2 },
-  { word: "can", start: 4.2, end: 4.4 },
-  { word: "easily", start: 4.4, end: 4.9 },
-  { word: "visualize", start: 4.9, end: 5.6 },
-  { word: "them", start: 5.6, end: 5.9 },
-  { word: "too!", start: 5.9, end: 6.5 },
+  { word: "audio", start: 2.4, end: 2.8 },
+  { word: "timings", start: 2.8, end: 3.4 },
+  { word: "—", start: 3.4, end: 3.8 },
+  { word: "now", start: 3.8, end: 4.2 },
+  { word: "you", start: 4.2, end: 4.4 },
+  { word: "can", start: 4.4, end: 4.6 },
+  { word: "easily", start: 4.6, end: 5.1 },
+  { word: "visualize", start: 5.1, end: 5.8 },
+  { word: "them", start: 5.8, end: 6.1 },
+  { word: "too!", start: 6.1, end: 6.672 },
 ];
 
 export function generateDefaultMockAlignment(): CharacterAlignmentResponseModel {
