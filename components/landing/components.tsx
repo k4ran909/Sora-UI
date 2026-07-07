@@ -7,7 +7,13 @@ import { MusicPlayer as DarkPlayer } from "@/registry/dark-player";
 import { BarVisualizer } from "@/registry/bar-visualizer";
 import { DateSelector } from "@/registry/date-selector";
 import { DustSphere } from "@/registry/dust-sphere";
-import { AudioTimingVisualizer } from "@/registry/audio-timing-visualizer";
+import { 
+  TranscriptViewerContainer, 
+  TranscriptViewerAudio, 
+  TranscriptViewerWords, 
+  TranscriptViewerPlayPauseButton, 
+  TranscriptViewerScrubBar 
+} from "@/registry/transcript-viewer";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { motion } from "motion/react";
 import { ShineButton } from "./shine-button";
@@ -345,12 +351,17 @@ function InteractiveDustSphere() {
         <span>Voice React: {voiceReact ? "ON" : "OFF"}</span>
       </button>
 
-      <AudioTimingVisualizer 
-        highlightBg="var(--primary)" 
-        highlightText="var(--primary-foreground)" 
+      <TranscriptViewerContainer 
         componentColor="var(--card)" 
-        className="mt-4 w-full max-w-[580px] border border-white/5 dark:border-zinc-800/30 animate-in fade-in duration-300" 
-      />
+        className="mt-4 w-full max-w-[580px] border border-white/5 dark:border-zinc-800/30 animate-in fade-in duration-300"
+      >
+        <TranscriptViewerAudio />
+        <TranscriptViewerWords highlightBg="var(--primary)" highlightText="var(--primary-foreground)" />
+        <div className="flex items-center gap-3">
+          <TranscriptViewerPlayPauseButton />
+          <TranscriptViewerScrubBar />
+        </div>
+      </TranscriptViewerContainer>
     </div>
   );
 }

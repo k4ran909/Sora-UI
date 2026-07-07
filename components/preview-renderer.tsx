@@ -66,10 +66,35 @@ const componentsMap: Record<string, React.ComponentType<any>> = {
     ssr: false,
     loading: () => <span className="text-zinc-500 text-xs">Loading 3D globe...</span>,
   }),
-  "audio-timing-visualizer": dynamic(() => import("@/registry/audio-timing-visualizer").then((mod) => mod.AudioTimingVisualizer), {
-    ssr: false,
-    loading: () => <span className="text-zinc-500 text-xs">Loading visualizer...</span>,
-  }),
+  "transcript-viewer": dynamic(
+    () => import("@/registry/transcript-viewer").then((mod) => {
+      const {
+        TranscriptViewerContainer,
+        TranscriptViewerAudio,
+        TranscriptViewerWords,
+        TranscriptViewerPlayPauseButton,
+        TranscriptViewerScrubBar
+      } = mod;
+      return function Preview() {
+        return (
+          <div className="w-full flex items-center justify-center p-4">
+            <TranscriptViewerContainer 
+              componentColor="var(--card)" 
+              className="max-w-[580px] border border-white/5 dark:border-zinc-800/30"
+            >
+              <TranscriptViewerAudio />
+              <TranscriptViewerWords highlightBg="var(--primary)" highlightText="var(--primary-foreground)" />
+              <div className="flex items-center gap-3">
+                <TranscriptViewerPlayPauseButton />
+                <TranscriptViewerScrubBar />
+              </div>
+            </TranscriptViewerContainer>
+          </div>
+        );
+      };
+    }),
+    { ssr: false, loading: () => <span className="text-zinc-500 text-xs">Loading transcript...</span> }
+  ),
 };
 
 export function PreviewRenderer({ slug }: { slug: string }) {
