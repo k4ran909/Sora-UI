@@ -418,7 +418,7 @@ export function TranscriptViewerContainer({
 
     const onEnded = () => {
       viewer.pause();
-      viewer.setCurrentTime(0);
+      viewer.seekToTime(0);
     };
 
     audio.addEventListener("timeupdate", onTimeUpdate);
