@@ -13,6 +13,7 @@ import { DateSelectorDocs } from "@/components/date-selector-docs";
 import { DustSphereDocs } from "@/components/dust-sphere-docs";
 import { AudioTimingVisualizerDocs } from "@/components/audio-timing-visualizer-docs";
 import { CLIInstallBlock } from "@/components/cli-install-block";
+import { ManualInstallBlock } from "@/components/manual-install-block";
 
 interface PageProps {
   params: Promise<{ slug: string }>;
@@ -78,13 +79,18 @@ export default async function ComponentPage({ params }: PageProps) {
 
         <div className="space-y-3 pt-2">
           <h3 className="text-sm font-semibold text-ink">Option B: Manual Copy-Paste</h3>
-          <p className="text-xs text-ink-subtle leading-relaxed space-y-2">
-            1. Copy the code from the <strong>Code &gt; Component</strong> tab above.
-            <br />
-            2. Paste it in your project at <code className="text-primary font-mono bg-surface-2 px-1.5 py-0.5 rounded border border-hairline text-[11px]">components/{componentInfo.slug}.tsx</code>.
-            <br />
-            3. Install the dependencies: <code className="text-primary font-mono bg-surface-2 px-1.5 py-0.5 rounded border border-hairline text-[11px]">npm install {componentInfo.dependencies?.join(" ") || "framer-motion clsx tailwind-merge lucide-react"}</code>.
-          </p>
+          <div className="text-xs text-ink-subtle leading-relaxed space-y-3">
+            <div>
+              1. Copy the code from the <strong>Code &gt; Component</strong> tab above.
+            </div>
+            <div>
+              2. Paste it in your project at <code className="text-primary font-mono bg-surface-2 px-1.5 py-0.5 rounded border border-hairline text-[11px]">components/{componentInfo.slug}.tsx</code>.
+            </div>
+            <div className="space-y-2">
+              <div>3. Install the dependencies:</div>
+              <ManualInstallBlock dependencies={componentInfo.dependencies || ["framer-motion", "clsx", "tailwind-merge", "lucide-react"]} />
+            </div>
+          </div>
         </div>
       </div>
 

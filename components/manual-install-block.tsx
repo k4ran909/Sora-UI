@@ -3,25 +3,27 @@
 import React, { useState } from "react";
 import { Check, Copy } from "lucide-react";
 
-interface CLIInstallBlockProps {
-  slug: string;
+interface ManualInstallBlockProps {
+  dependencies: string[];
 }
 
 type PackageManager = "npm" | "pnpm" | "bun";
 
-export function CLIInstallBlock({ slug }: CLIInstallBlockProps) {
+export function ManualInstallBlock({ dependencies }: ManualInstallBlockProps) {
   const [copied, setCopied] = useState(false);
   const [manager, setManager] = useState<PackageManager>("npm");
+  
+  const depsString = dependencies.join(" ");
 
   const getCommand = () => {
     switch (manager) {
       case "pnpm":
-        return `pnpm dlx soraui-cli add ${slug}`;
+        return `pnpm add ${depsString}`;
       case "bun":
-        return `bunx soraui-cli add ${slug}`;
+        return `bun add ${depsString}`;
       case "npm":
       default:
-        return `npx soraui-cli add ${slug}`;
+        return `npm install ${depsString}`;
     }
   };
 
@@ -51,7 +53,7 @@ export function CLIInstallBlock({ slug }: CLIInstallBlockProps) {
         ))}
       </div>
       <div className="relative flex items-center justify-between p-4 rounded-xl border border-hairline bg-surface-1 font-mono text-xs group">
-        <code className="text-primary select-all truncate pr-10">
+        <code className="text-primary select-all pr-10 whitespace-pre-wrap break-all">
           {command}
         </code>
         <button
