@@ -222,6 +222,9 @@ export function useTranscriptViewer({
       const audio = audioRef.current;
       if (audio) {
         setCurrentTime(audio.currentTime);
+        if (audio.duration && !isNaN(audio.duration) && audio.duration !== duration) {
+          setDuration(audio.duration);
+        }
       }
       if (isPlaying) {
         animationFrameRef.current = requestAnimationFrame(stepTimer);
@@ -536,19 +539,28 @@ export function TranscriptViewerPlayPauseButton(props: React.ButtonHTMLAttribute
     <button
       onClick={isPlaying ? pause : play}
       className={cn(
-        "h-11 px-4 border border-zinc-700/60 dark:border-zinc-800 bg-zinc-900/60 hover:bg-zinc-800/80 active:scale-[0.98] transition-all text-white rounded-xl text-sm font-semibold flex flex-row flex-nowrap items-center justify-center gap-2 cursor-pointer shadow-inner shrink-0 whitespace-nowrap",
+        "h-10 px-5 bg-white hover:bg-zinc-200 active:scale-[0.97] transition-all text-zinc-900 rounded-full text-xs font-bold cursor-pointer shrink-0 whitespace-nowrap shadow-sm",
         props.className
       )}
+      style={{
+        display: "flex",
+        flexDirection: "row",
+        flexWrap: "nowrap",
+        alignItems: "center",
+        justifyContent: "center",
+        gap: "6px",
+        ...props.style
+      }}
       {...props}
     >
       {isPlaying ? (
         <>
-          <Pause className="h-4 w-4 fill-current text-white" />
+          <Pause className="h-3.5 w-3.5 fill-current text-zinc-900" />
           <span>Pause</span>
         </>
       ) : (
         <>
-          <Play className="h-4 w-4 fill-current text-white" />
+          <Play className="h-3.5 w-3.5 fill-current text-zinc-900" />
           <span>Play</span>
         </>
       )}
