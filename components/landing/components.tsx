@@ -343,6 +343,21 @@ function InteractiveDustSphere() {
         <span className={cn(voiceReact && "animate-pulse")}>🎤</span>
         <span>Voice React: {voiceReact ? "ON" : "OFF"}</span>
       </button>
+
+      <div 
+        style={{ borderColor: "var(--border)" }}
+        className="mt-2 p-4 rounded-2xl border bg-surface-1/40 backdrop-blur-sm max-w-[350px] sm:max-w-[400px] text-center flex flex-col items-center gap-1.5 shadow-sm"
+      >
+        <span className="text-[10px] font-extrabold tracking-widest text-zinc-500 dark:text-zinc-400 uppercase">
+          Voice Testing & Visualisation
+        </span>
+        <p 
+          style={{ color: "var(--muted-foreground)" }}
+          className="text-xs leading-relaxed font-medium"
+        >
+          Sora UI allows you to generate audio timings — now you can easily visualize them too! Try enabling voice reactivity and speak to see the sphere morph.
+        </p>
+      </div>
     </div>
   );
 }
