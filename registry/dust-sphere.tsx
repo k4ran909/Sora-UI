@@ -338,10 +338,6 @@ export function DustSphere({
       previousMousePosition = { x: e.touches[0].clientX, y: e.touches[0].clientY };
     };
 
-    const onWheel = (e: WheelEvent) => {
-      camera.position.z = Math.max(100, Math.min(450, camera.position.z + e.deltaY * 0.15));
-    };
-
     const onResize = () => {
       camera.aspect = container.clientWidth / container.clientHeight;
       camera.updateProjectionMatrix();
@@ -357,7 +353,6 @@ export function DustSphere({
     container.addEventListener("touchstart", onTouchStart, { passive: true });
     window.addEventListener("touchend", onTouchEnd);
     window.addEventListener("touchmove", onTouchMove, { passive: true });
-    container.addEventListener("wheel", onWheel, { passive: true });
     window.addEventListener("resize", onResize);
 
     return () => {
@@ -368,7 +363,6 @@ export function DustSphere({
       container.removeEventListener("touchstart", onTouchStart);
       window.removeEventListener("touchend", onTouchEnd);
       window.removeEventListener("touchmove", onTouchMove);
-      container.removeEventListener("wheel", onWheel);
       window.removeEventListener("resize", onResize);
 
       renderer.dispose();
