@@ -409,9 +409,8 @@ export function MusicPlayer({
               />
             </div>
             
-            {/* Elapsed vs Total time readout */}
             <div className="mt-2 text-xs font-semibold text-ink-subtle tabular-nums">
-              <span className="text-white">{formatTime(currentTime)}</span>
+              <span className="text-zinc-950 dark:text-white">{formatTime(currentTime)}</span>
               <span className="mx-1 opacity-40">/</span>
               <span>{formatTime(duration)}</span>
             </div>
