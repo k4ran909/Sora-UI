@@ -2,26 +2,19 @@
 import { useState, useEffect, useRef } from "react";
 import { cn } from "@/lib/utils";
 import { PreviewComponents } from "@/components/preview/preview-components";
-import { PricingTableOne } from "@/components/billingsdk/pricing-table-one";
-import { plans } from "@/lib/billingsdk-config";
-import { Banner } from "@/components/billingsdk/banner";
-import { UsageMeter } from "@/components/billingsdk/usage-meter";
-import { SubscriptionManagementDemo } from "@/components/subscription-management-demo";
-import { UpdatePlanCardDemo } from "@/components/update-plan-card-demo";
-import { CancelSubscriptionCard } from "@/registry/billingsdk/cancel-subscription-card";
+import { MusicPlayer } from "@/registry/music-player";
+import { MusicPlayer as DarkPlayer } from "@/registry/dark-player";
+import { BarVisualizer } from "@/registry/bar-visualizer";
+import { DateSelector } from "@/registry/date-selector";
+import { DustSphere } from "@/registry/dust-sphere";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
-import { AiOutlineDollar } from "react-icons/ai";
-import { FiSettings } from "react-icons/fi";
-import { BsBell } from "react-icons/bs";
-import { BiBarChartAlt2, BiArrowToTop } from "react-icons/bi";
-import { MdClose } from "react-icons/md";
 import { motion } from "motion/react";
 import { ShineButton } from "./shine-button";
-import { ArrowLeft, ArrowRight, Blocks } from "lucide-react";
+import { ArrowLeft, ArrowRight, Blocks, Music, Disc, Activity, Calendar, Globe } from "lucide-react";
 import { Button } from "../ui/button";
 
 export function ComponentsSection() {
-  const [active, setActive] = useState("pricing");
+  const [active, setActive] = useState("music-player");
   const [isAutoRotating, setIsAutoRotating] = useState(true);
   const [isHovered, setIsHovered] = useState(false);
   const [borderPosition, setBorderPosition] = useState({
@@ -34,40 +27,34 @@ export function ComponentsSection() {
 
   const components = [
     {
-      id: "pricing",
-      label: "Pricing",
-      icon: AiOutlineDollar,
-      href: "/docs/components/pricing-table/pricing-table-one",
+      id: "music-player",
+      label: "Skeuomorphic Player",
+      icon: Disc,
+      href: "/docs/music-player",
     },
     {
-      id: "subscription",
-      label: "Subscription Management",
-      icon: FiSettings,
-      href: "/docs/components/banner#gradient-banner",
+      id: "dark-player",
+      label: "Dark Pill Player",
+      icon: Music,
+      href: "/docs/dark-player",
     },
     {
-      id: "banner",
-      label: "Banner Notifications",
-      icon: BsBell,
-      href: "/docs/components/banner",
+      id: "bar-visualizer",
+      label: "Voice Visualizer",
+      icon: Activity,
+      href: "/docs/bar-visualizer",
     },
     {
-      id: "usage",
-      label: "Usage Meters",
-      icon: BiBarChartAlt2,
-      href: "/docs/components/usage-meter/usage-meter-linear",
+      id: "date-selector",
+      label: "Date Selector",
+      icon: Calendar,
+      href: "/docs/date-selector",
     },
     {
-      id: "updates",
-      label: "Plan Updates",
-      icon: BiArrowToTop,
-      href: "/docs/components/update-plan/update-plan-card",
-    },
-    {
-      id: "cancellation",
-      label: "Cancellation Flow",
-      icon: MdClose,
-      href: "/docs/components/cancel-subscription/cancel-subscription-card",
+      id: "dust-sphere",
+      label: "3D Particle Sphere",
+      icon: Globe,
+      href: "/docs/dust-sphere",
     },
   ];
 
@@ -170,11 +157,11 @@ export function ComponentsSection() {
             />
             <div className="text-left">
               <h2 className="font-display text-primary animate-in fade-in slide-in-from-bottom-4 mt-4 text-3xl font-medium duration-1000 sm:text-3xl md:text-4xl">
-                Explore Interactive Billing Components
+                Explore Interactive Premium Components
               </h2>
               <p className="text-muted-foreground animate-in fade-in slide-in-from-bottom-4 mt-4 mb-8 text-sm tracking-tight text-balance delay-200 duration-1000 md:text-base">
-                Interact with real-time UI elements designed to streamline your
-                billing workflows.
+                Interact with real-time animated elements designed to make your
+                interfaces stand out.
               </p>
             </div>
 
@@ -272,114 +259,33 @@ function ComponentsShowcase({ setIsHovered }: any) {
         onMouseLeave={() => setIsHovered(false)}
       >
         <div className="h-full w-full transition-all duration-300 ease-in-out">
-          <TabsContent value="pricing" className="mt-0">
-            <PreviewComponents className="animate-in fade-in bg-background h-full min-h-[500px] w-full max-w-none border-none px-0 py-4 duration-300 md:min-h-[700px]">
-              <PricingTableOne
-                className="w-full"
-                plans={plans}
-                title="Pricing"
-                description="Choose the plan that's right for you"
-                onPlanSelect={(planId) => console.log("Selected plan:", planId)}
-                size="small"
-                theme="classic"
-              />
+          <TabsContent value="music-player" className="mt-0">
+            <PreviewComponents className="animate-in fade-in bg-background h-full min-h-[500px] w-full max-w-none border-none px-0 py-4 duration-300 md:min-h-[700px] flex items-center justify-center">
+              <MusicPlayer />
             </PreviewComponents>
           </TabsContent>
 
-          <TabsContent value="banner" className="mt-0">
-            <PreviewComponents className="animate-in fade-in border-fd-primary/10 bg-background min-h-[500px] w-full max-w-none rounded-lg border-none px-0 text-sm duration-300 md:min-h-[700px]">
-              <Banner
-                title="🎉 Start your free trial today!"
-                description="Get 30 days free access to all premium features"
-                buttonText="Start Free Trial"
-                buttonLink="https://example.com/signup"
-                gradientColors={[
-                  "rgba(0,149,255,0.56)",
-                  "rgba(231,77,255,0.77)",
-                  "rgba(255,0,0,0.73)",
-                  "rgba(131,255,166,0.66)",
-                ]}
-                variant="default"
-              />
+          <TabsContent value="dark-player" className="mt-0">
+            <PreviewComponents className="animate-in fade-in bg-background h-full min-h-[500px] w-full max-w-none border-none px-0 py-4 duration-300 md:min-h-[700px] flex items-center justify-center">
+              <DarkPlayer />
             </PreviewComponents>
           </TabsContent>
 
-          <TabsContent value="usage" className="mt-0">
-            <PreviewComponents className="animate-in fade-in border-fd-primary/10 bg-background min-h-[500px] w-full max-w-none rounded-lg border-none px-0 text-sm duration-300 md:min-h-[700px]">
-              <UsageMeter
-                usage={[
-                  {
-                    name: "Claude Sonnet 4",
-                    usage: 75,
-                    limit: 100,
-                  },
-                  {
-                    name: "ChatGPT 5",
-                    usage: 12,
-                    limit: 100,
-                  },
-                  {
-                    name: "Grok 3",
-                    usage: 95,
-                    limit: 100,
-                  },
-                ]}
-                title="LLM Usage"
-                description="Your usage of the LLM models"
-                variant="linear"
-                size="md"
-                className="mx-auto"
-              />
+          <TabsContent value="bar-visualizer" className="mt-0">
+            <PreviewComponents className="animate-in fade-in bg-background h-full min-h-[500px] w-full max-w-none border-none px-0 py-4 duration-300 md:min-h-[700px] flex items-center justify-center">
+              <BarVisualizer state="speaking" demo={true} />
             </PreviewComponents>
           </TabsContent>
 
-          <TabsContent value="subscription" className="mt-0">
-            <PreviewComponents className="animate-in fade-in border-fd-primary/10 bg-background min-h-[500px] w-full max-w-none rounded-lg border border-none px-0 text-sm duration-300 md:min-h-[700px]">
-              <div className="mt-4">
-                <SubscriptionManagementDemo />
-              </div>
+          <TabsContent value="date-selector" className="mt-0">
+            <PreviewComponents className="animate-in fade-in bg-background h-full min-h-[500px] w-full max-w-none border-none px-0 py-4 duration-300 md:min-h-[700px] flex items-center justify-center">
+              <DateSelector />
             </PreviewComponents>
           </TabsContent>
 
-          <TabsContent value="updates" className="mt-0">
-            <PreviewComponents className="animate-in fade-in border-fd-primary/10 bg-background min-h-[500px] w-full max-w-none rounded-lg border border-none px-0 text-sm duration-300 md:min-h-[700px]">
-              <div className="mt-4 w-full">
-                <UpdatePlanCardDemo />
-              </div>
-            </PreviewComponents>
-          </TabsContent>
-
-          <TabsContent value="cancellation" className="mt-0">
-            <PreviewComponents className="animate-in fade-in border-fd-primary/10 bg-background min-h-[500px] w-full max-w-none rounded-lg border border-none px-0 text-sm duration-300 md:min-h-[700px]">
-              <div className="flex w-full items-center justify-center">
-                <CancelSubscriptionCard
-                  title="We're sorry to see you go..."
-                  description={`Before you cancel, we hope you'll consider upgrading to a ${plans[1].title} plan again.`}
-                  plan={plans[1]}
-                  leftPanelImageUrl="https://framerusercontent.com/images/GWE8vop9hubsuh3uWWn0vyuxEg.webp"
-                  warningTitle="You will lose access to your account"
-                  warningText="If you cancel your subscription, you will lose access to your account and all your data will be deleted."
-                  keepButtonText={`Keep My ${plans[1].title} Plan`}
-                  continueButtonText="Continue with Cancellation"
-                  finalTitle="Final Step - Confirm Cancellation"
-                  finalSubtitle="This action will immediately cancel your subscription"
-                  finalWarningText="You'll lose access to all Pro features and your data will be permanently deleted after 30 days."
-                  goBackButtonText="Wait, Go Back"
-                  confirmButtonText="Yes, Cancel My Subscription"
-                  onCancel={async (planId) => {
-                    console.log("Cancelling subscription for plan:", planId);
-                    return new Promise((resolve) => {
-                      setTimeout(() => {
-                        resolve(void 0);
-                      }, 1000);
-                    });
-                  }}
-                  onKeepSubscription={async (planId) => {
-                    console.log("Keeping subscription for plan:", planId);
-                  }}
-                  className="max-w-4xl"
-                />
-              </div>
+          <TabsContent value="dust-sphere" className="mt-0">
+            <PreviewComponents className="animate-in fade-in bg-background h-full min-h-[500px] w-full max-w-none border-none px-0 py-4 duration-300 md:min-h-[700px] flex items-center justify-center">
+              <DustSphere className="h-[400px] w-[350px] sm:w-[400px]" />
             </PreviewComponents>
           </TabsContent>
         </div>
