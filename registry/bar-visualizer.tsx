@@ -61,6 +61,12 @@ export interface BarVisualizerProps extends React.HTMLAttributes<HTMLDivElement>
    * Center-align bars vertically (growing out from middle) instead of bottom-aligned. Default: false.
    */
   centerAlign?: boolean;
+
+  /**
+   * Optional custom color or CSS variable/gradient for the visualizer bars.
+   * If provided, it overrides the state-based default colors.
+   */
+  color?: string;
 }
 
 // ─── AUDIO HOOKS ───
@@ -297,6 +303,7 @@ export function BarVisualizer({
   maxHeight = 100,
   demo = false,
   centerAlign = false,
+  color,
   className,
   ...props
 }: BarVisualizerProps) {
@@ -335,13 +342,26 @@ export function BarVisualizer({
           Math.min(maxHeight, value * 100)
         );
 
+        const barStyle: React.CSSProperties = {
+          height: `${calculatedHeight}%`,
+        };
+
+        if (color) {
+          if (color.includes("gradient") || color.startsWith("linear") || color.startsWith("radial") || color.startsWith("var(")) {
+            barStyle.background = color;
+          } else {
+            barStyle.backgroundColor = color;
+          }
+          barStyle.boxShadow = `0 0 15px ${color}`;
+        }
+
         return (
           <div
             key={i}
-            style={{ height: `${calculatedHeight}%` }}
+            style={barStyle}
             className={cn(
               "w-2.5 rounded-full transition-all duration-[80ms] ease-out",
-              themeMap[state]
+              !color && themeMap[state]
             )}
           />
         );

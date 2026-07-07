@@ -273,7 +273,7 @@ function ComponentsShowcase({ setIsHovered }: any) {
 
           <TabsContent value="bar-visualizer" className="mt-0">
             <PreviewComponents className="animate-in fade-in bg-background h-full min-h-[500px] w-full max-w-none border-none px-0 py-4 duration-300 md:min-h-[700px] flex items-center justify-center">
-              <BarVisualizer state="speaking" demo={true} />
+              <BarVisualizer state="speaking" demo={true} color="var(--primary)" />
             </PreviewComponents>
           </TabsContent>
 
