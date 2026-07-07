@@ -458,7 +458,7 @@ export function TranscriptViewerWords({
   return (
     <div
       className={cn(
-        "flex flex-wrap items-center justify-start text-left mb-6 leading-relaxed select-none min-h-[140px] content-start gap-y-1.5",
+        "flex flex-wrap items-center justify-start text-left mb-4 leading-relaxed select-none min-h-[60px] content-start gap-y-1.5",
         className
       )}
       {...props}
