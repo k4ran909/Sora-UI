@@ -32,14 +32,29 @@ const Hero = () => {
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
+      // Don't hijack keys while the user is typing or focused on an interactive
+      // element, or when a modifier is held (browser/OS shortcuts).
+      if (e.metaKey || e.ctrlKey || e.altKey) return;
+      const target = e.target as HTMLElement | null;
+      if (
+        target &&
+        (target.isContentEditable ||
+          ["INPUT", "TEXTAREA", "SELECT", "BUTTON", "A"].includes(target.tagName))
+      ) {
+        return;
+      }
+
       if (e.key.toLowerCase() === "enter") {
-        router.push("/docs"); // Redirect to Get Started
-      }
-      if (e.key.toLowerCase() === "b") {
-        router.push("/docs/components"); // Redirect to Browse Components
-      }
-      if (e.key.toLowerCase() === "g") {
-        router.push("https://github.com/k4ran909/Sora-UI");
+        router.push("/docs"); // Get Started
+      } else if (e.key.toLowerCase() === "b") {
+        router.push("/docs"); // Browse Components (docs hub lists all components)
+      } else if (e.key.toLowerCase() === "g") {
+        // External URL — next/navigation router only handles in-app paths.
+        window.open(
+          "https://github.com/k4ran909/Sora-UI",
+          "_blank",
+          "noopener,noreferrer"
+        );
       }
     };
 
@@ -156,10 +171,11 @@ const Hero = () => {
               <Button
                 variant="secondary"
                 className="focus-visible:ring-ring gap-2 whitespace-nowrap transition-all duration-300 focus-visible:ring-1 focus-visible:outline-none disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0"
+                asChild
               >
                 <Link
                   className="group flex items-center gap-2"
-                  href="/docs/components"
+                  href="/docs"
                 >
                   <span>Browse Components</span>
                   <Badge className="bg-accent text-foreground shadow-white/70 transition-all duration-200 group-hover:shadow-xl">

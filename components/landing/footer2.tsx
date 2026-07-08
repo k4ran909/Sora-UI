@@ -74,7 +74,7 @@ export function Footer2() {
               <ul className="space-y-3 text-sm">
                 <li>
                   <Link
-                    href="/docs/components/pricing-table/pricing-table-one"
+                    href="/docs"
                     className="text-muted-foreground hover:text-foreground transition-colors"
                   >
                     Pricing Tables
@@ -82,7 +82,7 @@ export function Footer2() {
                 </li>
                 <li>
                   <Link
-                    href="/docs/components/usage-meter/usage-meter-linear"
+                    href="/docs"
                     className="text-muted-foreground hover:text-foreground transition-colors"
                   >
                     Usage Meters
@@ -90,7 +90,7 @@ export function Footer2() {
                 </li>
                 <li>
                   <Link
-                    href="/docs/components/manage-subscription"
+                    href="/docs"
                     className="text-muted-foreground hover:text-foreground transition-colors"
                   >
                     Subscription Management
@@ -98,7 +98,7 @@ export function Footer2() {
                 </li>
                 <li>
                   <Link
-                    href="/docs/components/banner"
+                    href="/docs"
                     className="text-muted-foreground hover:text-foreground transition-colors"
                   >
                     Banners

@@ -55,10 +55,13 @@ export function Footer() {
           <Button
             variant="secondary"
             className="bg-secondary text-secondary-foreground ring-accent relative isolate inline-flex h-10 w-full items-center justify-center overflow-hidden rounded-md px-3 text-left text-sm font-medium ring-1 before:pointer-events-none before:absolute before:inset-0 before:-z-10 before:rounded-md before:bg-gradient-to-b before:opacity-80 before:transition-opacity before:duration-300 before:ease-[cubic-bezier(0.4,0.36,0,1)] after:pointer-events-none after:absolute after:inset-0 after:-z-10 after:rounded-md after:bg-gradient-to-b after:to-transparent after:mix-blend-overlay hover:cursor-pointer hover:ring-2 sm:h-12 md:w-52"
+            asChild
           >
             <Link
               className="group flex items-center gap-2"
-              href="/docs/components"
+              href="https://github.com/k4ran909/Sora-UI"
+              target="_blank"
+              rel="noopener noreferrer"
             >
               <span>Github</span>
               <Badge className="bg-accent text-foreground shadow-white/70 transition-all duration-200 group-hover:shadow-xl">
