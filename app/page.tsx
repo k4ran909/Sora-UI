@@ -5,7 +5,6 @@ import Hero from "@/components/landing/Hero";
 import Features from "@/components/landing/Features";
 import { ComponentsSection } from "@/components/landing/components";
 import { QuickIntegration } from "@/components/landing/quick-integrations";
-import { Sentra } from "@/components/landing/sentra";
 import { Faq } from "@/components/landing/faq";
 import { OpenSource } from "@/components/landing/opensource";
 import { Footer2 } from "@/components/landing/footer2";
@@ -19,7 +18,6 @@ export default function Home() {
         <Features />
         <ComponentsSection />
         <QuickIntegration />
-        <Sentra />
         <Faq />
         <OpenSource />
         <Footer2 />
