@@ -59,7 +59,7 @@ export function Footer2() {
                 </Button>
                 <Button variant="ghost" size="sm" asChild>
                   <Link
-                    href="https://x.com/dodopayments"
+                    href="https://x.com/k4ran909"
                     target="_blank"
                     rel="noopener noreferrer"
                   >
@@ -158,7 +158,7 @@ export function Footer2() {
                 </li>
                 <li>
                   <Link
-                    href="https://discord.com/invite/bYqAp4ayYh"
+                    href="https://discord.com/invite/udZPtMSuE3"
                     className="text-muted-foreground hover:text-foreground transition-colors"
                   >
                     Discord Server

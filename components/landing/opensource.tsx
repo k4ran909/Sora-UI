@@ -14,13 +14,13 @@ export function OpenSource() {
     {
       name: "X/ Twitter",
       icon: BsTwitterX,
-      href: "https://x.com/dodopayments",
+      href: "https://x.com/k4ran909",
       description: "Follow us for updates and announcements on our products",
     },
     {
       name: "Discord",
       icon: BsDiscord,
-      href: "https://discord.com/invite/bYqAp4ayYh",
+      href: "https://discord.com/invite/udZPtMSuE3",
       description: "Join our community for support and discussions",
     },
   ];
