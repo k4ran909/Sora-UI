@@ -63,6 +63,7 @@ export function UsageBasedPricing({
   currency = "$",
   basePrice = 39.99,
   includedCredits = 4000,
+  unitPricePerCredit = 0.01,
   title = "Pay as you use pricing",
   subtitle = "Start with a flat monthly rate that includes 4,000 credits.",
 }: UsageBasedPricingProps) {
@@ -103,12 +104,14 @@ export function UsageBasedPricing({
   }, []);
 
   const price = useMemo(() => {
-    // Pricing: basePrice covers includedCredits. For every additional 1,000 credits, add $10.
+    // Pricing: basePrice covers includedCredits. Additional usage is billed in
+    // whole 1,000-credit blocks at `unitPricePerCredit` per credit
+    // (default $0.01/credit = $10 per 1,000 credits).
     const extra = Math.max(0, value - includedCredits);
     const thousandsOver = Math.ceil(extra / 1000);
-    const extraCost = thousandsOver * 10;
+    const extraCost = thousandsOver * 1000 * unitPricePerCredit;
     return basePrice + extraCost;
-  }, [value, includedCredits, basePrice]);
+  }, [value, includedCredits, basePrice, unitPricePerCredit]);
 
   const priceSpring = useSpring(price, {
     stiffness: 140,

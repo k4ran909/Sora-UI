@@ -73,7 +73,7 @@ export function SubscriptionManagement({
                         {currentPlan.type === `monthly`
                           ? `${currentPlan.plan.currency}${currentPlan.plan.monthlyPrice}/month`
                           : currentPlan.type === `yearly`
-                            ? `${currentPlan.plan.yearlyPrice}/year`
+                            ? `${currentPlan.plan.currency}${currentPlan.plan.yearlyPrice}/year`
                             : `${currentPlan.price}`}
                       </Badge>
                       <Badge
