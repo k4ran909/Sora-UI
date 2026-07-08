@@ -1,4 +1,0 @@
-export {
-  PaymentDetails,
-  type PaymentFormData,
-} from "@/registry/billingsdk/payment-details";
