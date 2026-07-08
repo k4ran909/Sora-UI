@@ -120,7 +120,7 @@ export function Footer2() {
                 </li>
                 <li>
                   <Link
-                    href="/docs/quick-start"
+                    href="/docs"
                     className="text-muted-foreground hover:text-foreground transition-colors"
                   >
                     Quick Start
@@ -128,7 +128,7 @@ export function Footer2() {
                 </li>
                 <li>
                   <Link
-                    href="/docs/theming"
+                    href="/docs"
                     className="text-muted-foreground hover:text-foreground transition-colors"
                   >
                     Theming Guide
@@ -136,7 +136,7 @@ export function Footer2() {
                 </li>
                 <li>
                   <Link
-                    href="/docs/interfaces"
+                    href="/docs"
                     className="text-muted-foreground hover:text-foreground transition-colors"
                   >
                     Interfaces
@@ -166,7 +166,9 @@ export function Footer2() {
                 </li>
                 <li>
                   <Link
-                    href="/docs/contribution-open-source"
+                    href="https://github.com/k4ran909/Sora-UI"
+                    target="_blank"
+                    rel="noopener noreferrer"
                     className="text-muted-foreground hover:text-foreground transition-colors"
                   >
                     Contributing

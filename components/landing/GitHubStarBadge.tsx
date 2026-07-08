@@ -31,9 +31,13 @@ export default function GitHubStarBadge() {
 
   function formatApprox(value: number | null | undefined): string {
     const n = Number(value ?? 0);
+    if (n < 10) {
+      // Show the exact count for small repos rather than overstating as "10+".
+      return String(n);
+    }
     if (n < 100) {
       const approx = Math.floor(n / 10) * 10;
-      return `${approx === 0 ? (n > 0 ? "10" : "0") : approx}+`;
+      return `${approx}+`;
     }
     if (n < 1000) {
       const approx = Math.floor(n / 25) * 25;

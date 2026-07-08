@@ -17,7 +17,7 @@ export default function DocsPage() {
       <div className="border-t border-hairline pt-8 space-y-6">
         <h2 className="text-2xl font-semibold text-ink tracking-[-0.6px]">How it works</h2>
         <p className="text-ink-subtle leading-relaxed">
-          Sora UI is a **copy-paste component collection**. Instead of installing it as an npm package dependency, you choose the component you need, copy its source code, and drop it straight into your project.
+          Sora UI is a <strong className="font-semibold text-ink">copy-paste component collection</strong>. Instead of installing it as an npm package dependency, you choose the component you need, copy its source code, and drop it straight into your project.
         </p>
         <p className="text-ink-subtle leading-relaxed">
           This gives you 100% design ownership over the component. You can tweak its colors, change animations, and rewrite logic to fit your specific needs.
