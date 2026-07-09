@@ -248,7 +248,7 @@ export function MusicPlayer({
     }
   };
 
-  const handleTrackClick = (idx: number) => {
+  function handleTrackClick(idx: number) {
     if (idx === activeTrackIndex) return;
     
     isSelfScrollingRef.current = true;
@@ -265,7 +265,7 @@ export function MusicPlayer({
     setTimeout(() => {
       isSelfScrollingRef.current = false;
     }, 600);
-  };
+  }
 
   const handleVolumeClick = (volVal: number) => {
     const volIdx = 100 - volVal;

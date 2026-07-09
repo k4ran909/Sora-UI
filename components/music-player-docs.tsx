@@ -393,9 +393,8 @@ export function MusicPlayerDocs() {
         <CodeBlock title="Token Exchange Route" code={EXAMPLE_TOKEN_ROUTE} />
         <CodeBlock title="Spotify Usage" code={EXAMPLE_SPOTIFY} />
 
-        {/* Note callout */}
         <div className="p-4 rounded-xl border border-amber-500/20 bg-amber-500/5 text-xs text-amber-200/80 leading-relaxed">
-          <strong className="text-amber-400">⚠️ Note:</strong> Spotify's free
+          <strong className="text-amber-400">⚠️ Note:</strong> Spotify&apos;s free
           API tier only provides <strong>30-second audio previews</strong>.
           Full-length playback requires Spotify Premium + OAuth user
           authorization. The CD banner (album art) is always available.
@@ -416,7 +415,7 @@ export function MusicPlayerDocs() {
           </h3>
           <p className="text-xs text-ink-muted leading-relaxed max-w-xl">
             Change the seek bar accent with any hex color value. Great for
-            matching your app's brand palette.
+            matching your app&apos;s brand palette.
           </p>
           <CodeBlock code={EXAMPLE_TIMELINE_COLOR} />
         </div>
@@ -478,7 +477,7 @@ export function MusicPlayerDocs() {
           Full Kitchen Sink Example
         </h2>
         <p className="text-sm text-ink-muted leading-relaxed max-w-2xl">
-          Here's a complete example combining Spotify integration with every
+          Here&apos;s a complete example combining Spotify integration with every
           customization option:
         </p>
         <CodeBlock title="Full Customization" code={EXAMPLE_FULL} />

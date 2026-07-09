@@ -10,14 +10,20 @@
     <img src="https://img.shields.io/badge/Next.js-16-black?style=flat-square&logo=next.js" alt="Next.js 16" />
     <img src="https://img.shields.io/badge/React-19-149eca?style=flat-square&logo=react" alt="React 19" />
     <img src="https://img.shields.io/badge/Tailwind-v4-38bdf8?style=flat-square&logo=tailwindcss" alt="Tailwind CSS v4" />
+    <a href="https://github.com/k4ran909/Sora-UI/blob/main/CONTRIBUTING.md"><img src="https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square&color=2ea44f" alt="PRs Welcome" /></a>
     <img src="https://img.shields.io/badge/license-MIT-green?style=flat-square" alt="MIT license" />
   </p>
 
   <a href="https://sora-ui-plum.vercel.app"><strong>Live Demo</strong></a> ·
   <a href="https://sora-ui-plum.vercel.app/docs"><strong>Docs</strong></a> ·
   <a href="#-components">Components</a> ·
+  <a href="#-contribution-roadmap">Roadmap</a> ·
   <a href="#-quick-start">Quick Start</a>
 </div>
+
+> [!NOTE]
+> **🚀 Launching Soon on Product Hunt!**
+> We are actively gearing up for a public launch. If you love tactile interfaces and the web design of the skeuomorphic era, support us by leaving a ⭐ star and checking out our [Contribution Roadmap](#-contribution-roadmap)!
 
 ---
 
@@ -92,9 +98,24 @@ app/docs/          Docs site + playground
 cli/               soraui-cli npm package
 ```
 
-## 🤝 Contributing
+## 🤝 Contributing & Community
 
-Fork → add/improve a component in `registry/` (register it in `scripts/build-registry.js` + `registry/index.ts`) → run `npm run lint && npm run build` → open a PR. Found a bug? [Open an issue](https://github.com/k4ran909/Sora-UI/issues).
+Sora UI is **open for contributions**! Whether you want to add new skeuomorphic widgets, fix bugs, improve dynamic documentations, or suggest designs, we would love your help.
+
+### 🗺️ Contribution Roadmap
+Here are some interactive skeuomorphic elements that would fit perfectly into the Sora UI registry:
+*   **🎛️ Vintage Synthesizer Knobs:** Rotary dials with spring drag physics and surrounding LED lights.
+*   **📟 Segmented LCD Display:** Glowing screens showcasing numerical feeds or mini retro graphs.
+*   **🔌 Patch Cables & Toggle Switches:** 만족스러운 스위치(tactile flipping switches) and drag-and-drop audio cords.
+*   **📼 Retro Cassette Deck:** Spinning spools that respond to audio playback.
+*   **🎚️ Needle VU Meters:** Responsive needle meters showcasing volume signals.
+
+To get started:
+1. Review the [Code of Conduct](CODE_OF_CONDUCT.md) to understand our community guidelines.
+2. Read the step-by-step [Contributing Guide](CONTRIBUTING.md) to set up your local development workspace and register your components.
+3. Propose a new UI asset using our [New Component Proposal](https://github.com/k4ran909/Sora-UI/issues/new?template=new_component_proposal.md) issue template.
+
+---
 
 ## 📄 License
 

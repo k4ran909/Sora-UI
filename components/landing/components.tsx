@@ -96,7 +96,7 @@ export function ComponentsSection() {
     return () => clearInterval(interval);
   }, [active, isAutoRotating, isHovered]);
 
-  const handleTransition = (targetComponent?: string) => {
+  function handleTransition(targetComponent?: string) {
     const currentIndex = components.findIndex((comp) => comp.id === active);
     let nextComponent;
 
@@ -108,7 +108,7 @@ export function ComponentsSection() {
     }
 
     setActive(nextComponent);
-  };
+  }
 
   const handleComponentClick = (componentId: string) => {
     if (componentId === active) return;
