@@ -4,7 +4,6 @@ import React, { useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { motion } from "motion/react";
 import Link from "next/link";
-import Image from "next/image";
 import { Badge } from "../ui/badge";
 import { CornerDownLeft } from "lucide-react";
 import { CodeBlock, CodeBlockCopyButton } from "./code-block";
@@ -64,12 +63,15 @@ const Hero = () => {
 
   return (
     <div className="border-muted relative max-h-fit min-h-[45rem] overflow-hidden rounded-4xl border pt-30">
-      {/* Background Image */}
-      <Image
-        src="/landing/hero-bg-blue.jpg"
-        alt="Abstract blue light streaks background"
-        width={1920}
-        height={1080}
+      {/* Background Video */}
+      <video
+        src="/landing/hero-bg.mp4"
+        poster="/landing/hero-bg-blue.jpg"
+        autoPlay
+        muted
+        loop
+        playsInline
+        aria-hidden="true"
         className="absolute inset-0 h-full w-full object-cover opacity-40 blur-[1px] md:blur-[2px]"
       />
       {/* Content */}
