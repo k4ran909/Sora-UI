@@ -77,23 +77,7 @@ export function Footer2() {
                     href="/docs"
                     className="text-muted-foreground hover:text-foreground transition-colors"
                   >
-                    Pricing Tables
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    href="/docs"
-                    className="text-muted-foreground hover:text-foreground transition-colors"
-                  >
                     Usage Meters
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    href="/docs"
-                    className="text-muted-foreground hover:text-foreground transition-colors"
-                  >
-                    Subscription Management
                   </Link>
                 </li>
                 <li>

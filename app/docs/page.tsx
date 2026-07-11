@@ -1,6 +1,5 @@
-import React from "react";
 import Link from "next/link";
-import { Sparkles, ArrowRight } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 
 export default function DocsPage() {
   return (
@@ -22,17 +21,6 @@ export default function DocsPage() {
         <p className="text-ink-subtle leading-relaxed">
           This gives you 100% design ownership over the component. You can tweak its colors, change animations, and rewrite logic to fit your specific needs.
         </p>
-      </div>
-
-      <div className="border-t border-hairline pt-8 space-y-6">
-        <h2 className="text-2xl font-semibold text-ink tracking-[-0.6px]">Prerequisites</h2>
-        <p className="text-ink-subtle leading-relaxed">
-          Ensure you have the following dependencies installed in your React/Tailwind/TypeScript project:
-        </p>
-        
-        <div className="rounded-lg border border-hairline bg-surface-1 p-5 font-mono text-sm text-primary">
-          npm install framer-motion lucide-react clsx tailwind-merge
-        </div>
       </div>
 
       <div className="border-t border-hairline pt-8 space-y-6">

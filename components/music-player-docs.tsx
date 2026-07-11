@@ -482,65 +482,6 @@ export function MusicPlayerDocs() {
         </p>
         <CodeBlock title="Full Customization" code={EXAMPLE_FULL} />
       </section>
-
-      {/* ─── Section 5: Dependencies ─── */}
-      <section className="space-y-4">
-        <h2 className="text-2xl font-bold text-ink tracking-[-0.5px]">
-          Dependencies
-        </h2>
-        <div className="overflow-x-auto rounded-xl border border-hairline">
-          <table className="w-full text-left text-sm">
-            <thead>
-              <tr className="bg-surface-2/60 border-b border-hairline">
-                <th className="px-4 py-3 text-[11px] font-bold text-ink-subtle uppercase tracking-wider">
-                  Package
-                </th>
-                <th className="px-4 py-3 text-[11px] font-bold text-ink-subtle uppercase tracking-wider">
-                  Purpose
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr className="border-b border-hairline/50 bg-surface-1/40 hover:bg-surface-2/30 transition-colors">
-                <td className="px-4 py-3">
-                  <code className="text-primary text-xs font-mono">
-                    framer-motion
-                  </code>
-                </td>
-                <td className="px-4 py-3 text-xs text-ink-muted">
-                  CD spin animation, cover morph transitions, sound wave bars
-                </td>
-              </tr>
-              <tr className="border-b border-hairline/50 hover:bg-surface-2/30 transition-colors">
-                <td className="px-4 py-3">
-                  <code className="text-primary text-xs font-mono">
-                    clsx + tailwind-merge
-                  </code>
-                </td>
-                <td className="px-4 py-3 text-xs text-ink-muted">
-                  Conditional class name merging via the{" "}
-                  <code className="font-mono">cn()</code> utility
-                </td>
-              </tr>
-              <tr className="border-b border-hairline/50 bg-surface-1/40 hover:bg-surface-2/30 transition-colors">
-                <td className="px-4 py-3">
-                  <code className="text-primary text-xs font-mono">
-                    tailwindcss
-                  </code>
-                </td>
-                <td className="px-4 py-3 text-xs text-ink-muted">
-                  Utility-first CSS framework for all layout and styling
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-
-        <CodeBlock
-          title="Install"
-          code="npm install framer-motion clsx tailwind-merge"
-        />
-      </section>
     </div>
   );
 }

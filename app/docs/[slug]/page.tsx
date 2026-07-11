@@ -13,7 +13,6 @@ import { DateSelectorDocs } from "@/components/date-selector-docs";
 import { DustSphereDocs } from "@/components/dust-sphere-docs";
 import { AudioTimingVisualizerDocs } from "@/components/audio-timing-visualizer-docs";
 import { CLIInstallBlock } from "@/components/cli-install-block";
-import { ManualInstallBlock } from "@/components/manual-install-block";
 
 interface PageProps {
   params: Promise<{ slug: string }>;
@@ -85,10 +84,6 @@ export default async function ComponentPage({ params }: PageProps) {
             </div>
             <div>
               2. Paste it in your project at <code className="text-primary font-mono bg-surface-2 px-1.5 py-0.5 rounded border border-hairline text-[11px]">components/{componentInfo.slug}.tsx</code>.
-            </div>
-            <div className="space-y-2">
-              <div>3. Install the dependencies:</div>
-              <ManualInstallBlock dependencies={componentInfo.dependencies || ["framer-motion", "clsx", "tailwind-merge", "lucide-react"]} />
             </div>
           </div>
         </div>
