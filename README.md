@@ -19,11 +19,15 @@
   <a href="#-components">Components</a> ·
   <a href="#-contribution-roadmap">Roadmap</a> ·
   <a href="#-quick-start">Quick Start</a>
+
+  <br /><br />
+
+  <a href="https://www.producthunt.com/products/sora-ui-2?utm_source=badge-featured&utm_medium=badge&utm_campaign=badge-sora-ui-2" target="_blank"><img src="https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=1192028&theme=light&t=1783850358250" alt="Sora UI - Skeuomorphic React components you copy-paste into your app | Product Hunt" width="250" height="54" /></a>
 </div>
 
 > [!NOTE]
-> **🚀 Launching Soon on Product Hunt!**
-> We are actively gearing up for a public launch. If you love tactile interfaces and the web design of the skeuomorphic era, support us by leaving a ⭐ star and checking out our [Contribution Roadmap](#-contribution-roadmap)!
+> **🚀 We're live on Product Hunt!**
+> If you love tactile interfaces and the web design of the skeuomorphic era, an [upvote on Product Hunt](https://www.producthunt.com/products/sora-ui-2) and a ⭐ star here go a long way. Curious to contribute? Check out the [Contribution Roadmap](#-contribution-roadmap)!
 
 ---
 
