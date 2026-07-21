@@ -2,7 +2,7 @@
 import { useState, useEffect, useRef } from "react";
 import { cn } from "@/lib/utils";
 import { PreviewComponents } from "@/components/preview/preview-components";
-import { MusicPlayer } from "@/registry/music-player";
+import { SpotifyMusicPlayer } from "@/components/landing/spotify-music-player";
 import { MusicPlayer as DarkPlayer } from "@/registry/dark-player";
 import { BarVisualizer } from "@/registry/bar-visualizer";
 import { DateSelector } from "@/registry/date-selector";
@@ -268,7 +268,7 @@ function ComponentsShowcase({ setIsHovered }: any) {
         <div className="h-full w-full transition-all duration-300 ease-in-out">
           <TabsContent value="music-player" className="mt-0">
             <PreviewComponents className="animate-in fade-in bg-background h-full min-h-[500px] w-full max-w-none border-none px-0 py-4 duration-300 md:min-h-[700px] flex items-center justify-center">
-              <MusicPlayer timelineColor="var(--primary)" componentColor="var(--card)" />
+              <SpotifyMusicPlayer timelineColor="var(--primary)" componentColor="var(--card)" />
             </PreviewComponents>
           </TabsContent>
 

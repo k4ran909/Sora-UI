@@ -84,6 +84,12 @@ interface MusicPlayerProps {
    * Toggles whether the playlist should loop continuously.
    */
   loop?: boolean;
+
+  /**
+   * Local baseline playlist. When provided, replaces the built-in demo tracks
+   * as both the initial playlist and the fallback when Spotify is unavailable.
+   */
+  tracks?: Track[];
 }
 
 // Framer motion variants to make those wave bars dance up and down!
@@ -112,7 +118,10 @@ export function MusicPlayer({
   defaultVolume = 80,
   playbackSpeed = 1.0,
   loop = true,
+  tracks,
 }: MusicPlayerProps) {
+  const baseline = tracks && tracks.length > 0 ? tracks : STATIC_PLAYLIST;
+
   // Let's hook up our track playback state so React knows when to re-render
   const [currentTrackIndex, setCurrentTrackIndex] = useState(0);
   const [isPlaying, setIsPlaying] = useState(false);
@@ -123,7 +132,7 @@ export function MusicPlayer({
   const [coverOpacity, setCoverOpacity] = useState(1);
 
   // Our active playlist state. If Spotify isn't connected, we default to our lovely local track mix.
-  const [playlist, setPlaylist] = useState<Track[]>(STATIC_PLAYLIST);
+  const [playlist, setPlaylist] = useState<Track[]>(baseline);
   const [spotifyError, setSpotifyError] = useState<string | null>(null);
 
   const audioRef = useRef<HTMLAudioElement | null>(null);
@@ -158,7 +167,7 @@ export function MusicPlayer({
   // If no credentials or IDs are passed, we gracefully fallback to local demo songs.
   useEffect(() => {
     if (!spotifyToken || !trackIds || trackIds.length === 0) {
-      setPlaylist(STATIC_PLAYLIST);
+      setPlaylist(baseline);
       setCurrentTrackIndex(0);
       setSpotifyError(null);
       return;
@@ -171,7 +180,8 @@ export function MusicPlayer({
       try {
         const fetchedTracks: Track[] = [];
 
-        for (const id of trackIds) {
+        for (let i = 0; i < trackIds.length; i++) {
+          const id = trackIds[i];
           const res = await fetch(`https://api.spotify.com/v1/tracks/${id}`, {
             headers: { Authorization: `Bearer ${spotifyToken}` },
             signal: controller.signal,
@@ -182,13 +192,15 @@ export function MusicPlayer({
           }
 
           const data = await res.json();
+          const localTrack = baseline[i];
 
           fetchedTracks.push({
             title: data.name,
             artist: data.artists.map((a: any) => a.name).join(", "),
-            cover: data.album.images[0]?.url || "https://images.unsplash.com/photo-1614613535308-eb5fbd3d2c17?q=80&w=600&auto=format&fit=crop",
-            src: data.preview_url || "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3", // fallback to local audio if no preview is available
-            hasPreview: !!data.preview_url,
+            cover: data.album.images[0]?.url || localTrack?.cover || "https://images.unsplash.com/photo-1614613535308-eb5fbd3d2c17?q=80&w=600&auto=format&fit=crop",
+            // preview_url is null for most tracks — always use the local file for audio
+            src: localTrack?.src || data.preview_url || "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3",
+            hasPreview: !!(localTrack?.src || data.preview_url),
           });
         }
 
@@ -204,7 +216,10 @@ export function MusicPlayer({
       } catch (err: any) {
         if (controller.signal.aborted) return; // superseded by a newer request or unmount
         setSpotifyError(err.message || "Failed to load tracks from Spotify.");
-        setPlaylist(STATIC_PLAYLIST);
+        // Fall back to the caller-provided baseline (e.g. the local sample
+        // tracks) so a Spotify failure keeps the real audio + covers instead
+        // of dropping to the built-in SoundHelix demo.
+        setPlaylist(baseline);
       }
     };
 
@@ -270,7 +285,7 @@ export function MusicPlayer({
       audio.play().then(() => {
         setIsPlaying(true);
       }).catch(err => {
-        console.error("Playback failed:", err);
+        if (err.name !== "AbortError") console.error("Playback failed:", err);
       });
     }
   };
@@ -327,7 +342,7 @@ export function MusicPlayer({
             setIsTransitioning(false);
           })
           .catch((err) => {
-            console.error("Auto-play failed:", err);
+            if (err.name !== "AbortError") console.error("Auto-play failed:", err);
             setIsTransitioning(false);
           });
       } else {

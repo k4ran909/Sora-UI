@@ -33,6 +33,10 @@ yarn-error.log*
 # env files (can opt-in for committing if needed)
 .env*
 
+# copyrighted demo audio (local dev only — swap for royalty-free before publishing)
+/public/audio/*.mp3
+!/public/audio/.gitkeep
+
 # vercel
 .vercel
 
