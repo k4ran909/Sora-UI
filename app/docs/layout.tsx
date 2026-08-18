@@ -3,6 +3,7 @@ import Link from "next/link";
 import { registry } from "@/registry";
 import { Sparkles, Layers, FileText } from "lucide-react";
 import { Logo } from "@/components/logo";
+import { DocsSidebar } from "@/components/docs/sidebar";
 
 export default function DocsLayout({
   children,
@@ -32,45 +33,7 @@ export default function DocsLayout({
       {/* Docs Body Layout */}
       <div className="flex flex-1">
         {/* Sidebar */}
-        <aside className="fixed bottom-0 top-16 z-30 hidden w-64 shrink-0 border-r border-hairline bg-background md:sticky md:block">
-          <div className="h-full overflow-y-auto px-6 py-8">
-            <div className="mb-8">
-              <h4 className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-ink-subtle mb-4">
-                <FileText className="h-3 w-3" />
-                Getting Started
-              </h4>
-              <ul className="space-y-2">
-                <li>
-                  <Link
-                    href="/docs"
-                    className="block text-sm text-ink-subtle hover:text-ink hover:underline transition-colors"
-                  >
-                    Introduction
-                  </Link>
-                </li>
-              </ul>
-            </div>
-
-            <div>
-              <h4 className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-ink-subtle mb-4">
-                <Layers className="h-3 w-3" />
-                Components
-              </h4>
-              <ul className="space-y-2">
-                {Object.values(registry).map((item) => (
-                  <li key={item.slug}>
-                    <Link
-                      href={`/docs/${item.slug}`}
-                      className="block text-sm text-ink-subtle hover:text-ink transition-colors border-l border-hairline hover:border-primary pl-3"
-                    >
-                      {item.name}
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          </div>
-        </aside>
+        <DocsSidebar />
 
         {/* Main Content Area */}
         <main className="flex-1 px-6 py-10 md:px-12 lg:px-16 overflow-y-auto">
