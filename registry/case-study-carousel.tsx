@@ -1,8 +1,8 @@
 "use client";
 
 import React, { useState, useEffect, useCallback } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import { ChevronLeft, ChevronRight, ArrowUpRight, ArrowRight } from "lucide-react";
+import { motion } from "framer-motion";
+import { ChevronLeft, ChevronRight, ArrowRight } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 // ─── TYPES & INTERFACES ───
@@ -41,17 +41,15 @@ export function LiquidDropletGraphic({ className }: { className?: string }) {
       viewBox="0 0 400 400"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
-      className={cn("w-full h-full object-contain select-none pointer-events-none", className)}
+      className={cn("w-full h-full object-contain select-none pointer-events-none p-4", className)}
     >
       <defs>
-        {/* Soft Radial Ambient Lighting */}
         <radialGradient id="liquidBaseGlow" cx="50%" cy="60%" r="50%">
-          <stop offset="0%" stopColor="#27272a" stopOpacity="0.8" />
+          <stop offset="0%" stopColor="#27272a" stopOpacity="0.9" />
           <stop offset="60%" stopColor="#09090b" stopOpacity="1" />
           <stop offset="100%" stopColor="#000000" stopOpacity="1" />
         </radialGradient>
 
-        {/* Specular Highlight Gloss */}
         <linearGradient id="glossTop" x1="0%" y1="0%" x2="50%" y2="100%">
           <stop offset="0%" stopColor="#ffffff" stopOpacity="0.85" />
           <stop offset="40%" stopColor="#a1a1aa" stopOpacity="0.3" />
@@ -59,14 +57,14 @@ export function LiquidDropletGraphic({ className }: { className?: string }) {
         </linearGradient>
 
         <linearGradient id="dropletHighlight" x1="30%" y1="0%" x2="70%" y2="100%">
-          <stop offset="0%" stopColor="#ffffff" stopOpacity="0.9" />
+          <stop offset="0%" stopColor="#ffffff" stopOpacity="0.95" />
           <stop offset="50%" stopColor="#71717a" stopOpacity="0.4" />
           <stop offset="100%" stopColor="#18181b" stopOpacity="1" />
         </linearGradient>
 
         <filter id="liquidShadow" x="-20%" y="-20%" width="140%" height="140%">
-          <feGaussianBlur in="SourceAlpha" stdDeviation="10" />
-          <feOffset dx="0" dy="12" result="offsetblur" />
+          <feGaussianBlur in="SourceAlpha" stdDeviation="12" />
+          <feOffset dx="0" dy="14" result="offsetblur" />
           <feComponentTransfer>
             <feFuncA type="linear" slope="0.6" />
           </feComponentTransfer>
@@ -77,32 +75,32 @@ export function LiquidDropletGraphic({ className }: { className?: string }) {
         </filter>
       </defs>
 
-      {/* Background Soft Shadow Base */}
-      <ellipse cx="200" cy="290" rx="90" ry="24" fill="#000000" opacity="0.6" filter="blur(14px)" />
+      {/* Ambient shadow floor */}
+      <ellipse cx="200" cy="300" rx="100" ry="24" fill="#000000" opacity="0.65" filter="blur(16px)" />
 
-      {/* Main Liquid Cone & Splash Body */}
+      {/* Main Liquid Splash Body */}
       <g filter="url(#liquidShadow)">
-        {/* Outer Splash Cone */}
+        {/* Splash Cone */}
         <path
-          d="M 120 280 C 135 270 170 260 190 200 C 195 185 197 165 200 150 C 203 165 205 185 210 200 C 230 260 265 270 280 280 C 290 287 270 295 200 295 C 130 295 110 287 120 280 Z"
+          d="M 115 285 C 130 275 168 262 190 200 C 195 185 197 165 200 150 C 203 165 205 185 210 200 C 232 262 270 275 285 285 C 295 292 270 300 200 300 C 130 300 105 292 115 285 Z"
           fill="url(#liquidBaseGlow)"
         />
 
-        {/* Gloss Edge Highlight */}
+        {/* Specular Rim Highlight */}
         <path
-          d="M 130 278 C 145 268 175 258 192 205 C 196 190 198 170 200 155 C 202 170 204 190 208 205 C 225 258 255 268 270 278 C 240 288 160 288 130 278 Z"
+          d="M 125 282 C 140 272 172 260 192 205 C 196 190 198 170 200 155 C 202 170 204 190 208 205 C 228 260 260 272 275 282 C 245 292 155 292 125 282 Z"
           fill="none"
           stroke="url(#glossTop)"
           strokeWidth="2.5"
-          opacity="0.75"
+          opacity="0.8"
         />
 
         {/* Liquid Surface Rim Base */}
-        <ellipse cx="200" cy="278" rx="72" ry="14" fill="#18181b" />
-        <ellipse cx="200" cy="277" rx="68" ry="11" fill="#09090b" />
-        <ellipse cx="200" cy="275" rx="55" ry="7" fill="#27272a" opacity="0.5" />
+        <ellipse cx="200" cy="282" rx="76" ry="14" fill="#18181b" />
+        <ellipse cx="200" cy="280" rx="70" ry="11" fill="#09090b" />
+        <ellipse cx="200" cy="278" rx="55" ry="7" fill="#27272a" opacity="0.5" />
 
-        {/* Center Peak Tip */}
+        {/* Center Peak Highlight */}
         <path
           d="M 197 150 C 197 145 199 142 200 142 C 201 142 203 145 203 150 C 203 155 197 155 197 150 Z"
           fill="#ffffff"
@@ -114,8 +112,7 @@ export function LiquidDropletGraphic({ className }: { className?: string }) {
             d="M 0 -14 C 6 -6 8 2 8 6 C 8 11 4 14 0 14 C -4 14 -8 11 -8 6 C -8 2 -6 -6 0 -14 Z"
             fill="url(#dropletHighlight)"
           />
-          {/* Droplet Highlight Dot */}
-          <ellipse cx="-2" cy="2" rx="2" ry="4" fill="#ffffff" opacity="0.9" />
+          <ellipse cx="-2.5" cy="2" rx="2" ry="4" fill="#ffffff" opacity="0.9" />
         </g>
       </g>
     </svg>
@@ -258,14 +255,12 @@ export function CaseStudyCarousel({
   };
 
   return (
-    <div className={cn("relative w-full max-w-5xl mx-auto py-10 px-4 select-none overflow-hidden", className)}>
+    <div className={cn("relative w-full max-w-4xl mx-auto py-6 px-2 sm:px-4 select-none", className)}>
       {/* ── Stacked Viewport ── */}
-      <div className="relative h-[480px] sm:h-[420px] md:h-[400px] flex items-center justify-center perspective-[1200px]">
+      <div className="relative w-full min-h-[460px] sm:min-h-[380px] md:min-h-[360px] flex items-center justify-center overflow-hidden">
         {slides.map((slide, index) => {
           const position = getSlidePosition(index);
           const isActive = position === 0;
-          const isPrev = position === -1;
-          const isNext = position === 1;
           const isVisible = Math.abs(position) <= 1;
 
           if (!isVisible) return null;
@@ -275,11 +270,11 @@ export function CaseStudyCarousel({
               key={slide.id}
               initial={false}
               animate={{
-                x: `${position * 75}%`,
-                scale: isActive ? 1 : 0.85,
-                opacity: isActive ? 1 : 0.45,
-                zIndex: isActive ? 30 : 10,
-                rotateY: position * -8,
+                x: `${position * 62}%`,
+                scale: isActive ? 1 : 0.86,
+                opacity: isActive ? 1 : 0.35,
+                zIndex: isActive ? 20 : 10,
+                rotateY: position * -6,
               }}
               transition={{
                 type: "spring",
@@ -294,15 +289,15 @@ export function CaseStudyCarousel({
                 if (info.offset.x > 50) prevSlide();
               }}
               className={cn(
-                "absolute w-full max-w-[760px] rounded-[36px] sm:rounded-[44px] p-4 sm:p-6 bg-white dark:bg-zinc-950 text-zinc-950 dark:text-zinc-50 border border-zinc-200/80 dark:border-zinc-800 shadow-[0_20px_50px_rgba(0,0,0,0.12)] dark:shadow-[0_20px_50px_rgba(0,0,0,0.4)] cursor-grab active:cursor-grabbing",
+                "absolute w-[90%] sm:w-[86%] md:w-[700px] lg:w-[740px] shrink-0 rounded-[32px] sm:rounded-[40px] p-4 sm:p-6 bg-white dark:bg-zinc-950 text-zinc-950 dark:text-zinc-50 border border-zinc-200/80 dark:border-zinc-800 shadow-[0_20px_50px_rgba(0,0,0,0.08)] dark:shadow-[0_20px_50px_rgba(0,0,0,0.4)] cursor-grab active:cursor-grabbing",
                 cardClassName
               )}
             >
-              <div className="flex flex-col md:flex-row items-center gap-6 h-full">
+              <div className="flex flex-col sm:flex-row items-center gap-5 sm:gap-6 h-full">
                 {/* ── Left Visual Box (3D Squircle) ── */}
                 <div
                   className={cn(
-                    "w-full md:w-[280px] h-[200px] md:h-[320px] shrink-0 rounded-[28px] sm:rounded-[36px] relative overflow-hidden flex items-center justify-center border border-white/10 shadow-[inset_0_1px_1px_rgba(255,255,255,0.2),0_10px_30px_rgba(0,0,0,0.35)]",
+                    "w-full sm:w-[240px] md:w-[260px] h-[190px] sm:h-[260px] md:h-[280px] shrink-0 rounded-[24px] sm:rounded-[32px] relative overflow-hidden flex items-center justify-center border border-white/10 shadow-[inset_0_1px_1px_rgba(255,255,255,0.2),0_10px_30px_rgba(0,0,0,0.35)]",
                     slide.visualBg || "bg-zinc-950"
                   )}
                 >
@@ -310,16 +305,16 @@ export function CaseStudyCarousel({
                 </div>
 
                 {/* ── Right Content Area ── */}
-                <div className="flex-1 flex flex-col justify-between h-full py-1 min-w-0">
+                <div className="flex-1 flex flex-col justify-between h-full py-1 min-w-0 w-full">
                   {/* Top Header & Copy */}
-                  <div className="space-y-3">
+                  <div className="space-y-2.5">
                     {slide.logo || (
                       <span className="font-bold tracking-wider text-xs uppercase text-zinc-400">
                         {slide.companyName}
                       </span>
                     )}
 
-                    <h3 className="text-xl sm:text-2xl font-bold tracking-tight text-zinc-900 dark:text-zinc-50 leading-snug">
+                    <h3 className="text-lg sm:text-xl md:text-2xl font-bold tracking-tight text-zinc-900 dark:text-zinc-50 leading-snug">
                       {slide.title}
                     </h3>
 
@@ -336,7 +331,7 @@ export function CaseStudyCarousel({
                             slide.onReadMore();
                           }
                         }}
-                        className="inline-flex items-center gap-1.5 text-xs font-bold text-zinc-900 dark:text-zinc-100 hover:text-primary transition-colors group/link pt-1"
+                        className="inline-flex items-center gap-1.5 text-xs font-bold text-zinc-900 dark:text-zinc-100 hover:text-primary transition-colors group/link pt-0.5"
                       >
                         <span>Read More</span>
                         <div className="h-4 w-4 rounded-full border border-current flex items-center justify-center transition-transform group-hover/link:translate-x-0.5">
@@ -348,10 +343,10 @@ export function CaseStudyCarousel({
 
                   {/* Bottom Metrics / Stats */}
                   {slide.stats && slide.stats.length > 0 && (
-                    <div className="grid grid-cols-3 gap-3 pt-6 border-t border-zinc-100 dark:border-zinc-900 mt-4 sm:mt-0">
+                    <div className="grid grid-cols-3 gap-2 pt-4 sm:pt-5 border-t border-zinc-100 dark:border-zinc-900 mt-4 sm:mt-0">
                       {slide.stats.map((stat, i) => (
                         <div key={i} className="flex flex-col">
-                          <span className="text-lg sm:text-xl font-bold tracking-tight text-zinc-900 dark:text-zinc-50">
+                          <span className="text-base sm:text-lg md:text-xl font-bold tracking-tight text-zinc-900 dark:text-zinc-50">
                             {stat.value}
                           </span>
                           <span className="text-[10px] sm:text-xs text-zinc-400 font-medium whitespace-nowrap">
@@ -371,22 +366,22 @@ export function CaseStudyCarousel({
         <button
           onClick={prevSlide}
           aria-label="Previous slide"
-          className="absolute left-2 sm:left-6 z-40 h-10 w-10 sm:h-11 sm:w-11 rounded-full bg-black/80 hover:bg-black text-white border border-white/20 flex items-center justify-center shadow-lg transition-all hover:scale-105 active:scale-95 cursor-pointer backdrop-blur-sm"
+          className="absolute left-1 sm:left-3 md:left-6 z-30 h-9 w-9 sm:h-10 sm:w-10 rounded-full bg-black/85 hover:bg-black text-white border border-white/20 flex items-center justify-center shadow-lg transition-all hover:scale-105 active:scale-95 cursor-pointer backdrop-blur-sm"
         >
-          <ChevronLeft className="h-5 w-5" />
+          <ChevronLeft className="h-4 w-4 sm:h-5 sm:w-5" />
         </button>
 
         <button
           onClick={nextSlide}
           aria-label="Next slide"
-          className="absolute right-2 sm:right-6 z-40 h-10 w-10 sm:h-11 sm:w-11 rounded-full bg-black/80 hover:bg-black text-white border border-white/20 flex items-center justify-center shadow-lg transition-all hover:scale-105 active:scale-95 cursor-pointer backdrop-blur-sm"
+          className="absolute right-1 sm:right-3 md:right-6 z-30 h-9 w-9 sm:h-10 sm:w-10 rounded-full bg-black/85 hover:bg-black text-white border border-white/20 flex items-center justify-center shadow-lg transition-all hover:scale-105 active:scale-95 cursor-pointer backdrop-blur-sm"
         >
-          <ChevronRight className="h-5 w-5" />
+          <ChevronRight className="h-4 w-4 sm:h-5 sm:w-5" />
         </button>
       </div>
 
       {/* ── Bottom Pill Pagination ── */}
-      <div className="flex items-center justify-center gap-2 mt-6">
+      <div className="flex items-center justify-center gap-1.5 mt-5">
         {slides.map((_, i) => {
           const isActive = i === currentIndex;
           return (
@@ -395,10 +390,10 @@ export function CaseStudyCarousel({
               onClick={() => setCurrentIndex(i)}
               aria-label={`Go to slide ${i + 1}`}
               className={cn(
-                "h-2 rounded-full transition-all duration-300 cursor-pointer",
+                "h-1.5 rounded-full transition-all duration-300 cursor-pointer",
                 isActive
-                  ? "w-8 bg-gradient-to-r from-blue-400 via-purple-400 to-indigo-500 shadow-[0_0_12px_rgba(99,102,241,0.5)]"
-                  : "w-2 bg-zinc-300 dark:bg-zinc-700 hover:bg-zinc-400 dark:hover:bg-zinc-600"
+                  ? "w-7 bg-gradient-to-r from-blue-400 via-purple-400 to-indigo-500 shadow-[0_0_10px_rgba(99,102,241,0.5)]"
+                  : "w-1.5 bg-zinc-300 dark:bg-zinc-700 hover:bg-zinc-400 dark:hover:bg-zinc-600"
               )}
             />
           );

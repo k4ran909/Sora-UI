@@ -100,8 +100,8 @@ export function ComponentViewer({ code, usageCode, children }: ComponentViewerPr
       {/* Tab Content */}
       <div className="p-0">
         {activeTab === "preview" ? (
-          <div className="relative min-h-[300px] flex items-center justify-center p-12 bg-background bg-grid-pattern overflow-hidden">
-            <div className="z-10">{children}</div>
+          <div className="relative min-h-[360px] flex items-center justify-center p-4 sm:p-8 md:p-12 bg-background bg-grid-pattern overflow-hidden">
+            <div className="z-10 w-full flex items-center justify-center">{children}</div>
           </div>
         ) : (
           <div className="relative max-h-[500px] overflow-auto w-full">
