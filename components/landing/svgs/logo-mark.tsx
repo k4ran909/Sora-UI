@@ -4,7 +4,7 @@ export const LogoMark = ({ className }: { className?: string }) => {
   return (
     <svg
       className={cn("size-20", className)}
-      viewBox="0 0 231 233"
+      viewBox="8 9 230 230"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
     >
