@@ -96,6 +96,10 @@ const componentsMap: Record<string, React.ComponentType<any>> = {
     }),
     { ssr: false, loading: () => <span className="text-zinc-500 text-xs">Loading transcript...</span> }
   ),
+  "case-study-carousel": dynamic(() => import("@/registry/case-study-carousel").then((mod) => mod.CaseStudyCarousel), {
+    ssr: false,
+    loading: () => <span className="text-zinc-500 text-xs">Loading carousel...</span>,
+  }),
 };
 
 export function PreviewRenderer({ slug }: { slug: string }) {

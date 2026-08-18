@@ -76,5 +76,18 @@
     "files": [
       "transcript-viewer.tsx"
     ]
+  },
+  {
+    "name": "case-study-carousel",
+    "type": "registry:ui",
+    "dependencies": [
+      "framer-motion",
+      "lucide-react",
+      "clsx",
+      "tailwind-merge"
+    ],
+    "files": [
+      "case-study-carousel.tsx"
+    ]
   }
 ]

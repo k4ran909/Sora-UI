@@ -12,6 +12,7 @@ import { BarVisualizerDocs } from "@/components/bar-visualizer-docs";
 import { DateSelectorDocs } from "@/components/date-selector-docs";
 import { DustSphereDocs } from "@/components/dust-sphere-docs";
 import { TranscriptViewerDocs } from "@/components/transcript-viewer-docs";
+import { CaseStudyCarouselDocs } from "@/components/case-study-carousel-docs";
 import { CLIInstallBlock } from "@/components/cli-install-block";
 import { ManualInstallBlock } from "@/components/manual-install-block";
 
@@ -133,6 +134,13 @@ export default async function ComponentPage({ params }: PageProps) {
       {slug === "transcript-viewer" && (
         <div className="border-t border-hairline pt-12">
           <TranscriptViewerDocs />
+        </div>
+      )}
+
+      {/* Detailed documentation section for case-study-carousel */}
+      {slug === "case-study-carousel" && (
+        <div className="border-t border-hairline pt-12">
+          <CaseStudyCarouselDocs />
         </div>
       )}
     </div>

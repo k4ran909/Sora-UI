@@ -57,6 +57,14 @@ export const registry: Record<string, RegistryEntry> = {
     codePath: "registry/transcript-viewer.tsx",
     dependencies: ["clsx", "tailwind-merge", "lucide-react"],
   },
+  "case-study-carousel": {
+    name: "Case Study Carousel",
+    slug: "case-study-carousel",
+    category: "Marketing",
+    description: "A 3D stacked case study carousel featuring interactive depth cards, squircle graphics, impact metrics, and glowing pill pagination.",
+    codePath: "registry/case-study-carousel.tsx",
+    dependencies: ["framer-motion", "lucide-react", "clsx", "tailwind-merge"],
+  },
 };
 
 

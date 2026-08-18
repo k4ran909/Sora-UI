@@ -14,6 +14,7 @@ import {
   Calendar,
   Globe,
   MessageSquareText,
+  GalleryHorizontal,
   type LucideIcon,
 } from "lucide-react";
 import { registry } from "@/registry";
@@ -71,6 +72,7 @@ const componentIcons: Record<string, LucideIcon> = {
   "date-selector": Calendar,
   "dust-sphere": Globe,
   "transcript-viewer": MessageSquareText,
+  "case-study-carousel": GalleryHorizontal,
 };
 
 const CN_SNIPPET = `import { type ClassValue, clsx } from "clsx";

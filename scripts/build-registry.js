@@ -71,6 +71,17 @@ const components = [
         type: "registry:ui"
       }
     ]
+  },
+  {
+    name: "case-study-carousel",
+    type: "registry:ui",
+    dependencies: ["framer-motion", "lucide-react", "clsx", "tailwind-merge"],
+    files: [
+      {
+        path: "case-study-carousel.tsx",
+        type: "registry:ui"
+      }
+    ]
   }
 ];
 
