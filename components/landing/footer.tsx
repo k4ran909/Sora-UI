@@ -26,10 +26,10 @@ export function Footer() {
       <div className="relative z-10 flex h-full flex-col items-start justify-between px-4 pt-2 pb-2 sm:justify-center sm:pb-4 md:px-8">
         <div className="relative flex flex-col items-start justify-start">
           <p className="mt-2 max-w-lg text-left text-lg font-semibold tracking-tight text-white sm:mt-3 sm:text-xl md:text-3xl">
-            Ready to use billing components and blocks for your next project?
+            Ready to use interactive components and blocks for your next project?
           </p>
           <p className="max-w-xl pt-2 text-left text-xs text-neutral-200 sm:pt-3 sm:text-sm">
-            Free Billing components and blocks built with React, Typescript,
+            Free UI components and blocks built with React, Typescript,
             Tailwind CSS, and Motion. Perfect companion for shadcn/ui.
           </p>
         </div>

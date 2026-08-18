@@ -29,7 +29,7 @@ interface QuickIntegrationDataItem {
   };
 }
 
-export const billingQuickIntegrationData: QuickIntegrationDataItem[] = [
+export const quickIntegrationData: QuickIntegrationDataItem[] = [
   {
     heading: "Installation",
     href: "/docs/quick-start",
@@ -201,7 +201,7 @@ export function QuickIntegration() {
       </motion.h2>
 
       <div className="mt-14 flex w-full max-w-7xl flex-col gap-8">
-        {billingQuickIntegrationData.map((item, index) => (
+        {quickIntegrationData.map((item, index) => (
           <motion.div
             key={item.heading}
             initial={{

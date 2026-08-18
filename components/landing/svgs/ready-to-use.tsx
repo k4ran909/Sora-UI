@@ -10,7 +10,7 @@ export const ReadyToUse = () => {
             containerClassName="px-2 text-xs"
             Icon={BadgeCheck}
             className=""
-            label="Billing Settings"
+            label="Music Player"
           />
         </div>
         <div className="transition-all delay-75 duration-500 ease-out group-hover:-translate-y-0.5 group-hover:scale-[1.02]">
@@ -18,7 +18,7 @@ export const ReadyToUse = () => {
             containerClassName="px-2 text-xs"
             Icon={BadgeCheck}
             className=""
-            label="Pricing Tables"
+            label="Bar Visualizer"
           />
         </div>
         <div className="transition-all delay-150 duration-500 ease-out group-hover:-translate-y-0.5 group-hover:scale-[1.02]">
@@ -26,7 +26,7 @@ export const ReadyToUse = () => {
             containerClassName="px-2 text-xs"
             Icon={BadgeCheck}
             className=""
-            label="Upload Plan Card"
+            label="3D Dust Sphere"
           />
         </div>
         <div className="transition-all delay-200 duration-500 ease-out group-hover:-translate-y-0.5 group-hover:scale-[1.02]">
@@ -34,7 +34,7 @@ export const ReadyToUse = () => {
             containerClassName="px-2 text-xs"
             Icon={BadgeCheck}
             className=""
-            label="Pricing"
+            label="Date Selector"
           />
         </div>
         <div className="transition-all delay-300 duration-500 ease-out group-hover:-translate-y-0.5 group-hover:scale-[1.02]">
@@ -42,7 +42,7 @@ export const ReadyToUse = () => {
             containerClassName="px-2 text-xs"
             Icon={BadgeCheck}
             className=""
-            label="Customer Portal"
+            label="Transcript Viewer"
           />
         </div>
       </div>

@@ -50,7 +50,7 @@ export const features = [
     label: "fast-dev",
     title: "Fast Development",
     description:
-      "Save weeks of work with pre-built billing components and focus on core business logic instead.",
+      "Save weeks of work with pre-built voice, media, and interactive components and focus on core logic instead.",
     icon: TrendingUpIcon,
   },
   {

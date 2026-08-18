@@ -32,7 +32,7 @@ export function PreviewComponents({
     setPreviewDarkMode,
   } = useTheme();
   const themeStyles = getThemeStyles(currentTheme, previewDarkMode);
-  const registryUrl = `https://billingsdk.com/r/${registryName}.json`;
+  const registryUrl = typeof window !== "undefined" ? `${window.location.origin}/registry/${registryName}.json` : `/registry/${registryName}.json`;
 
   // Open-in helpers
   const openInV0 = () => {
